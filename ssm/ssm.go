@@ -14,18 +14,33 @@ type SSMChaincode struct {
 }
 
 func (t *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
-	fmt.Printf("Signing State Machines Chaincode Init")
+	fmt.Println("Signing State Machines Chaincode Init")
+	_, args := stub.GetFunctionAndParameters()
+	if len(args) != 1 {
+		return shim.Error("Incorrect arg count. Expecting 1")
+	}
+
+	fmt.Println("SSM Chaincode admins info:", args[0])
+
 	return shim.Success(nil)
 }
 
 func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
-	fmt.Printf("Signing State Machines Chaincode Invoke")
+	fmt.Println("Signing State Machines Chaincode Invoke")
+	function, args := stub.GetFunctionAndParameters()
+	if len(args) != 1 {
+		return shim.Error("Incorrect arg count. Expecting 1")
+	}
+
+	fmt.Println("SSM Chaincode function:", function)
+	fmt.Println("SSM Chaincode args:", args[0])
+
 	return shim.Success(nil)
 }
 
 func main() {
 	err := shim.Start(new(SSMChaincode))
 	if err != nil {
-		fmt.Printf("Signing State Machines Chaincode init error: %s", err)
+		fmt.Println("Signing State Machines Chaincode init error:", err)
 	}
 }
