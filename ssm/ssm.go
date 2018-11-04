@@ -13,6 +13,32 @@ import (
 type SSMChaincode struct {
 }
 
+type Agent struct {
+	name		string
+	pub			string
+}
+
+type State struct {
+	ssm			string
+	session		string
+	current		int
+	public		string
+	private		map[string]string
+}
+
+type Transition struct {
+	from		int
+	to			int
+	agent		string
+	action		string
+}
+
+type SigningStateMachine struct {
+	name		string
+	transitions	[]Transition
+}
+
+
 func (t *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	fmt.Println("Signing State Machines Chaincode Init")
 	_, args := stub.GetFunctionAndParameters()
