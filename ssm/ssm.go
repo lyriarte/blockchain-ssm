@@ -59,7 +59,16 @@ func (t *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	}
 	fmt.Println("Admins info:", string(admins_info))
 	fmt.Println("")
-
+	for i := 0; i < len(admins); i++ {
+		admin_info, err := json.Marshal(admins[i])
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		err = stub.PutState("ADMIN_" + admins[i].Name, admin_info)
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+	}
 	return shim.Success(nil)
 }
 
@@ -70,11 +79,12 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	fmt.Println("Function:", function, "args:", len(args))
 
 	var err error	
+	var admin Agent
+	var user Agent
 	if function == "register" {
 		if len(args) != 3 {
 			return shim.Error("Incorrect arg count.")
 		}
-		var user Agent
 		err = json.Unmarshal([]byte(args[0]), &user)
 		if (err != nil) {
 			return shim.Error(err.Error())
@@ -85,6 +95,18 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		}
 		fmt.Println("User info:", string(user_info))
 		fmt.Println("Admin:", args[1], "sign:", args[2])
+		dat, err := stub.GetState("ADMIN_" + args[1]);
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		err = json.Unmarshal(dat, &admin)
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		err = stub.PutState("USER_" + user.Name, user_info)
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
 	}
 	
 	if function == "create" {
@@ -102,6 +124,14 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		}
 		fmt.Println("State machine info:", string(ssm_info))
 		fmt.Println("Admin:", args[1], "sign:", args[2])
+		dat, err := stub.GetState("ADMIN_" + args[1]);
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		err = json.Unmarshal(dat, &admin)
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
 	}
 	
 	if function == "start" {
@@ -119,6 +149,14 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		}
 		fmt.Println("Session state info:", string(state_info))
 		fmt.Println("Admin:", args[1], "sign:", args[2])
+		dat, err := stub.GetState("ADMIN_" + args[1]);
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		err = json.Unmarshal(dat, &admin)
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
 	}
 	
 	if function == "perform" {
@@ -137,6 +175,14 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		}
 		fmt.Println("Perform state info:", string(state_info))
 		fmt.Println("User:", args[2], "sign:", args[3])
+		dat, err := stub.GetState("USER_" + args[2]);
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		err = json.Unmarshal(dat, &user)
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
 	}
 	
 	if function == "session" {
@@ -158,6 +204,15 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 			return shim.Error("Incorrect arg count.")
 		}
 		fmt.Println("Identifier:", args[0])
+		dat, err := stub.GetState("USER_" + args[0]);
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		err = json.Unmarshal(dat, &user)
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		return shim.Success(dat)
 	}
 	
 	if function == "admin" {
@@ -165,6 +220,15 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 			return shim.Error("Incorrect arg count.")
 		}
 		fmt.Println("Identifier:", args[0])
+		dat, err := stub.GetState("ADMIN_" + args[0]);
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		err = json.Unmarshal(dat, &admin)
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		return shim.Success(dat)
 	}
 	
 	fmt.Println()
