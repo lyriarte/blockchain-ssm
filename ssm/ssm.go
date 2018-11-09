@@ -161,6 +161,10 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
+		err = stub.PutState("STATE_" + state.Session, state_info)
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
 	}
 	
 	if function == "perform" {
@@ -194,6 +198,16 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 			return shim.Error("Incorrect arg count.")
 		}
 		fmt.Println("Identifier:", args[0])
+		var state State
+		dat, err := stub.GetState("STATE_" + args[0]);
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		err = json.Unmarshal(dat, &state)
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		return shim.Success(dat)
 	}
 	
 	if function == "ssm" {
