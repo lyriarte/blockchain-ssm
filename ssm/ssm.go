@@ -41,7 +41,6 @@ type SigningStateMachine struct {
 
 
 func (t *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
-	fmt.Println("Signing State Machines Chaincode Init")
 	_, args := stub.GetFunctionAndParameters()
 	if len(args) != 1 {
 		return shim.Error("Incorrect arg count. Expecting 1")
@@ -53,12 +52,6 @@ func (t *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
-	admins_info, err := json.Marshal(admins)
-	if (err != nil) {
-		return shim.Error(err.Error())
-	}
-	fmt.Println("Admins info:", string(admins_info))
-	fmt.Println("")
 	for i := 0; i < len(admins); i++ {
 		admin_info, err := json.Marshal(admins[i])
 		if (err != nil) {
@@ -73,11 +66,8 @@ func (t *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 }
 
 func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
-	fmt.Println("Signing State Machines Chaincode Invoke")
 	function, args := stub.GetFunctionAndParameters()
 	
-	fmt.Println("Function:", function, "args:", len(args))
-
 	var err error	
 	var admin Agent
 	var user Agent
@@ -89,12 +79,6 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		user_info, err := json.Marshal(user)
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		fmt.Println("User info:", string(user_info))
-		fmt.Println("Admin:", args[1], "sign:", args[2])
 		dat, err := stub.GetState("ADMIN_" + args[1]);
 		if (err != nil) {
 			return shim.Error(err.Error())
@@ -119,12 +103,6 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		ssm_info, err := json.Marshal(ssm)
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		fmt.Println("State machine info:", string(ssm_info))
-		fmt.Println("Admin:", args[1], "sign:", args[2])
 		dat, err := stub.GetState("ADMIN_" + args[1]);
 		if (err != nil) {
 			return shim.Error(err.Error())
@@ -149,12 +127,6 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		state_info, err := json.Marshal(state)
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		fmt.Println("Session state info:", string(state_info))
-		fmt.Println("Admin:", args[1], "sign:", args[2])
 		dat, err := stub.GetState("ADMIN_" + args[1]);
 		if (err != nil) {
 			return shim.Error(err.Error())
@@ -180,12 +152,6 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		state_info, err := json.Marshal(state)
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		fmt.Println("Perform state info:", string(state_info))
-		fmt.Println("User:", args[2], "sign:", args[3])
 		dat, err := stub.GetState("USER_" + args[2]);
 		if (err != nil) {
 			return shim.Error(err.Error())
@@ -201,13 +167,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 1 {
 			return shim.Error("Incorrect arg count.")
 		}
-		fmt.Println("Identifier:", args[0])
-		var state State
 		dat, err := stub.GetState("STATE_" + args[0]);
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		err = json.Unmarshal(dat, &state)
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -218,13 +178,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 1 {
 			return shim.Error("Incorrect arg count.")
 		}
-		fmt.Println("Identifier:", args[0])
-		var ssm SigningStateMachine
 		dat, err := stub.GetState("SSM_" + args[0]);
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		err = json.Unmarshal(dat, &ssm)
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -235,12 +189,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 1 {
 			return shim.Error("Incorrect arg count.")
 		}
-		fmt.Println("Identifier:", args[0])
 		dat, err := stub.GetState("USER_" + args[0]);
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		err = json.Unmarshal(dat, &user)
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -251,19 +200,13 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 1 {
 			return shim.Error("Incorrect arg count.")
 		}
-		fmt.Println("Identifier:", args[0])
 		dat, err := stub.GetState("ADMIN_" + args[0]);
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		err = json.Unmarshal(dat, &admin)
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
 		return shim.Success(dat)
 	}
 	
-	fmt.Println()
 	return shim.Success(nil)
 }
 
