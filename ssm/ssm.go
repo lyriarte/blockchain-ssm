@@ -103,7 +103,8 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		err = stub.PutState("USER_" + user.Name, user_info)
+		// TODO validate admin signature
+		err = stub.PutState("USER_" + user.Name, []byte(args[0]))
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -132,7 +133,8 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		err = stub.PutState("SSM_" + ssm.Name, ssm_info)
+		// TODO validate admin signature
+		err = stub.PutState("SSM_" + ssm.Name, []byte(args[0]))
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -161,7 +163,8 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		err = stub.PutState("STATE_" + state.Session, state_info)
+		// TODO validate admin signature
+		err = stub.PutState("STATE_" + state.Session, []byte(args[0]))
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -191,6 +194,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
+		// TODO validate user signature
 	}
 	
 	if function == "session" {
