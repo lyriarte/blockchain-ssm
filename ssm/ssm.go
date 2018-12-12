@@ -146,13 +146,16 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 4 {
 			return shim.Error("Incorrect arg count.")
 		}
-		fmt.Println("Perform action:", args[0])
 		var state State
-		err = json.Unmarshal([]byte(args[1]), &state)
+		dat, err := stub.GetState("STATE_" + args[1]);
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		dat, err := stub.GetState("USER_" + args[2]);
+		err = json.Unmarshal(dat, &state)
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		dat, err = stub.GetState("USER_" + args[2]);
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
