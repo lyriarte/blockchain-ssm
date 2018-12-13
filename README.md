@@ -8,7 +8,7 @@ A Signing State Machine (SSM) is a smart contract written with a more constraine
 
 ## Theory of operations
 
-### Agents and identities
+### Agents, roles and identities
 
 Every agent participating in the SSM provides:
 
@@ -17,27 +17,29 @@ Every agent participating in the SSM provides:
 
 Agents hold the private key corresponding to the public key stored in the SSM, and are never supposed to share it.
 
+In a SSM, transitions are performed by a given role. At execution time, the agent registered for the role performs the transition.
+
 ### Initial state
 
 The SSM is initialized with:
 
-  * A set of agents, with their public keys.
+  * A mapping of the SSM roles on registered agents.
   * A finite state automaton.
   * Initial data, that can be public like for instance the hash of a document, or private.
 
 ### States and Transitions
 
   * Agents can query the state automaton and the current data.
-  * Each state transition is a tuple <agent,action>. An agent performs a transition by signing the requested action value with its private key. The SSM validates the transaction by checking the action value using the agent's stored public key, and then updates the SSM state.
+  * Each state transition is a tuple <role,action>. An agent performs a transition by signing the requested action with its private key. The SSM validates the transaction by checking the action signature with the public key of the agent assigned to the corresponding role, and then updates the SSM state.
   * The smart-contract is fulfilled when the SSM enters an acceptance state.
 
 ### Data management
 
   * When performing a transition, an agent can update the target state data.
-  * At any given state, involved agents - i.e mentioned in a transition originating from therein - can choose to perform a transition according to the current state data.
+  * At any given state, involved agents - i.e assigned to the roles mentioned in a transition originating from therein - can choose to perform a transition according to the current state data.
   * Private data is encrypted using the public keys of the involved agents, that can use it do decide if they perform a transition.
   * The originating agent - who performed the previous transition - can write one data entry for each involved agent, encrypted with that agent's public key.
-  * Other agents involved can check the multiple encrypted versions of the data and verify that they are identical, by decrypting their own version with their public key, then re-encrypting it with each other agent public key to compare with the corresponding encrypted version in the state data.
+  * Other agents involved can check the multiple encrypted versions of the data and verify that they are identical, by decrypting their own version with their private key, then re-encrypting it with each other agent public key to compare with the corresponding encrypted version in the state data.
 
 
 ## Signing State Machine Chaincode API
@@ -69,6 +71,10 @@ The SSM state represents a snapshot of a run session on a given state machine. I
 	ssm: "Car dealership",
 	session: "deal20181201",
 	current: 0,
+	roles: {
+		"Buyer": "John Doe",
+		"Seller": "Joe Black"
+	}
 	public: "Some non encrypted data",
 	private: {
 		"John Doe": "FDST54EGFH5bdfe66654",
@@ -83,9 +89,9 @@ The Signing State Machine is created from a list of transitions. A transition is
 
 ```
 "Transition": {
-	from: 0,
-	to: 4,
-	agent: "John Doe",
+	from: 1,
+	to: 2,
+	role: "Buyer",
 	action: "Buy"
 }
 ```
@@ -97,7 +103,7 @@ The SSM structure is just a list of transitions and a unique name.
 ```
 "SigningStateMachine": {
 	name: "Car dealership",
-	transitions: [{from: 0,	to: 0, agent: "Joe Black", action: "Sell"},{from: 0, to: 4, agent: "John Doe", action: "Buy"}]
+	transitions: [{from: 0,	to: 1, role: "Seller", action: "Sell"},{from: 1, to: 2, role: "Buyer", action: "Buy"}]
 }
 ```
 
