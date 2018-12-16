@@ -28,11 +28,7 @@ func (t *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 		return shim.Error(err.Error())
 	}
 	for i := 0; i < len(admins); i++ {
-		admin_info, err := admins[i].Serialize()
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		err = stub.PutState("ADMIN_" + admins[i].Name, admin_info)
+		err = admins[i].Put(stub, "ADMIN_" + admins[i].Name)
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -54,16 +50,12 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		dat, err := stub.GetState("ADMIN_" + args[1]);
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		err = admin.Deserialize(dat)
+		err = admin.Get(stub, "ADMIN_" + args[1])
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
 		// TODO validate admin signature
-		err = stub.PutState("USER_" + user.Name, []byte(args[0]))
+		err = user.Put(stub, "USER_" + user.Name)
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -78,16 +70,12 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		dat, err := stub.GetState("ADMIN_" + args[1]);
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		err = admin.Deserialize(dat)
+		err = admin.Get(stub, "ADMIN_" + args[1])
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
 		// TODO validate admin signature
-		err = stub.PutState("SSM_" + ssm.Name, []byte(args[0]))
+		err = ssm.Put(stub, "SSM_" + ssm.Name)
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -102,16 +90,12 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		dat, err := stub.GetState("ADMIN_" + args[1]);
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		err = admin.Deserialize(dat)
+		err = admin.Get(stub, "ADMIN_" + args[1])
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
 		// TODO validate admin signature
-		err = stub.PutState("STATE_" + state.Session, []byte(args[0]))
+		err = state.Put(stub, "STATE_" + state.Session)
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -122,19 +106,11 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 			return shim.Error("Incorrect arg count.")
 		}
 		var state State
-		dat, err := stub.GetState("STATE_" + args[1]);
+		err = state.Get(stub, "STATE_" + args[1])
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		err = state.Deserialize(dat)
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		dat, err = stub.GetState("USER_" + args[2]);
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		err = user.Deserialize(dat)
+		err = user.Get(stub, "USER_" + args[2])
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -145,7 +121,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 1 {
 			return shim.Error("Incorrect arg count.")
 		}
-		dat, err := stub.GetState("STATE_" + args[0]);
+		dat, err := stub.GetState("STATE_" + args[0])
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -156,7 +132,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 1 {
 			return shim.Error("Incorrect arg count.")
 		}
-		dat, err := stub.GetState("SSM_" + args[0]);
+		dat, err := stub.GetState("SSM_" + args[0])
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -167,7 +143,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 1 {
 			return shim.Error("Incorrect arg count.")
 		}
-		dat, err := stub.GetState("USER_" + args[0]);
+		dat, err := stub.GetState("USER_" + args[0])
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -178,7 +154,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 1 {
 			return shim.Error("Incorrect arg count.")
 		}
-		dat, err := stub.GetState("ADMIN_" + args[0]);
+		dat, err := stub.GetState("ADMIN_" + args[0])
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
