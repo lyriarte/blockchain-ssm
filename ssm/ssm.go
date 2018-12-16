@@ -14,32 +14,6 @@ import (
 type SSMChaincode struct {
 }
 
-type Agent struct {
-	Name		string	`json:"name"`
-	Pub			string	`json:"pub"`
-}
-
-type State struct {
-	Ssm			string	`json:"ssm,omitempty"`
-	Session		string	`json:"session"`
-	Roles		map[string]string	`json:"roles,omitempty"`
-	Current		int		`json:"current,omitempty"`
-	Public		string	`json:"public,omitempty"`
-	Private		map[string]string	`json:"private,omitempty"`
-}
-
-type Transition struct {
-	From		int		`json:"from"`
-	To			int		`json:"to"`
-	Role		string	`json:"role"`
-	Action		string	`json:"action"`
-}
-
-type SigningStateMachine struct {
-	Name		string	`json:"name"`
-	Transitions	[]Transition	`json:"transitions"`
-}
-
 
 func (t *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	_, args := stub.GetFunctionAndParameters()
