@@ -28,7 +28,7 @@ func (t *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 		return shim.Error(err.Error())
 	}
 	for i := 0; i < len(admins); i++ {
-		admin_info, err := json.Marshal(admins[i])
+		admin_info, err := admins[i].Serialize()
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -50,7 +50,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 3 {
 			return shim.Error("Incorrect arg count.")
 		}
-		err = json.Unmarshal([]byte(args[0]), &user)
+		err = user.Deserialize([]byte(args[0]))
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -58,7 +58,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		err = json.Unmarshal(dat, &admin)
+		err = admin.Deserialize(dat)
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -74,7 +74,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 			return shim.Error("Incorrect arg count.")
 		}
 		var ssm SigningStateMachine
-		err = json.Unmarshal([]byte(args[0]), &ssm)
+		err = ssm.Deserialize([]byte(args[0]))
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -82,7 +82,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		err = json.Unmarshal(dat, &admin)
+		err = admin.Deserialize(dat)
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -98,7 +98,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 			return shim.Error("Incorrect arg count.")
 		}
 		var state State
-		err = json.Unmarshal([]byte(args[0]), &state)
+		err = state.Deserialize([]byte(args[0]))
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -106,7 +106,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		err = json.Unmarshal(dat, &admin)
+		err = admin.Deserialize(dat)
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -126,7 +126,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		err = json.Unmarshal(dat, &state)
+		err = state.Deserialize(dat)
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
@@ -134,7 +134,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
-		err = json.Unmarshal(dat, &user)
+		err = user.Deserialize(dat)
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
