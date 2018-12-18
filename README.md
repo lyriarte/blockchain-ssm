@@ -30,15 +30,15 @@ The SSM is initialized with:
 ### States and Transitions
 
   * Agents can query the state automaton and the current data.
-  * Each state transition is a tuple <role,action>. An agent performs a transition by signing the requested action with its private key. The SSM validates the transaction by checking the action signature with the public key of the agent assigned to the corresponding role, and then updates the SSM state.
+  * Each state transition is a tuple <role,action>. An agent performs a transition by signing the updated state with its private key. The SSM validates the transaction by checking the state's signature with the public key of the agent assigned to the corresponding role, and then updates the SSM state.
   * The smart-contract is fulfilled when the SSM enters an acceptance state.
 
 ### Data management
 
-  * When performing a transition, an agent can update the target state data.
+  * When performing a transition, an agent updates the target state data. The agent signs the updated state data with its private key. The updated state data must contain the current iteration number that will be incremented by the ssm, preventing unintentional transitions and signature reuse.
   * At any given state, involved agents - i.e assigned to the roles mentioned in a transition originating from therein - can choose to perform a transition according to the current state data.
   * Private data is encrypted using the public keys of the involved agents, that can use it do decide if they perform a transition.
-  * The originating agent - who performed the previous transition - can write one data entry for each involved agent, encrypted with that agent's public key.
+  * The originating agent - who performed the previous transition - can write in the updated state one data entry for each involved agent, encrypted with that agent's public key.
   * Other agents involved can check the multiple encrypted versions of the data and verify that they are identical, by decrypting their own version with their private key, then re-encrypting it with each other agent public key to compare with the corresponding encrypted version in the state data.
 
 
@@ -64,17 +64,19 @@ There are two kind of agents:
 
 #### SSM state
 
-The SSM state represents a snapshot of a run session on a given state machine. It can be queried and updated from the SSM chaicode API. It holds the current state index, public and private data relevant to the SSM session.
+The SSM state represents a snapshot of a run session on a given state machine. It can be queried and updated from the SSM chaicode API. It holds the current state index, public and private data relevant to the SSM session. The iteration is incremented at every transition. The originating transition allows to track the SSM run session history in the ledger.
 
 ```
 "State": {
 	ssm: "Car dealership",
 	session: "deal20181201",
-	current: 0,
+	iteration: 1,
 	roles: {
 		"Buyer": "John Doe",
 		"Seller": "Joe Black"
-	}
+	},
+	current: 2,
+	origin: {from: 1, to: 2, role: "Buyer", action: "Buy"}
 	public: "Some non encrypted data",
 	private: {
 		"John Doe": "FDST54EGFH5bdfe66654",
@@ -180,7 +182,7 @@ Result
   Session state is updated. 
 ```
 
-**Note**: In the `State` structure of the `context` parameter, `session` field is mandatory, `public` and `private` data fields are optional, other fields are read-only.
+**Note**: In the `State` structure of the `context` parameter, `session` and `iteration` fields are mandatory, `public` and `private` data fields are optional, other fields are read-only.
 
 #### SSM queries
 

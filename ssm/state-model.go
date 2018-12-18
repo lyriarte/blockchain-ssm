@@ -6,8 +6,10 @@ package main
 type StateModel struct {
 	Ssm			string	`json:"ssm,omitempty"`
 	Session		string	`json:"session"`
+	Iteration	int		`json:"iteration"`
 	Roles		map[string]string	`json:"roles,omitempty"`
 	Current		int		`json:"current,omitempty"`
+	Origin		*Transition	`json:"origin,omitempty"`
 	Public		string	`json:"public,omitempty"`
 	Private		map[string]string	`json:"private,omitempty"`
 }
