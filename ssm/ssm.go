@@ -1,5 +1,10 @@
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // Copyright Luc Yriarte <luc.yriarte@thingagora.org> 2018 
 // License: Apache-2.0
+//
+// Signing State Machines chaincode
+//
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
 package main
 
@@ -11,16 +16,27 @@ import (
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+//
+// chaincode interface
+//
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
 type SSMChaincode struct {
 }
 
+//
+// chaincode initialization
+//
 
-func (t *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
+func (self *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	_, args := stub.GetFunctionAndParameters()
 	if len(args) != 1 {
 		return shim.Error("Incorrect arg count. Expecting 1")
 	}
 
+	// "init", admins: <Agent>* 
 	var err error	
 	var admins []Agent
 	err = json.Unmarshal([]byte(args[0]), &admins)
@@ -36,12 +52,19 @@ func (t *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	return shim.Success(nil)
 }
 
-func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
+
+func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
 	
 	var err error	
 	var admin Agent
 	var user Agent
+	
+	//
+	//	transactions
+	//
+	
+	// "register", user:Agent, admin_name:string, signature:b64	
 	if function == "register" {
 		if len(args) != 3 {
 			return shim.Error("Incorrect arg count.")
@@ -60,7 +83,8 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 			return shim.Error(err.Error())
 		}
 	}
-	
+
+	// "create", ssm:SigningStateMachine, admin_name:string, signature:b64
 	if function == "create" {
 		if len(args) != 3 {
 			return shim.Error("Incorrect arg count.")
@@ -81,6 +105,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		}
 	}
 	
+	// "start", init:State, admin_name:string, signature:b64
 	if function == "start" {
 		if len(args) != 3 {
 			return shim.Error("Incorrect arg count.")
@@ -101,6 +126,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		}
 	}
 	
+	// "perform", action:string, context:State, user_name:string, signature:b64
 	if function == "perform" {
 		if len(args) != 4 {
 			return shim.Error("Incorrect arg count.")
@@ -117,6 +143,11 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		// TODO validate user signature
 	}
 	
+	//
+	//	queries
+	//
+
+	// "session", <session id> 
 	if function == "session" {
 		if len(args) != 1 {
 			return shim.Error("Incorrect arg count.")
@@ -128,6 +159,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return shim.Success(dat)
 	}
 	
+	// "ssm", <ssm name> 
 	if function == "ssm" {
 		if len(args) != 1 {
 			return shim.Error("Incorrect arg count.")
@@ -139,6 +171,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return shim.Success(dat)
 	}
 	
+	// "user", <user name>
 	if function == "user" {
 		if len(args) != 1 {
 			return shim.Error("Incorrect arg count.")
@@ -150,6 +183,7 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return shim.Success(dat)
 	}
 	
+	// "admin", <admin name>
 	if function == "admin" {
 		if len(args) != 1 {
 			return shim.Error("Incorrect arg count.")
@@ -163,6 +197,13 @@ func (t *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	
 	return shim.Success(nil)
 }
+
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+//
+// main function
+//
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 
 func main() {
 	err := shim.Start(new(SSMChaincode))
