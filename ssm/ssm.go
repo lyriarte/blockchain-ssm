@@ -26,6 +26,7 @@ import (
 type SSMChaincode struct {
 }
 
+
 //
 // chaincode initialization
 //
@@ -53,14 +54,15 @@ func (self *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 }
 
 
+//
+// chaincode invocation for transactions and queries
+//
+
 func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
 	
 	errmsg := "Incorrect arg count."
-	
 	var err error	
-	var admin Agent
-	var user Agent
 	
 	//
 	//	transactions
@@ -71,20 +73,7 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 3 {
 			return shim.Error(errmsg)
 		}
-		err = user.Deserialize([]byte(args[0]))
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		err = admin.Get(stub, "ADMIN_" + args[1])
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		// TODO validate admin signature
-		err = user.Put(stub, "USER_" + user.Name)
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		return shim.Success(nil)
+		return self.Register(stub, args)
 	}
 
 	// "create", ssm:SigningStateMachine, admin_name:string, signature:b64
@@ -92,21 +81,7 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 3 {
 			return shim.Error(errmsg)
 		}
-		var ssm SigningStateMachine
-		err = ssm.Deserialize([]byte(args[0]))
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		err = admin.Get(stub, "ADMIN_" + args[1])
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		// TODO validate admin signature
-		err = ssm.Put(stub, "SSM_" + ssm.Name)
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		return shim.Success(nil)
+		return self.Create(stub, args)
 	}
 	
 	// "start", init:State, admin_name:string, signature:b64
@@ -114,21 +89,7 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 3 {
 			return shim.Error(errmsg)
 		}
-		var state State
-		err = state.Deserialize([]byte(args[0]))
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		err = admin.Get(stub, "ADMIN_" + args[1])
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		// TODO validate admin signature
-		err = state.Put(stub, "STATE_" + state.Session)
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		return shim.Success(nil)
+		return self.Start(stub, args)
 	}
 	
 	// "perform", action:string, context:State, user_name:string, signature:b64
@@ -136,17 +97,7 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) != 4 {
 			return shim.Error(errmsg)
 		}
-		var state State
-		err = state.Get(stub, "STATE_" + args[1])
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		err = user.Get(stub, "USER_" + args[2])
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		// TODO validate user signature
-		return shim.Success(nil)
+		return self.Perform(stub, args)
 	}
 	
 	//
@@ -181,6 +132,94 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	
 	return shim.Success(dat)
 }
+
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+//
+// transactions API implementation
+//
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+// "register", user:Agent, admin_name:string, signature:b64	
+func (self *SSMChaincode) Register(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	var admin Agent
+	var user Agent
+	err := user.Deserialize([]byte(args[0]))
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	err = admin.Get(stub, "ADMIN_" + args[1])
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	// TODO validate admin signature
+	err = user.Put(stub, "USER_" + user.Name)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(nil)
+}
+
+
+// "create", ssm:SigningStateMachine, admin_name:string, signature:b64
+func (self *SSMChaincode) Create(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	var admin Agent
+	var ssm SigningStateMachine
+	err := ssm.Deserialize([]byte(args[0]))
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	err = admin.Get(stub, "ADMIN_" + args[1])
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	// TODO validate admin signature
+	err = ssm.Put(stub, "SSM_" + ssm.Name)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(nil)
+}
+
+
+// "start", init:State, admin_name:string, signature:b64
+func (self *SSMChaincode) Start(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	var admin Agent
+	var state State
+	err := state.Deserialize([]byte(args[0]))
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	err = admin.Get(stub, "ADMIN_" + args[1])
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	// TODO validate admin signature
+	err = state.Put(stub, "STATE_" + state.Session)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(nil)
+}
+
+
+// "perform", action:string, context:State, user_name:string, signature:b64
+func (self *SSMChaincode) Perform(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	var user Agent
+	var state State
+	err := state.Get(stub, "STATE_" + args[1])
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	err = user.Get(stub, "USER_" + args[2])
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	// TODO validate user signature
+	return shim.Success(nil)
+}
+
+
 
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
