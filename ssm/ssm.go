@@ -56,6 +56,8 @@ func (self *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
 	
+	errmsg := "Incorrect arg count."
+	
 	var err error	
 	var admin Agent
 	var user Agent
@@ -67,7 +69,7 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	// "register", user:Agent, admin_name:string, signature:b64	
 	if function == "register" {
 		if len(args) != 3 {
-			return shim.Error("Incorrect arg count.")
+			return shim.Error(errmsg)
 		}
 		err = user.Deserialize([]byte(args[0]))
 		if (err != nil) {
@@ -82,12 +84,13 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
+		return shim.Success(nil)
 	}
 
 	// "create", ssm:SigningStateMachine, admin_name:string, signature:b64
 	if function == "create" {
 		if len(args) != 3 {
-			return shim.Error("Incorrect arg count.")
+			return shim.Error(errmsg)
 		}
 		var ssm SigningStateMachine
 		err = ssm.Deserialize([]byte(args[0]))
@@ -103,12 +106,13 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
+		return shim.Success(nil)
 	}
 	
 	// "start", init:State, admin_name:string, signature:b64
 	if function == "start" {
 		if len(args) != 3 {
-			return shim.Error("Incorrect arg count.")
+			return shim.Error(errmsg)
 		}
 		var state State
 		err = state.Deserialize([]byte(args[0]))
@@ -124,12 +128,13 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if (err != nil) {
 			return shim.Error(err.Error())
 		}
+		return shim.Success(nil)
 	}
 	
 	// "perform", action:string, context:State, user_name:string, signature:b64
 	if function == "perform" {
 		if len(args) != 4 {
-			return shim.Error("Incorrect arg count.")
+			return shim.Error(errmsg)
 		}
 		var state State
 		err = state.Get(stub, "STATE_" + args[1])
@@ -141,61 +146,40 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 			return shim.Error(err.Error())
 		}
 		// TODO validate user signature
+		return shim.Success(nil)
 	}
 	
 	//
 	//	queries
 	//
 
-	// "session", <session id> 
+	if len(args) != 1 {
+		return shim.Error(errmsg)
+	}
+	errmsg = "Unknown operation."
+	var dat []byte
+	
 	if function == "session" {
-		if len(args) != 1 {
-			return shim.Error("Incorrect arg count.")
-		}
-		dat, err := stub.GetState("STATE_" + args[0])
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		return shim.Success(dat)
-	}
-	
+	// "session", <session id> 
+		dat, err = stub.GetState("STATE_" + args[0])
+	} else if function == "ssm" {
 	// "ssm", <ssm name> 
-	if function == "ssm" {
-		if len(args) != 1 {
-			return shim.Error("Incorrect arg count.")
-		}
-		dat, err := stub.GetState("SSM_" + args[0])
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		return shim.Success(dat)
-	}
-	
+		dat, err = stub.GetState("SSM_" + args[0])
+	} else if function == "user" {
 	// "user", <user name>
-	if function == "user" {
-		if len(args) != 1 {
-			return shim.Error("Incorrect arg count.")
-		}
-		dat, err := stub.GetState("USER_" + args[0])
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		return shim.Success(dat)
-	}
-	
+		dat, err = stub.GetState("USER_" + args[0])
+	} else if function == "admin" {
 	// "admin", <admin name>
-	if function == "admin" {
-		if len(args) != 1 {
-			return shim.Error("Incorrect arg count.")
-		}
-		dat, err := stub.GetState("ADMIN_" + args[0])
-		if (err != nil) {
-			return shim.Error(err.Error())
-		}
-		return shim.Success(dat)
+		dat, err = stub.GetState("ADMIN_" + args[0])
+	} else {
+		return shim.Error(errmsg)
 	}
 	
-	return shim.Success(nil)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	
+	return shim.Success(dat)
 }
 
 
