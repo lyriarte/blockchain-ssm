@@ -38,13 +38,14 @@ func (self *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	}
 
 	// "init", admins: <Agent>* 
-	var err error	
 	var admins []Agent
-	err = json.Unmarshal([]byte(args[0]), &admins)
+	// Create admins array from JSON string
+	err := json.Unmarshal([]byte(args[0]), &admins)
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
 	for i := 0; i < len(admins); i++ {
+		// Store every admin
 		err = admins[i].Put(stub, "ADMIN_" + admins[i].Name)
 		if (err != nil) {
 			return shim.Error(err.Error())
@@ -144,15 +145,18 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 func (self *SSMChaincode) Register(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var admin Agent
 	var user Agent
-	err := user.Deserialize([]byte(args[0]))
+	// Get validating admin
+	err := admin.Get(stub, "ADMIN_" + args[1])
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
-	err = admin.Get(stub, "ADMIN_" + args[1])
+	// TODO Validate admin signature on user JSON string
+	// Create user from JSON string
+	err = user.Deserialize([]byte(args[0]))
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
-	// TODO validate admin signature
+	// Store user if not alreay existing
 	err = user.Put(stub, "USER_" + user.Name)
 	if (err != nil) {
 		return shim.Error(err.Error())
@@ -165,15 +169,18 @@ func (self *SSMChaincode) Register(stub shim.ChaincodeStubInterface, args []stri
 func (self *SSMChaincode) Create(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var admin Agent
 	var ssm SigningStateMachine
-	err := ssm.Deserialize([]byte(args[0]))
+	// Get validating admin
+	err := admin.Get(stub, "ADMIN_" + args[1])
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
-	err = admin.Get(stub, "ADMIN_" + args[1])
+	// TODO Validate admin signature on ssm JSON string
+	// Create ssm from JSON string
+	err = ssm.Deserialize([]byte(args[0]))
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
-	// TODO validate admin signature
+	// Store ssm if not alreay existing
 	err = ssm.Put(stub, "SSM_" + ssm.Name)
 	if (err != nil) {
 		return shim.Error(err.Error())
@@ -186,15 +193,18 @@ func (self *SSMChaincode) Create(stub shim.ChaincodeStubInterface, args []string
 func (self *SSMChaincode) Start(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var admin Agent
 	var state State
-	err := state.Deserialize([]byte(args[0]))
+	// Get validating admin
+	err := admin.Get(stub, "ADMIN_" + args[1])
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
-	err = admin.Get(stub, "ADMIN_" + args[1])
+	// TODO Validate admin signature on state JSON string
+	// Create state from JSON string
+	err = state.Deserialize([]byte(args[0]))
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
-	// TODO validate admin signature
+	// Store state if not alreay existing
 	err = state.Put(stub, "STATE_" + state.Session)
 	if (err != nil) {
 		return shim.Error(err.Error())
@@ -207,15 +217,18 @@ func (self *SSMChaincode) Start(stub shim.ChaincodeStubInterface, args []string)
 func (self *SSMChaincode) Perform(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var user Agent
 	var state State
-	err := state.Get(stub, "STATE_" + args[1])
+	// Get validating user
+	err := user.Get(stub, "USER_" + args[2])
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
-	err = user.Get(stub, "USER_" + args[2])
+	// TODO Validate user signature on state JSON string
+	// Create state from JSON string
+	err = state.Get(stub, "STATE_" + args[1])
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
-	// TODO validate user signature
+	// TODO Update state if validated
 	return shim.Success(nil)
 }
 
