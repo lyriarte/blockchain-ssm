@@ -30,7 +30,7 @@ The SSM is initialized with:
 ### States and Transitions
 
   * Agents can query the state automaton and the current data.
-  * Each state transition is a tuple <role,action>. An agent performs a transition by signing the updated state with its private key. The SSM validates the transaction by checking the state's signature with the public key of the agent assigned to the corresponding role, and then updates the SSM state.
+  * Each state transition is a tuple <role,action>. An agent performs a transition by signing the update with its private key. The SSM validates the transaction by checking the state's signature with the public key of the agent assigned to the corresponding role, and then updates the SSM state.
   * The smart-contract is fulfilled when the SSM enters an acceptance state.
 
 ### Data management
@@ -43,6 +43,13 @@ The SSM is initialized with:
 
 
 ## Signing State Machine Chaincode API
+
+### Operation
+
+SSM chaincode API involves Queries and Transations. Queries can be performed without other restictions than those set at chaincode deployment. Transactions on the other hand  have to be signed either by an administrator or a user.
+
+  * Queries follow a "Get by id" model, under the form: `<type>, <identifier>` where the type is one of "ssm", "session", "user", "admin".
+  * Transactions have the form: `<arg1>, ...<argn>, <agent>, <signature>` where the signature is a hash of args1..n concatenation signed with the agent's private key.
 
 ### Data structures
 
@@ -170,7 +177,7 @@ Result
 
 #### SSM execution
 
-  * **perform:** A user performs an action on a SSM session. The new session state is signed with the user private key.
+  * **perform:** A user performs an action on a SSM session. The action to perform and the new session state are signed with the user private key.
   
 ```
 Command
