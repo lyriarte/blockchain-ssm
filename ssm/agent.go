@@ -13,6 +13,10 @@ type Agent struct {
 	AgentModel
 }
 
+//
+// Storable interface implementation
+//
+
 func (self *Agent) Put(stub shim.ChaincodeStubInterface, key string) error {
 	data, err := self.Serialize()
 	if (err != nil) {
@@ -28,6 +32,10 @@ func (self *Agent) Get(stub shim.ChaincodeStubInterface, key string) error {
 	}	
 	return self.Deserialize(data)
 }
+
+//
+// Serializable interface implementation
+//
 
 func (self *Agent) Serialize() ([]byte, error) {
 	return json.Marshal(self.AgentModel)

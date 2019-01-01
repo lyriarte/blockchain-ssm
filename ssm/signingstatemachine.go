@@ -13,6 +13,10 @@ type SigningStateMachine struct {
 	SigningStateMachineModel
 }
 
+//
+// Storable interface implementation
+//
+
 func (self *SigningStateMachine) Put(stub shim.ChaincodeStubInterface, key string) error {
 	data, err := self.Serialize()
 	if (err != nil) {
@@ -28,6 +32,10 @@ func (self *SigningStateMachine) Get(stub shim.ChaincodeStubInterface, key strin
 	}	
 	return self.Deserialize(data)
 }
+
+//
+// Serializable interface implementation
+//
 
 func (self *SigningStateMachine) Serialize() ([]byte, error) {
 	return json.Marshal(self.SigningStateMachineModel)

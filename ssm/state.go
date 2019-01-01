@@ -13,6 +13,10 @@ type State struct {
 	StateModel
 }
 
+//
+// Storable interface implementation
+//
+
 func (self *State) Put(stub shim.ChaincodeStubInterface, key string) error {
 	data, err := self.Serialize()
 	if (err != nil) {
@@ -28,6 +32,10 @@ func (self *State) Get(stub shim.ChaincodeStubInterface, key string) error {
 	}	
 	return self.Deserialize(data)
 }
+
+//
+// Serializable interface implementation
+//
 
 func (self *State) Serialize() ([]byte, error) {
 	return json.Marshal(self.StateModel)
