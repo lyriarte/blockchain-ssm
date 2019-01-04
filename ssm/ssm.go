@@ -44,6 +44,13 @@ func (self *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
+	// Verify admins public key before storing
+	for i := 0; i < len(admins); i++ {
+		_, err = admins[i].PublicKey()
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+	}
 	for i := 0; i < len(admins); i++ {
 		// Store every admin
 		err = admins[i].Put(stub, "ADMIN_" + admins[i].Name)
@@ -154,6 +161,11 @@ func (self *SSMChaincode) Register(stub shim.ChaincodeStubInterface, args []stri
 	// Create user from JSON string
 	err = user.Deserialize([]byte(args[0]))
 	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	// Verify user public key before storing
+	_, err = user.PublicKey()
+	if err != nil {
 		return shim.Error(err.Error())
 	}
 	// Store user if not alreay existing
