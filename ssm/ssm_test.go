@@ -43,3 +43,33 @@ func TestAgent(test *testing.T) {
 	fmt.Println("---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ")
 }
 
+
+//
+// State
+//
+
+func TestState(test *testing.T) {
+	fmt.Println("---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- State")
+
+	var err error
+	var state State
+
+	fmt.Println("---- ---- ---- ---- Deserialize")
+	strState := "{\"ssm\": \"Car dealership\", \"session\": \"deal20181201\", \"current\": 0, \"public\": \"Car dealer 2018 public\", \"private\": {\"John Doe\": \"XXX\",\"Joe Black\": \"YYY\"}, \"roles\": {\"Buyer\": \"John Doe\", \"Seller\": \"Joe Black\"}}"
+	err = state.Deserialize([]byte(strState))
+	if err != nil {
+		test.Fatal(err)
+	}
+	
+	fmt.Println("---- ---- ---- ---- Serialize")
+	bytesState, err := state.Serialize()
+	if err != nil {
+		test.Fatal(err)
+	}
+	if bytesState == nil {
+		test.Fatal("bytesState")
+	}
+	
+	fmt.Println("---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ")
+}
+
