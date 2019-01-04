@@ -73,3 +73,33 @@ func TestState(test *testing.T) {
 	fmt.Println("---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ")
 }
 
+
+//
+// SigningStateMachine
+//
+
+func TestSigningStateMachine(test *testing.T) {
+	fmt.Println("---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- SigningStateMachine")
+
+	var err error
+	var ssm SigningStateMachine
+
+	fmt.Println("---- ---- ---- ---- Deserialize")
+	strSigningStateMachine := "{\"name\": \"Car dealership\", \"transitions\": [{\"from\": 0, \"to\": 1, \"role\": \"Seller\", \"action\": \"Sell\"}, {\"from\": 1, \"to\": 2, \"role\": \"Buyer\", \"action\": \"Buy\"}]}"
+	err = ssm.Deserialize([]byte(strSigningStateMachine))
+	if err != nil {
+		test.Fatal(err)
+	}
+	
+	fmt.Println("---- ---- ---- ---- Serialize")
+	bytesSigningStateMachine, err := ssm.Serialize()
+	if err != nil {
+		test.Fatal(err)
+	}
+	if bytesSigningStateMachine == nil {
+		test.Fatal("bytesSigningStateMachine")
+	}
+	
+	fmt.Println("---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ")
+}
+
