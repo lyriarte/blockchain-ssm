@@ -1,0 +1,17 @@
+#!/bin/bash
+
+usage() 
+{
+    echo "Usage: `basename $0` <NAME> <KEY.pub>"
+    exit 1
+}
+
+[[ $# -ne 2 ]] && usage
+
+AGENT="$1"
+IFILE="$2"
+[[ -f ${IFILE} ]] || usage
+
+PUBKEY=$(cat ${IFILE} | grep -v "PUBLIC KEY" | tr -d "\n")
+
+echo '{}' | jq -M --arg agent $AGENT --arg pubkey $PUBKEY '. + {name: $agent, pub: $pubkey}'

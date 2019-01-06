@@ -1,0 +1,12 @@
+#!/bin/bash
+
+usage() 
+{
+    echo "Usage: `basename $0` [FILE.json]"
+    exit 1
+}
+
+[[ $# -gt 1 ]] && usage
+
+jq . -cM $1 | sed 's/"/\\"/g ; s/^/"/ ; s/$/"/'
+
