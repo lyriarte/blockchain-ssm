@@ -1,0 +1,15 @@
+#!/bin/bash
+
+usage() 
+{
+    echo "Usage: `basename $0` <KEY.pub> <FILE> [FILE.crypt]"
+    exit 1
+}
+
+[[ $# -lt 2 ]] && usage
+KEY="$1"
+FILE="$2"
+CRYPT=${FILE}.crypt
+[[ "$3" ]] && CRYPT="$3"
+
+openssl rsautl -encrypt -pubin -inkey ${KEY} -in ${FILE} -out ${CRYPT}

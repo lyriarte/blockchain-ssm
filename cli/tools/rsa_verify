@@ -1,0 +1,14 @@
+#!/bin/bash
+
+usage() 
+{
+    echo "Usage: `basename $0` <KEY.pub> <FILE> <FILE.dgst>"
+    exit 1
+}
+
+[[ $# -ne 3 ]] && usage
+KEY="$1"
+FILE="$2"
+DGST="$3"
+
+openssl dgst -sha256 -verify ${KEY} -signature ${DGST} ${FILE}

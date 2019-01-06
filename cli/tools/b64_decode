@@ -1,0 +1,17 @@
+#!/bin/bash
+
+usage() 
+{
+    echo "Usage: `basename $0` <FILE.b64> [FILE]"
+    exit 1
+}
+
+[[ $# -lt 1 ]] && usage
+IFILE="$1"
+[[ -f ${IFILE} ]] || usage
+
+OFILE=$(basename ${IFILE} .b64)
+[[ "$2" ]] && OFILE="$2"
+[[ -f ${OFILE} ]] && usage
+
+openssl base64 -d -in ${IFILE} -out ${OFILE}

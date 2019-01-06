@@ -1,0 +1,9 @@
+#!/bin/bash
+
+KEY=key_rsa
+[[ "$1" ]] && KEY="$1"
+BITS=2048
+[[ "$2" ]] && BITS="$2"
+
+openssl genrsa -out ${KEY} ${BITS}
+openssl rsa -in ${KEY} -pubout > ${KEY}.pub
