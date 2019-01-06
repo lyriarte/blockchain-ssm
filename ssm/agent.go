@@ -8,8 +8,11 @@ import (
 
 	"crypto"
 	"crypto/x509"
+	"crypto/sha256"
+	"crypto/rsa"
 	"encoding/json"
 	"encoding/pem"
+	"encoding/base64" 
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
@@ -75,4 +78,26 @@ func (self *Agent) PublicKey() (crypto.PublicKey, error) {
 	}
 
 	return x509.ParsePKIXPublicKey(block.Bytes)
+}
+
+func (self *Agent) Verify(message string, b64sign string) error {
+	// Retrieve agent's public key
+	pubKey, err := self.PublicKey()
+	if err != nil {
+		return err
+	}
+	// Explicit cast to RSA public key
+	pubKeyRSA, _ := pubKey.(*rsa.PublicKey)
+	if err != nil {
+		return err
+	}
+	// Decode base 64 signature
+	signature, err := base64.StdEncoding.DecodeString(b64sign)
+	if err != nil {
+		return err
+	}
+	// Calculate message hash
+	hash := sha256.Sum256([]byte(message))
+	// Verify signature
+	return rsa.VerifyPKCS1v15(pubKeyRSA, crypto.SHA256, hash[:], signature)
 }
