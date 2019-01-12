@@ -59,8 +59,8 @@ SSM chaincode agents are identified by a unique name. The agent's public key is 
 
 ```
 "Agent": {
-	name: "John Doe",
-	pub: "AAAAB3NzaC1yc2EAAAADAQA"
+	name: "Adam",
+	pub: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3MO+2nIRi/cs4WbE+ykzA1ErTfs0QmBIdpZoAsU7YVMKBnBNulxhy2BI93QHK9uQreLhANBDexagMZg9ZzCxtKLi9UNHSm08099znPfMKn2cITHI8ShyZC7OogsbNmqrY0iy01r4IVpPi4CMNhLTCWyLGWS+L0hsmZOQQWV5BeER4nufBgGmA8plD14T/AXaHF7pMJAGlvauqjcjhb9YAoDUjSmdy4h3KzNq0c1KSQwORgQhgGItUxs5X8jvAXsikRDs7OkqbEDWpSf5z6FSyenvPmnplrqL/5bjiis6ObbOA+BjpMpyuouXOA3WuGv61a5Wrx62bcfeCx9471EKFQIDAQAB"
 }
 ```
 
@@ -79,15 +79,15 @@ The SSM state represents a snapshot of a run session on a given state machine. I
 	session: "deal20181201",
 	iteration: 1,
 	roles: {
-		"Buyer": "John Doe",
-		"Seller": "Joe Black"
+		"Buyer": "Bob",
+		"Seller": "Sam"
 	},
 	current: 2,
 	origin: {from: 1, to: 2, role: "Buyer", action: "Buy"}
 	public: "Some non encrypted data",
 	private: {
-		"John Doe": "FDST54EGFH5bdfe66654",
-		"Joe Black": "33STXXFH5bdfe3334566"
+		"Bob": "XXXX",
+		"Sam": "YYYY"
 	}
 }
 ```

@@ -50,8 +50,8 @@ func TestAgent(test *testing.T) {
 	}
 	
 	fmt.Println("---- ---- ---- ---- Verify")
-	message := "Adam the admin, Sam the seller and Bob the buyer."
-	b64sign := "UqEaW5pfefoaJXFbN7so6jziSwqLCZftytzHanFv1OgeLX/Dvl5PQCPPyUpR3dubCqbtOKSQiJdcMkBsC56V2ZGzzO7c0/phQKp2NGD0IlgsEDYwbR3ok9Ah52ZC9ZAeaWEALUJ0mZ8N58u8VbVV1zR9YPJNTO9LzDEjM95lOgMMtEWq+O++qM+F/kZQjPNHZUYk2gdANnQWfSeB73O2oG+WTHJTNKar0k9JTkklhOMVMGDhKfrADyTeYonrlS6vNlbLQSOB2rH1f/QruzxBMzNj0z7HO+7dY0qf/PpwtcVTKOz+5y9HYeyTFP0ZABT0lSRaDx9X0aNeBzodYItm6w=="
+	message := "{\"name\":\"Bob\",\"pub\":\"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4v2ZYVhQaG7HdhCsrFKlxG1kWLrApCgb2tUjdXLjc4WVG12ZC2eW1b5WZZnsGmS46eCDZyxZsJTxTbKjlKb8FcWWfs0tEixL08gqBKUH9+FD8GaEdtiaOdQJ+yehUBZ5VEty9OrLUMW5L3Ftr9kGmbbtAMRkyRXTT6KEXemm3xRpX/Z2FQzmFmcucbArjyu/LvzlDHJwCiQEQS3R9UCGnjYLZEBYqj7tEEP5cnsm5egwe/EWXx9rvZH9HK3AYVgraE69qZ+FhWkErIqHWmctgPbBYBPXKCfBMzf4INMA4+c5gaCygz4RRFcr10OjGCAS/IiKaLl0X7ehbt6yrYyxEwIDAQAB\"}"
+	b64sign := "GotPEetQ34tbVodiGw3prtYWYjf06mMJX5j4X6n8m+KbMYQt0GMRtmVo88jRbXqD71IRlgPfe6dnNZ0dZRIZSUGAk57Y6fuADC0vwDciEg2+IXEc/F4vrMAEh3KXPMwb3MskRA+K1IO91szwcrrn3Y74odrBzmSypTjO60GmPAJybJ9r/5ynafDZFM5wmzgNNecJ51Yz8nltHPhhMOzDIE7pETvrlK58XnarySl81WMgR9GIO64A+WixsEsyURCiYQwWVf9XKAM6a9bDvm8h5fUvfrfktmruz8CB/qJgBLD60WD3qvSCPoN8BgCzI+QgAebyqNejNPbWSP7Z18JpxQ=="
 	err = agent.Verify(message, b64sign)
 	if err != nil {
 		test.Fatal(err)
