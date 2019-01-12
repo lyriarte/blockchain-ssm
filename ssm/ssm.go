@@ -9,6 +9,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"encoding/json"
 
@@ -245,6 +246,33 @@ func (self *SSMChaincode) Perform(stub shim.ChaincodeStubInterface, args []strin
 }
 
 
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+//
+// utilities
+//
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+
+// agent signature verification
+func (self *SSMChaincode) Verify(stub shim.ChaincodeStubInterface, args []string, agentType string) error {
+	// Need at least 3 args: message, verifier, signature
+	argCount := len(args)
+	if argCount < 3 {
+		return errors.New("Incorrect arg count. Expecting 3 or more")
+	}
+	// Verifier agent type is either "USER" or "ADMIN"
+	var verifier Agent
+	err :=  verifier.Get(stub, agentType + "_" + args[argCount - 2])
+	if (err != nil) {
+		return err
+	}
+	// message to verify is args 0 to n-3
+	message := args[0]
+	for i := 1; i < argCount-2; i++ {
+		message += args[i]
+	}
+	return verifier.Verify(message, args[argCount - 1])
+}	
 
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
