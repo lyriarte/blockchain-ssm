@@ -60,10 +60,9 @@ func (self *Agent) Deserialize(data []byte) error {
 func (self *Agent) PublicKey() (crypto.PublicKey, error) {
 	// PEM from base 64
 	pemStr := "-----BEGIN PUBLIC KEY-----\n"
-	i := 0;
-	for i < len(self.AgentModel.Pub)-64 {
+	var i int
+	for i = 0; i < len(self.AgentModel.Pub)-64; i += 64 {
 		pemStr += self.AgentModel.Pub[i:i+64] + "\n"
-		i += 64
 	}
 	pemStr += self.AgentModel.Pub[i:len(self.AgentModel.Pub)] + "\n"
 	pemStr += "-----END PUBLIC KEY-----\n"
@@ -87,10 +86,7 @@ func (self *Agent) Verify(message string, b64sign string) error {
 		return err
 	}
 	// Explicit cast to RSA public key
-	pubKeyRSA, _ := pubKey.(*rsa.PublicKey)
-	if err != nil {
-		return err
-	}
+	pubKeyRSA := pubKey.(*rsa.PublicKey)
 	// Decode base 64 signature
 	signature, err := base64.StdEncoding.DecodeString(b64sign)
 	if err != nil {
