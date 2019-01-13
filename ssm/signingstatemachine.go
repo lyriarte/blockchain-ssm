@@ -44,3 +44,20 @@ func (self *SigningStateMachine) Serialize() ([]byte, error) {
 func (self *SigningStateMachine) Deserialize(data []byte) error {
 	return json.Unmarshal(data, &self.SigningStateMachineModel)
 }
+
+//
+// SigningStateMachine API implementation
+//
+
+func (self *SigningStateMachine) NextState(from int, role string, action string) int {
+	// Iterate through transition list
+	for _, trans := range self.SigningStateMachineModel.Transitions {
+		// If we found a matching transition
+		if from == trans.From && role == trans.Role && action == trans.Action {
+			// Return the destination state
+			return trans.To
+		}
+	} 
+	// No valid transition was found
+	return -1
+}

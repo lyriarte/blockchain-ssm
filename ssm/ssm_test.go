@@ -117,6 +117,19 @@ func TestSigningStateMachine(test *testing.T) {
 		test.Fatal("bytesSigningStateMachine")
 	}
 	
+	fmt.Println("---- ---- ---- ---- NextState")
+	var stt int
+	fmt.Println("---- ---- positive")
+	stt = ssm.NextState(1, "Buyer", "Buy")
+	if stt != 2 {
+		test.Fatal("Failed accepting transition")
+	}
+	fmt.Println("---- ---- negative")
+	stt = ssm.NextState(0, "Buyer", "Buy")
+	if stt != -1 {
+		test.Fatal("Failed rejecting transition")
+	}
+	
 	fmt.Println("---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ")
 }
 
