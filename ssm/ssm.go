@@ -227,13 +227,44 @@ func (self *SSMChaincode) Start(stub shim.ChaincodeStubInterface, args []string)
 // "perform", action:string, context:State, user_name:string, signature:b64
 func (self *SSMChaincode) Perform(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error	
-	var state State
-	// Create state from JSON string
-	err = state.Get(stub, "STATE_" + args[1])
+	var update State
+	// Create state update from JSON string
+	err = update.Deserialize([]byte(args[1]))
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
-	// TODO Update state if validated
+	// Get the session state referenced in the update
+	var session State
+	err = session.Get(stub, "STATE_" + update.Session)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	// Get the user's role in the current session
+	role := session.Roles[args[2]]
+	if (role == "") {
+		return shim.Error("No role for user " + args[2] + " in session " + session.Session)
+	}
+	// Get the SSM for the current session
+	var ssm SigningStateMachine
+	err = ssm.Get(stub, "SSM_" + session.Ssm)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	// Get the next state for the proposed transition
+	update.Current = ssm.NextState(session.Current, role, args[0])
+	if (update.Current == -1) {
+		return shim.Error("No valid transition from state " + string(session.Current))
+	}
+	// Let the current session validate and perform the update
+	err = session.Perform(&update, role, args[0])
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	// Save the updated state for the current session
+	err = session.Put(stub, "STATE_" + session.Session)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}	
 	return shim.Success(nil)
 }
 

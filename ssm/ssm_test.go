@@ -72,7 +72,7 @@ func TestState(test *testing.T) {
 	var state State
 
 	fmt.Println("---- ---- ---- ---- Deserialize")
-	strState := "{\"ssm\": \"Car dealership\", \"session\": \"deal20181201\", \"current\": 0, \"public\": \"Car dealer 2018 public\", \"private\": {\"John Doe\": \"XXX\",\"Joe Black\": \"YYY\"}, \"roles\": {\"Buyer\": \"John Doe\", \"Seller\": \"Joe Black\"}}"
+	strState := "{\"ssm\": \"Car dealership\", \"session\": \"deal20181201\", \"public\": \"Used car for 100 dollars.\", \"roles\": {\"Bob\": \"Buyer\", \"Sam\": \"Seller\"}}"
 	err = state.Deserialize([]byte(strState))
 	if err != nil {
 		test.Fatal(err)
@@ -87,6 +87,24 @@ func TestState(test *testing.T) {
 		test.Fatal("bytesState")
 	}
 	
+	fmt.Println("---- ---- ---- ---- Perform")
+	var update State
+	strUpdate := "{\"session\": \"deal20181201\", \"public\": \"Ok to sell\", \"iteration\": 0, \"private\": {\"Bob\": \"XXX\",\"Sam\": \"YYY\"}}"
+	err = update.Deserialize([]byte(strUpdate))
+	if err != nil {
+		test.Fatal(err)
+	}
+	fmt.Println("---- ---- positive")
+	err = state.Perform(&update, "Role", "Action")
+	if err != nil {
+		test.Fatal(err)
+	}
+	fmt.Println("---- ---- negative")
+	err = state.Perform(&update, "Role", "Action")
+	if err == nil {
+		test.Fatal("Should fail due to iteration.")
+	}
+
 	fmt.Println("---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ")
 }
 

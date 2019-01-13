@@ -23,7 +23,7 @@ In a SSM, transitions are performed by a given role. At execution time, the agen
 
 The SSM is initialized with:
 
-  * A mapping of the SSM roles on registered agents.
+  * A mapping of the registered agents on SSM roles.
   * A finite state automaton.
   * Initial data, that can be public like for instance the hash of a document, or private.
 
@@ -79,12 +79,12 @@ The SSM state represents a snapshot of a run session on a given state machine. I
 	session: "deal20181201",
 	iteration: 1,
 	roles: {
-		"Buyer": "Bob",
-		"Seller": "Sam"
+		"Bob": "Buyer",
+		"Sam": "Seller"
 	},
 	current: 2,
 	origin: {from: 1, to: 2, role: "Buyer", action: "Buy"}
-	public: "Some non encrypted data",
+	public: "Used car for 100 dollars.",
 	private: {
 		"Bob": "XXXX",
 		"Sam": "YYYY"
