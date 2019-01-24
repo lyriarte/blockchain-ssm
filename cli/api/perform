@@ -1,0 +1,26 @@
+#!/bin/bash
+
+usage() 
+{
+    echo "Usage: perform <action> <context> <signer>"
+    exit 1
+}
+
+[[ $# -ne 3 ]] && usage
+
+ACTION="$1"
+CONTEXT="$2"
+SIGNER="$3"
+[[ -f ${CONTEXT}.json ]] || usage
+
+F_ARGS=$(mktemp)
+echo -n ${ACTION} > ${F_ARGS}
+cat ${CONTEXT}.json | jq . -cM | tr -d "\n" >> ${F_ARGS}
+rsa_sign ${SIGNER} ${F_ARGS}
+b64_encode ${F_ARGS}.dgst
+
+ARG2=$(mkarg ${CONTEXT}.json | tr -d "\n")
+SIGN=$(cat ${F_ARGS}.dgst.b64 | tr -d "\n" | sed 's/"/\\"/g ; s/^/"/ ; s/$/"/')
+
+rm ${F_ARGS} ${F_ARGS}.dgst ${F_ARGS}.dgst.b64
+echo -n "{\"Args\": [\"perform\", \"${ACTION}\", ${ARG2}, \"${SIGNER}\", ${SIGN}]}"

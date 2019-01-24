@@ -1,0 +1,24 @@
+#!/bin/bash
+
+usage() 
+{
+    echo "Usage: register <user> <signer>"
+    exit 1
+}
+
+[[ $# -ne 2 ]] && usage
+
+USER="$1"
+SIGNER="$2"
+[[ -f ${USER}.pub ]] || usage
+
+F_ARGS=$(mktemp)
+json_agent ${USER} ${USER}.pub | jq . -cM | tr -d "\n" > ${F_ARGS}
+rsa_sign ${SIGNER} ${F_ARGS}
+b64_encode ${F_ARGS}.dgst
+
+ARGS=$(mkarg ${F_ARGS})
+SIGN=$(cat ${F_ARGS}.dgst.b64 | tr -d "\n" | sed 's/"/\\"/g ; s/^/"/ ; s/$/"/')
+
+rm ${F_ARGS} ${F_ARGS}.dgst ${F_ARGS}.dgst.b64
+echo -n "{\"Args\": [\"register\", ${ARGS}, \"${SIGNER}\", ${SIGN}]}"
