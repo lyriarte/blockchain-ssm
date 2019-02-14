@@ -44,6 +44,8 @@ The SSM is initialized with:
 
 ## Signing State Machine Chaincode API
 
+  * Command Line Interface [SDK Documentation](sdk/cli/README.md) and [example](sdk/cli/example.md).
+
 ### Operation
 
 SSM chaincode API involves Queries and Transations. Queries can be performed without other restictions than those set at chaincode deployment. Transactions on the other hand  have to be signed either by an administrator or a user.

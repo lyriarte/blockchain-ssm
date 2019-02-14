@@ -127,5 +127,6 @@ peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["session", "deal
 
 ```
 cp * /opt/blockchain-coop
+exit
 ```
 
