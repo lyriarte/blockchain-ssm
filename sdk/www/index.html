@@ -17,6 +17,14 @@ function logSignature() {
 	document.getElementById('sgn__Log').innerHTML = sgn;
 }
 
+function logPublicKey() {
+	var prv = document.getElementById('prv__Fld').value;
+	var JSE = new JSEncrypt();
+	JSE.setPrivateKey(prv);
+	var pub = JSE.getPublicKey();
+	document.getElementById('pub__Log').innerHTML = pub;
+}
+
 </script>
 
 <body>
@@ -26,6 +34,12 @@ function logSignature() {
 <h2>Private key</h2>
 <textarea rows="28" cols="64" id="prv__Fld">
 </textarea>
+
+<input type="button" value="public" onclick="logPublicKey()"/>
+
+<h2>Public key</h2>
+<pre id="pub__Log">
+</pre>
 
 <h2>Text to sign</h2>
 <textarea rows="8" cols="64" id="txt__Fld">
