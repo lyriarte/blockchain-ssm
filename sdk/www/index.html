@@ -1,0 +1,41 @@
+<html>
+<head>
+  <title>Signing State Machines</title>
+</head>
+
+<script src="crypto-js/crypto-js.js"></script>
+<script src="jsencrypt/jsencrypt.js"></script>
+
+<script type="text/javascript">
+
+function logSignature() {
+	var txt = document.getElementById('txt__Fld').value;
+	var prv = document.getElementById('prv__Fld').value;
+	var JSE = new JSEncrypt();
+	JSE.setPrivateKey(prv);
+	var sgn = JSE.sign(txt, CryptoJS.SHA256, "sha256");
+	document.getElementById('sgn__Log').innerHTML = sgn;
+}
+
+</script>
+
+<body>
+
+<center><h1>Signing State Machines</h1></center>
+
+<h2>Private key</h2>
+<textarea rows="28" cols="64" id="prv__Fld">
+</textarea>
+
+<h2>Text to sign</h2>
+<textarea rows="8" cols="64" id="txt__Fld">
+</textarea>
+
+<input type="button" value="sign" onclick="logSignature()"/>
+
+<h2>Signature</h2>
+<pre id="sgn__Log">
+</pre>
+
+</body>
+</html>
