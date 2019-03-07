@@ -77,15 +77,15 @@ The SSM state represents a snapshot of a run session on a given state machine. I
 
 ```
 "State": {
-	ssm: "Car dealership",
-	session: "deal20181201",
+	ssm: "Negociation",
+	session: "carsale20190301",
 	iteration: 1,
 	roles: {
-		"Bob": "Buyer",
-		"Sam": "Seller"
+		"Bob": "Validator",
+		"Sam": "Initiator"
 	},
 	current: 2,
-	origin: {from: 1, to: 2, role: "Buyer", action: "Buy"}
+	origin: {from: 1, to: 2, role: "Validator", action: "Accept"}
 	public: "Used car for 100 dollars.",
 	private: {
 		"Bob": "XXXX",
@@ -102,8 +102,8 @@ The Signing State Machine is created from a list of transitions. A transition is
 "Transition": {
 	from: 1,
 	to: 2,
-	role: "Buyer",
-	action: "Buy"
+	role: "Validator",
+	action: "Accept"
 }
 ```
 
@@ -113,8 +113,16 @@ The SSM structure is just a list of transitions and a unique name.
 
 ```
 "SigningStateMachine": {
-	name: "Car dealership",
-	transitions: [{from: 0,	to: 1, role: "Seller", action: "Sell"},{from: 1, to: 2, role: "Buyer", action: "Buy"}]
+	name: "Negociation",
+	transitions: [
+		{from: 0, to: 1, role: "Initiator", action: "Propose"},
+		{from: 1, to: 2, role: "Validator", action: "Accept"},
+		{from: 1, to: 3, role: "Validator", action: "Reject"},
+		{from: 1, to: 4, role: "Validator", action: "Amend"},
+		{from: 4, to: 1, role: "Initiator", action: "Update"},
+		{from: 4, to: 2, role: "Initiator", action: "Accept"},
+		{from: 4, to: 3, role: "Initiator", action: "Reject"}
+	]
 }
 ```
 
