@@ -23,6 +23,11 @@ function logSignature() {
 	document.getElementById('data__Fld').value = sgn;
 }
 
+function logFlatPublicKey() {
+	var pub = document.getElementById('pub__Fld').value;
+	document.getElementById('data__Fld').value = flattenPublicKey(pub);
+}
+
 function logPublicKey() {
 	var prv = document.getElementById('prv__Fld').value;
 	var JSE = new JSEncrypt();
@@ -93,6 +98,8 @@ Host address <input type="text" size="12" value="127.0.0.1" id="host__Fld">:<inp
 <h2>Public key</h2>
 <textarea rows="8" cols="64" id="pub__Fld">
 </textarea>
+<br>
+<input type="button" value="flatten" onclick="logFlatPublicKey()"/>
 
 <h2>Text to sign</h2>
 <textarea rows="4" cols="64" id="txt__Fld">
