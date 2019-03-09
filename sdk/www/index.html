@@ -25,6 +25,12 @@ function logPublicKey() {
 	document.getElementById('pub__Log').innerHTML = pub;
 }
 
+function genPrivateKey() {
+	var JSE = new JSEncrypt({default_key_size: 2048});
+	var prv = JSE.getPrivateKey(prv);
+	document.getElementById('prv__Fld').value = prv;
+}
+
 </script>
 
 <body>
@@ -35,6 +41,7 @@ function logPublicKey() {
 <textarea rows="28" cols="64" id="prv__Fld">
 </textarea>
 
+<input type="button" value="generate" onclick="genPrivateKey()"/>
 <input type="button" value="public" onclick="logPublicKey()"/>
 
 <h2>Public key</h2>
