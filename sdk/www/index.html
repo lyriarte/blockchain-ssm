@@ -6,8 +6,13 @@
 <script src="crypto-js/crypto-js.js"></script>
 <script src="jsencrypt/jsencrypt.js"></script>
 
+<script src="bcc-xmlhttp.js"></script>
 <script src="ssm-api.js"></script>
 <script type="text/javascript">
+
+function logResult(result) {
+	document.getElementById('data__Fld').value = JSON.stringify(JSON.parse(result),null,2);
+}
 
 function logSignature() {
 	var txt = document.getElementById('txt__Fld').value;
@@ -33,10 +38,11 @@ function genPrivateKey() {
 }
 
 function ssmQuerySetup() {
+	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
 	var fcn = document.getElementById('query__Sel').value;
 	var queryId = document.getElementById('query__Fld').value;
 	var hostCmd = ssmQuery(fcn, queryId);
-	document.getElementById('txt__Fld').value = JSON.stringify(hostCmd,null,2);
+	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logResult);
 }
 
 
@@ -46,6 +52,9 @@ function ssmQuerySetup() {
 <body>
 
 <center><h1>Signing State Machines</h1></center>
+
+<h2>Host gateway</h2>
+Host address <input type="text" size="12" value="127.0.0.1" id="host__Fld">:<input type="text" size="6" value="8080" id="port__Fld">
 
 <table>
 <tr>
@@ -67,6 +76,15 @@ function ssmQuerySetup() {
 </select>
 <input type="text" size="12" id="query__Fld"/>
 
+
+<ul>
+<li><b>Agent </b><input type="text" size="12" id="agent__Fld">
+<li><b>Action </b><input type="text" size="12" id="action__Fld">
+</ul>
+<h3>Data</h3>
+<textarea rows="16" cols="32" id="data__Fld">
+</textarea>
+<br>
 
 </td>
 </tr>
