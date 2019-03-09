@@ -20,7 +20,7 @@ function logSignature() {
 	var JSE = new JSEncrypt();
 	JSE.setPrivateKey(prv);
 	var sgn = JSE.sign(txt, CryptoJS.SHA256, "sha256");
-	document.getElementById('sgn__Log').innerHTML = sgn;
+	document.getElementById('data__Fld').value = sgn;
 }
 
 function logPublicKey() {
@@ -95,14 +95,10 @@ Host address <input type="text" size="12" value="127.0.0.1" id="host__Fld">:<inp
 </textarea>
 
 <h2>Text to sign</h2>
-<textarea rows="8" cols="64" id="txt__Fld">
+<textarea rows="4" cols="64" id="txt__Fld">
 </textarea>
 <br>
 <input type="button" value="sign" onclick="logSignature()"/>
-
-<h2>Signature</h2>
-<pre id="sgn__Log">
-</pre>
 
 </body>
 </html>
