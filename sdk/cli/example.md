@@ -117,10 +117,14 @@ peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["session", "cars
 ```
 echo '{
   "session": "carsale20190301",
-  "public": "Deal !",
-  "iteration": 1
-}' > state2.json
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(perform Accept state2 bob)"
+  "iteration": 5
+}' > loop.json
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(perform Amend loop bob)"
+echo '{
+  "session": "carsale20190301",
+  "iteration": 6
+}' > loop.json
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(perform Update loop sam)"
 ```
 
 ```

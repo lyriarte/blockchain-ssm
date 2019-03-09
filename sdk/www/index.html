@@ -6,6 +6,7 @@
 <script src="crypto-js/crypto-js.js"></script>
 <script src="jsencrypt/jsencrypt.js"></script>
 
+<script src="ssm-api.js"></script>
 <script type="text/javascript">
 
 function logSignature() {
@@ -31,18 +32,45 @@ function genPrivateKey() {
 	document.getElementById('prv__Fld').value = prv;
 }
 
+function ssmQuerySetup() {
+	var fcn = document.getElementById('query__Sel').value;
+	var queryId = document.getElementById('query__Fld').value;
+	var hostCmd = ssmQuery(fcn, queryId);
+	document.getElementById('txt__Fld').value = JSON.stringify(hostCmd,null,2);
+}
+
+
+
 </script>
 
 <body>
 
 <center><h1>Signing State Machines</h1></center>
 
+<table>
+<tr>
+<td>
 <h2>Private key</h2>
 <textarea rows="28" cols="64" id="prv__Fld">
 </textarea>
-
+<br>
 <input type="button" value="generate" onclick="genPrivateKey()"/>
 <input type="button" value="public" onclick="logPublicKey()"/>
+</td>
+<td>
+<input type="button" value="query" onclick="ssmQuerySetup()"/>
+<select id="query__Sel">
+  <option value="admin" selected>Admin</option>
+  <option value="user">User</option>
+  <option value="ssm">SSM</option>
+  <option value="session">Session</option>
+</select>
+<input type="text" size="12" id="query__Fld"/>
+
+
+</td>
+</tr>
+</table>
 
 <h2>Public key</h2>
 <pre id="pub__Log">
@@ -51,7 +79,7 @@ function genPrivateKey() {
 <h2>Text to sign</h2>
 <textarea rows="8" cols="64" id="txt__Fld">
 </textarea>
-
+<br>
 <input type="button" value="sign" onclick="logSignature()"/>
 
 <h2>Signature</h2>
