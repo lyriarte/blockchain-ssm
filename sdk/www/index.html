@@ -28,7 +28,7 @@ function logPublicKey() {
 	var JSE = new JSEncrypt();
 	JSE.setPrivateKey(prv);
 	var pub = JSE.getPublicKey();
-	document.getElementById('pub__Log').innerHTML = pub;
+	document.getElementById('pub__Fld').value = pub;
 }
 
 function genPrivateKey() {
@@ -91,8 +91,8 @@ Host address <input type="text" size="12" value="127.0.0.1" id="host__Fld">:<inp
 </table>
 
 <h2>Public key</h2>
-<pre id="pub__Log">
-</pre>
+<textarea rows="8" cols="64" id="pub__Fld">
+</textarea>
 
 <h2>Text to sign</h2>
 <textarea rows="8" cols="64" id="txt__Fld">
