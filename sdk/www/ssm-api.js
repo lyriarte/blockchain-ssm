@@ -8,37 +8,46 @@ function ssmRegister(user, admin, adminKey) {
 		cmd: "invoke",
 		fcn: "register",
 		args: [userStr, admin, signStr]
-	}
+	};
 
 	return hostCmd;
 }
 
 function ssmCreate(ssm, admin, adminKey) {
+	JSE.setPrivateKey(adminKey);
+	var ssmStr = JSON.stringify(ssm);
+	var signStr = JSE.sign(ssmStr, CryptoJS.SHA256, "sha256");
 	var hostCmd = {
 		cmd: "invoke",
 		fcn: "create",
-		args: [ssm, admin]
-	}
+		args: [ssmStr, admin, signStr]
+	};
 
 	return hostCmd;
 }
 
 function ssmStart(session, admin, adminKey) {
+	JSE.setPrivateKey(adminKey);
+	var sessionStr = JSON.stringify(session);
+	var signStr = JSE.sign(sessionStr, CryptoJS.SHA256, "sha256");
 	var hostCmd = {
 		cmd: "invoke",
 		fcn: "start",
-		args: [session, admin]
-	}
+		args: [sessionStr, admin, signStr]
+	};
 
 	return hostCmd;
 }
 
 function ssmPerform(action, context, user, userKey) {
+	JSE.setPrivateKey(userKey);
+	var contextStr = JSON.stringify(context);
+	var signStr = JSE.sign(action + contextStr, CryptoJS.SHA256, "sha256");
 	var hostCmd = {
 		cmd: "invoke",
 		fcn: "perform",
-		args: [action, context, user]
-	}
+		args: [action, contextStr, user, signStr]
+	};
 
 	return hostCmd;
 }
@@ -48,7 +57,7 @@ function ssmQuery(fcn, id) {
 		cmd: "query",
 		fcn: fcn,
 		args: [id]
-	}
+	};
 
 	return hostCmd;
 }

@@ -60,6 +60,34 @@ function ssmRegisterSetup() {
 	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logResult);
 }
 
+function ssmCreateSetup() {
+	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
+	var ssm = JSON.parse(document.getElementById('data__Fld').value);
+	var admin = document.getElementById('agent__Fld').value;
+	var adminKey = document.getElementById('prv__Fld').value;
+	var hostCmd = ssmCreate(ssm, admin, adminKey);
+	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logResult);
+}
+
+function ssmStartSetup() {
+	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
+	var session = JSON.parse(document.getElementById('data__Fld').value);
+	var admin = document.getElementById('agent__Fld').value;
+	var adminKey = document.getElementById('prv__Fld').value;
+	var hostCmd = ssmStart(session, admin, adminKey);
+	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logResult);
+}
+
+function ssmPerformSetup() {
+	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
+	var context = JSON.parse(document.getElementById('data__Fld').value);
+	var action = document.getElementById('action__Fld').value;
+	var user = document.getElementById('agent__Fld').value;
+	var userKey = document.getElementById('prv__Fld').value;
+	var hostCmd = ssmPerform(action, context, user, userKey);
+	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logResult);
+}
+
 
 </script>
 
@@ -94,6 +122,10 @@ Host address <input type="text" size="12" value="127.0.0.1" id="host__Fld">:<inp
 <br>
 <input type="button" value="register" onclick="ssmRegisterSetup()"/> user: <input type="text" size="12" id="user__Fld"/>
 <br>
+<input type="button" value="perform" onclick="ssmPerformSetup()"/> action: <input type="text" size="12" id="action__Fld"/>
+<br>
+<input type="button" value="create SSM" onclick="ssmCreateSetup()"/>
+<input type="button" value="start session" onclick="ssmStartSetup()"/>
 <h3>Data</h3>
 <textarea rows="16" cols="32" id="data__Fld">
 </textarea>
