@@ -17,7 +17,6 @@ function logResult(result) {
 function logSignature() {
 	var txt = document.getElementById('txt__Fld').value;
 	var prv = document.getElementById('prv__Fld').value;
-	var JSE = new JSEncrypt();
 	JSE.setPrivateKey(prv);
 	var sgn = JSE.sign(txt, CryptoJS.SHA256, "sha256");
 	document.getElementById('data__Fld').value = sgn;
@@ -30,14 +29,12 @@ function logFlatPublicKey() {
 
 function logPublicKey() {
 	var prv = document.getElementById('prv__Fld').value;
-	var JSE = new JSEncrypt();
 	JSE.setPrivateKey(prv);
 	var pub = JSE.getPublicKey();
 	document.getElementById('pub__Fld').value = pub;
 }
 
 function genPrivateKey() {
-	var JSE = new JSEncrypt({default_key_size: 2048});
 	var prv = JSE.getPrivateKey(prv);
 	document.getElementById('prv__Fld').value = prv;
 }
@@ -50,6 +47,18 @@ function ssmQuerySetup() {
 	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logResult);
 }
 
+function ssmRegisterSetup() {
+	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
+	var user = {
+		name: document.getElementById('user__Fld').value,
+		pub: flattenPublicKey(document.getElementById('pub__Fld').value)
+	}
+	document.getElementById('data__Fld').value = JSON.stringify(user,null,2);
+	var admin = document.getElementById('agent__Fld').value;
+	var adminKey = document.getElementById('prv__Fld').value;
+	var hostCmd = ssmRegister(user, admin, adminKey);
+	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logResult);
+}
 
 
 </script>
@@ -80,12 +89,11 @@ Host address <input type="text" size="12" value="127.0.0.1" id="host__Fld">:<inp
   <option value="session">Session</option>
 </select>
 <input type="text" size="12" id="query__Fld"/>
-
-
-<ul>
-<li><b>Agent </b><input type="text" size="12" id="agent__Fld">
-<li><b>Action </b><input type="text" size="12" id="action__Fld">
-</ul>
+<br>
+<b>Signer agent: </b><input type="text" size="12" id="agent__Fld">
+<br>
+<input type="button" value="register" onclick="ssmRegisterSetup()"/> user: <input type="text" size="12" id="user__Fld"/>
+<br>
 <h3>Data</h3>
 <textarea rows="16" cols="32" id="data__Fld">
 </textarea>
