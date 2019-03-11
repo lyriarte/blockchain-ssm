@@ -36,4 +36,5 @@ function ssmView(ssm, canvas) {
 	};
 	var data = ssmToVis(ssm);
 	var network = new vis.Network(canvas, data, options);
+	return network;
 }
