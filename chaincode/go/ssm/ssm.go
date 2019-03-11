@@ -10,6 +10,7 @@ package main
 
 import (
 	"errors"
+	"strings"
 	"fmt"
 	"encoding/json"
 
@@ -147,6 +148,22 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	} else if function == "admin" {
 	// "admin", <admin name>
 		dat, err = stub.GetState("ADMIN_" + args[0])
+	} else 	if function == "list" {
+	// "list", <session|ssm|user|admin>
+		var lst []string
+		pre := strings.ToUpper(args[0]) + "_"
+		if args[0] == "session" {
+			pre = "STATE_"
+		}
+		itr, _ := stub.GetStateByRange(" ", "~")
+		defer itr.Close()
+		for itr.HasNext() {
+			key, _ := itr.Next()
+			if strings.HasPrefix(key.Key, pre) {
+				lst = append(lst, "\"" + strings.TrimPrefix(key.Key, pre) + "\"")
+			}
+		}
+		dat = []byte("[" + strings.Join(lst,",") + "]")
 	} else {
 		return shim.Error(errmsg)
 	}
