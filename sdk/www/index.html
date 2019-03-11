@@ -5,13 +5,22 @@
 
 <script src="crypto-js/crypto-js.js"></script>
 <script src="jsencrypt/jsencrypt.js"></script>
+<script src="vis/vis.js"></script>
 
 <script src="bcc-xmlhttp.js"></script>
 <script src="ssm-api.js"></script>
+<script src="ssm-view.js"></script>
 <script type="text/javascript">
 
 function logResult(result) {
 	document.getElementById('data__Fld').value = JSON.stringify(JSON.parse(result),null,2);
+}
+
+function logSSM(result) {
+	logResult(result);
+	var ssm = JSON.parse(result);
+	var cnv = document.getElementById('ssm__Cnv');
+	ssmView(ssm, cnv);
 }
 
 function logSignature() {
@@ -44,7 +53,7 @@ function ssmQuerySetup() {
 	var fcn = document.getElementById('query__Sel').value;
 	var queryId = document.getElementById('query__Fld').value;
 	var hostCmd = ssmQuery(fcn, queryId);
-	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logResult);
+	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logSSM, logResult);
 }
 
 function ssmRegisterSetup() {
@@ -130,11 +139,14 @@ Host address <input type="text" size="12" value="127.0.0.1" id="host__Fld">:<inp
 <textarea rows="16" cols="32" id="data__Fld">
 </textarea>
 <br>
-
 </td>
-</tr>
-</table>
 
+<td id="ssm__Cnv" rowspan="2" style="width:100%;height:100%">
+</td>
+
+</tr>
+<tr>
+<td colspan="2">
 <h2>Public key</h2>
 <textarea rows="8" cols="64" id="pub__Fld">
 </textarea>
@@ -146,6 +158,10 @@ Host address <input type="text" size="12" value="127.0.0.1" id="host__Fld">:<inp
 </textarea>
 <br>
 <input type="button" value="sign" onclick="logSignature()"/>
+</td>
+
+</tr>
+</table>
 
 </body>
 </html>
