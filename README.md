@@ -251,4 +251,17 @@ Result
   Returns corresponding Agent structure.
 ```
 
+  * **list:** List all Sessions, SigningStateMachines, Users or Admins 
+
+```
+Query
+-------
+  "list", <session|ssm|user|admin> 
+
+Result
+------
+  Returns the list of corresponding identifiers.
+```
+
+
 
