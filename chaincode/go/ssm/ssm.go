@@ -197,7 +197,12 @@ func (self *SSMChaincode) Register(stub shim.ChaincodeStubInterface, args []stri
 		return shim.Error(err.Error())
 	}
 	// Store user if not alreay existing
-	err = user.Put(stub, "USER_" + user.Name)
+	key := "USER_" + user.Name
+	err = self.CheckUnique(stub, key)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	err = user.Put(stub, key)
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
@@ -215,7 +220,12 @@ func (self *SSMChaincode) Create(stub shim.ChaincodeStubInterface, args []string
 		return shim.Error(err.Error())
 	}
 	// Store ssm if not alreay existing
-	err = ssm.Put(stub, "SSM_" + ssm.Name)
+	key := "SSM_" + ssm.Name
+	err = self.CheckUnique(stub, key)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}	
+	err = ssm.Put(stub, key)
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
@@ -233,7 +243,12 @@ func (self *SSMChaincode) Start(stub shim.ChaincodeStubInterface, args []string)
 		return shim.Error(err.Error())
 	}
 	// Store state if not alreay existing
-	err = state.Put(stub, "STATE_" + state.Session)
+	key := "STATE_" + state.Session
+	err = self.CheckUnique(stub, key)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}	
+	err = state.Put(stub, key)
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
@@ -314,6 +329,17 @@ func (self *SSMChaincode) Verify(stub shim.ChaincodeStubInterface, args []string
 	return verifier.Verify(message, args[argCount - 1])
 }	
 
+// ensure a key is not already in use
+func (self *SSMChaincode) CheckUnique(stub shim.ChaincodeStubInterface, key string) error {
+	data, err := stub.GetState(key);
+	if (err != nil) {
+		return err
+	}	
+	if (data != nil) {
+		return errors.New("Identifier " + key + " already in use.")
+	}
+	return nil
+}
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 //
