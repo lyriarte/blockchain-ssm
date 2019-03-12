@@ -64,6 +64,14 @@ function ssmListSetup() {
 	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logSSM, logResult);
 }
 
+function ssmLogSetup() {
+	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
+	var fcn = "log";
+	var queryId = document.getElementById('query__Fld').value;
+	var hostCmd = ssmQuery(fcn, queryId);
+	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logSSM, logResult);
+}
+
 function ssmRegisterSetup() {
 	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
 	var user = {
@@ -127,6 +135,7 @@ Host address <input type="text" size="12" value="127.0.0.1" id="host__Fld">:<inp
 </td>
 <td>
 <input type="button" value="query" onclick="ssmQuerySetup()"/>
+<input type="button" value="log" onclick="ssmLogSetup()"/>
 <input type="button" value="list" onclick="ssmListSetup()"/>
 <select id="query__Sel">
   <option value="admin" selected>Admin</option>
