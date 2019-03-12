@@ -16,7 +16,7 @@ ORDERER_ADDR=orderer.bclan:7050
 ORDERER_CERT=/etc/hyperledger/orderer/tlsca.bclan-cert.pem
 CHANNEL=sandbox
 CHAINCODE=ssm
-VERSION=0.1.0
+VERSION=0.4.0
 ```
 
   * Install ssm chaincode
@@ -140,6 +140,11 @@ peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["list", "ssm"]}'
 peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["list", "session"]}'
 ```
 
+  * Log session history
+
+```
+peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["log", "carsale20190301"]}'
+```
 
   * Backup generated crypto keys and session data
 
