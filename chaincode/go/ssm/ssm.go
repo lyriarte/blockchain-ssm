@@ -164,6 +164,16 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 			}
 		}
 		dat = []byte("[" + strings.Join(lst,",") + "]")
+	} else 	if function == "log" {
+	// "log", <session id>
+		var lst []string
+		itr, _ := stub.GetHistoryForKey("STATE_" + args[0])
+		defer itr.Close()
+		for itr.HasNext() {
+			key, _ := itr.Next()
+			lst = append(lst, "{\"txId\": \"" + key.GetTxId() + "\", \"state\": " + string(key.GetValue()) + "}")
+		}
+		dat = []byte("[" + strings.Join(lst,",") + "]")
 	} else {
 		return shim.Error(errmsg)
 	}
