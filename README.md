@@ -263,5 +263,14 @@ Result
   Returns the list of corresponding identifiers.
 ```
 
+  * **log:** Log a session history
 
+```
+Query
+-------
+  "log", <session id> 
 
+Result
+------
+  Returns the successive session states with the corresponding transaction ids.
+```
