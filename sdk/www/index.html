@@ -188,24 +188,24 @@ Private key
 <br>
 User
 <input type="text" id="user_id__Fld">
-<input type="button" value="query" onclick="ssmQuerySetup('user',logUser)"/>
-<input type="button" value="admin" onclick="ssmQuerySetup('admin',logUser)"/>
+<input type="button" value="query user" onclick="ssmQuerySetup('user',logUser)"/>
+<input type="button" value="query admin" onclick="ssmQuerySetup('admin',logUser)"/>
 
 <br>
 Public key
-<input type="button" value="register" onclick="ssmRegisterSetup()"/>
+<input type="button" value="register user" onclick="ssmRegisterSetup()"/>
 <textarea rows="8" cols="64" id="user_pub__Fld">
 </textarea>
 
 <br>
 Private key
-<input type="button" value="generate" onclick="usrGenerateKeyPair()"/>
+<input type="button" value="generate key pair" onclick="usrGenerateKeyPair()"/>
 <textarea rows="28" cols="64" id="user_prv__Fld">
 </textarea>
 
 <br>
-<input type="button" value="list" onclick="ssmListSetup('user',listUser)"/>
-<input type="button" value="admin" onclick="ssmListSetup('admin',listUser)"/>
+<input type="button" value="list users" onclick="ssmListSetup('user',listUser)"/>
+<input type="button" value="list admins" onclick="ssmListSetup('admin',listUser)"/>
 <textarea rows="8" cols="12" id="user_list__Tbl">
 </textarea>
 </div>
@@ -219,26 +219,26 @@ Private key
 <br>
 Session
 <input type="text" id="session_id__Fld">
-<input type="button" value="query" onclick="ssmQuerySetup('session',logSession)"/>
+<input type="button" value="query session" onclick="ssmQuerySetup('session',logSession)"/>
 
 <br>
 Action
 <input type="text" id="session_action__Fld">
-<input type="button" value="perform" onclick="ssmPerformSetup()"/>
+<input type="button" value="perform action" onclick="ssmPerformSetup()"/>
 
 <br>
 State
-<input type="button" value="start" onclick="ssmStartSetup()"/>
+<input type="button" value="start session" onclick="ssmStartSetup()"/>
 <textarea rows="12" cols="64" id="session_data__Fld">
 </textarea>
 
 <br>
-<input type="button" value="list" onclick="ssmListSetup('session',listSession)"/>
+<input type="button" value="list sessions" onclick="ssmListSetup('session',listSession)"/>
 <textarea rows="8" cols="12" id="session_list__Tbl">
 </textarea>
 
 <br>
-<input type="button" value="log" onclick="ssmLogSetup()"/>
+<input type="button" value="log session" onclick="ssmLogSetup()"/>
 <textarea rows="8" cols="12" id="session_log__Tbl">
 </textarea>
 </div>
@@ -252,16 +252,16 @@ State
 <br>
 SSM
 <input type="text" id="ssm_id__Fld">
-<input type="button" value="query" onclick="ssmQuerySetup('ssm',logSSM)"/>
+<input type="button" value="query SSM" onclick="ssmQuerySetup('ssm',logSSM)"/>
 
 <br>
 State Machine
-<input type="button" value="create" onclick="ssmCreateSetup()"/>
+<input type="button" value="create SSM" onclick="ssmCreateSetup()"/>
 <textarea rows="12" cols="64" id="ssm_data__Fld">
 </textarea>
 
 <br>
-<input type="button" value="list" onclick="ssmListSetup('ssm',listSSM)"/>
+<input type="button" value="list SSM" onclick="ssmListSetup('ssm',listSSM)"/>
 <textarea rows="8" cols="12" id="ssm_list__Tbl">
 </textarea>
 
