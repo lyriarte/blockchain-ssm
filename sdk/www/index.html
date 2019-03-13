@@ -12,6 +12,13 @@
 <script src="ssm-view.js"></script>
 <script type="text/javascript">
 
+var viewElements = {
+	"access": ['access_host__Fld', 'access_port__Fld', 'access_id__Fld', 'access_prv__Fld'],
+	"user": ['user_id__Fld', 'user_pub__Fld', 'user_prv__Fld', 'user_list__Tbl'],
+	"session": ['session_id__Fld', 'session_action__Fld', 'session_data__Fld', 'session_list__Tbl', 'session_log__Tbl'],
+	"ssm": ['ssm_id__Fld', 'ssm_data__Fld', 'ssm_list__Tbl', 'ssm_graph__Cnv']
+}
+
 function argsFromQueryString(queryString) {
 	var args = {};
 	if (!queryString)
@@ -33,6 +40,13 @@ function logError(result) {
 function logResult(result) {
 	console.log(result)
 	document.getElementById('data__Fld').innerHTML = JSON.stringify(JSON.parse(result),null,2);
+}
+
+function clearView(elements) {
+	elements.map(function(id) {
+		document.getElementById(id).innerHTML = "";
+		document.getElementById(id).value = "";
+	});
 }
 
 function logSSM(result) {
@@ -177,6 +191,8 @@ Private key
 <textarea rows="28" cols="64" id="access_prv__Fld">
 </textarea>
 
+<br>
+<input type="button" value="clear view" onclick="clearView(viewElements['access'])"/>
 </div>
 
 
@@ -208,6 +224,9 @@ Private key
 <input type="button" value="list admins" onclick="ssmListSetup('admin',listUser)"/>
 <textarea rows="8" cols="12" id="user_list__Tbl">
 </textarea>
+
+<br>
+<input type="button" value="clear view" onclick="clearView(viewElements['user'])"/>
 </div>
 
 
@@ -241,6 +260,9 @@ State
 <input type="button" value="log session" onclick="ssmLogSetup()"/>
 <textarea rows="8" cols="12" id="session_log__Tbl">
 </textarea>
+
+<br>
+<input type="button" value="clear view" onclick="clearView(viewElements['session'])"/>
 </div>
 
 
@@ -268,8 +290,12 @@ State Machine
 <br>
 <div style="min-width:320px;min-height:200px;border-style:solid;border-width:1px" id="ssm_graph__Cnv">
 </div>
+
+<br>
+<input type="button" value="clear view" onclick="clearView(viewElements['ssm'])"/>
 </div>
 
+<hr>
 
 <pre style="width:100%;min-height:320px" id="data__Fld">
 </pre>
