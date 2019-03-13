@@ -36,10 +36,36 @@ function logResult(result) {
 }
 
 function logSSM(result) {
-	logResult(result);
 	var ssm = JSON.parse(result);
 	var cnv = document.getElementById('ssm_graph__Cnv');
 	ssmView(ssm, cnv);
+	document.getElementById('ssm_data__Fld').innerHTML = JSON.stringify(ssm,null,2);
+}
+
+function listSSM(result) {
+	document.getElementById('ssm_list__Tbl').innerHTML = JSON.stringify(JSON.parse(result),null,2);
+}
+
+function logSession(result) {
+	document.getElementById('session_data__Fld').innerHTML = JSON.stringify(JSON.parse(result),null,2);
+}
+
+function listSession(result) {
+	document.getElementById('session_list__Tbl').innerHTML = JSON.stringify(JSON.parse(result),null,2);
+}
+
+function listSessionLog(result) {
+	document.getElementById('session_log__Tbl').innerHTML = JSON.stringify(JSON.parse(result),null,2);
+}
+
+function logUser(result) {
+	var usr = JSON.parse(result);
+	document.getElementById('user_id__Fld').value = usr.name;
+	document.getElementById('user_pub__Fld').value = usr.pub;
+}
+
+function listUser(result) {
+	document.getElementById('user_list__Tbl').innerHTML = JSON.stringify(JSON.parse(result),null,2);
 }
 
 function usrGenerateKeyPair() {
@@ -48,18 +74,18 @@ function usrGenerateKeyPair() {
 	document.getElementById('user_pub__Fld').value = JSE.getPublicKey();
 }
 
-function ssmQuerySetup(keyType) {
-	var keyId = document.getElementById(keyType == 'admin' ? 'user' : keyType + '_id__Fld').value;
+function ssmQuerySetup(keyType, onOk, onError) {
+	var keyId = document.getElementById((keyType == 'admin' ? 'user' : keyType) + '_id__Fld').value;
 	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
 	var hostCmd = ssmQuery(keyType, keyId);
-	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, keyType == 'ssm' ? logSSM : logResult , logError);
+	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, onOk ? onOk : logResult , onError ? onError : logError);
 	return cbctx;
 }
 
-function ssmListSetup(keyType) {
+function ssmListSetup(keyType, onOk, onError) {
 	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
 	var hostCmd = ssmQuery("list", keyType);
-	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, onOk ? onOk : logResult , onError ? onError : logError);
 	return cbctx;
 }
 
@@ -68,7 +94,7 @@ function ssmLogSetup() {
 	var fcn = "log";
 	var queryId = document.getElementById('session_id__Fld').value;
 	var hostCmd = ssmQuery(fcn, queryId);
-	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, listSessionLog, logError);
 	return cbctx;
 }
 
@@ -162,8 +188,8 @@ Private key
 <br>
 User
 <input type="text" id="user_id__Fld">
-<input type="button" value="query" onclick="ssmQuerySetup('user')"/>
-<input type="button" value="admin" onclick="ssmQuerySetup('admin')"/>
+<input type="button" value="query" onclick="ssmQuerySetup('user',logUser)"/>
+<input type="button" value="admin" onclick="ssmQuerySetup('admin',logUser)"/>
 
 <br>
 Public key
@@ -178,8 +204,8 @@ Private key
 </textarea>
 
 <br>
-<input type="button" value="list" onclick="ssmListSetup('user')"/>
-<input type="button" value="admin" onclick="ssmListSetup('admin')"/>
+<input type="button" value="list" onclick="ssmListSetup('user',listUser)"/>
+<input type="button" value="admin" onclick="ssmListSetup('admin',listUser)"/>
 <textarea rows="8" cols="12" id="user_list__Tbl">
 </textarea>
 </div>
@@ -193,7 +219,7 @@ Private key
 <br>
 Session
 <input type="text" id="session_id__Fld">
-<input type="button" value="query" onclick="ssmQuerySetup('session')"/>
+<input type="button" value="query" onclick="ssmQuerySetup('session',logSession)"/>
 
 <br>
 Action
@@ -207,7 +233,7 @@ State
 </textarea>
 
 <br>
-<input type="button" value="list" onclick="ssmListSetup('session')"/>
+<input type="button" value="list" onclick="ssmListSetup('session',listSession)"/>
 <textarea rows="8" cols="12" id="session_list__Tbl">
 </textarea>
 
@@ -226,7 +252,7 @@ State
 <br>
 SSM
 <input type="text" id="ssm_id__Fld">
-<input type="button" value="query" onclick="ssmQuerySetup('ssm')"/>
+<input type="button" value="query" onclick="ssmQuerySetup('ssm',logSSM)"/>
 
 <br>
 State Machine
@@ -235,8 +261,8 @@ State Machine
 </textarea>
 
 <br>
-<input type="button" value="list" onclick="ssmListSetup('ssm')"/>
-<textarea rows="8" cols="12" id="session_list__Tbl">
+<input type="button" value="list" onclick="ssmListSetup('ssm',listSSM)"/>
+<textarea rows="8" cols="12" id="ssm_list__Tbl">
 </textarea>
 
 <br>
