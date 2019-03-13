@@ -12,174 +12,242 @@
 <script src="ssm-view.js"></script>
 <script type="text/javascript">
 
+function argsFromQueryString(queryString) {
+	var args = {};
+	if (!queryString)
+		return args;
+	var getVars = decodeURI(queryString).split("\&");
+	for (var i=0; i<getVars.length; i++) {
+		var varVal = getVars[i].split("\=");
+		if (varVal.length == 2)
+			args[varVal[0]] = varVal[1];
+	}
+	return args;
+}
+
+function logError(result) {
+	console.log(result)
+	document.getElementById('data__Fld').innerHTML = "<b>Error:</b> " + result;
+}
+
 function logResult(result) {
-	document.getElementById('data__Fld').value = JSON.stringify(JSON.parse(result),null,2);
+	console.log(result)
+	document.getElementById('data__Fld').innerHTML = JSON.stringify(JSON.parse(result),null,2);
 }
 
 function logSSM(result) {
 	logResult(result);
 	var ssm = JSON.parse(result);
-	var cnv = document.getElementById('ssm__Cnv');
+	var cnv = document.getElementById('ssm_graph__Cnv');
 	ssmView(ssm, cnv);
 }
 
-function logSignature() {
-	var txt = document.getElementById('txt__Fld').value;
-	var prv = document.getElementById('prv__Fld').value;
-	JSE.setPrivateKey(prv);
-	var sgn = JSE.sign(txt, CryptoJS.SHA256, "sha256");
-	document.getElementById('data__Fld').value = sgn;
+function usrGenerateKeyPair() {
+	JSE.key = null;
+	document.getElementById('user_prv__Fld').value = JSE.getPrivateKey();
+	document.getElementById('user_pub__Fld').value = JSE.getPublicKey();
 }
 
-function logFlatPublicKey() {
-	var pub = document.getElementById('pub__Fld').value;
-	document.getElementById('data__Fld').value = flattenPublicKey(pub);
+function ssmQuerySetup(keyType) {
+	var keyId = document.getElementById(keyType == 'admin' ? 'user' : keyType + '_id__Fld').value;
+	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
+	var hostCmd = ssmQuery(keyType, keyId);
+	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, keyType == 'ssm' ? logSSM : logResult , logError);
+	return cbctx;
 }
 
-function logPublicKey() {
-	var prv = document.getElementById('prv__Fld').value;
-	JSE.setPrivateKey(prv);
-	var pub = JSE.getPublicKey();
-	document.getElementById('pub__Fld').value = pub;
-}
-
-function genPrivateKey() {
-	var prv = JSE.getPrivateKey(prv);
-	document.getElementById('prv__Fld').value = prv;
-}
-
-function ssmQuerySetup() {
-	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
-	var fcn = document.getElementById('query__Sel').value;
-	var queryId = document.getElementById('query__Fld').value;
-	var hostCmd = ssmQuery(fcn, queryId);
-	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logSSM, logResult);
-}
-
-function ssmListSetup() {
-	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
-	var fcn = "list";
-	var queryType = document.getElementById('query__Sel').value;
-	var hostCmd = ssmQuery(fcn, queryType);
-	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logSSM, logResult);
+function ssmListSetup(keyType) {
+	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
+	var hostCmd = ssmQuery("list", keyType);
+	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	return cbctx;
 }
 
 function ssmLogSetup() {
-	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
+	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
 	var fcn = "log";
-	var queryId = document.getElementById('query__Fld').value;
+	var queryId = document.getElementById('session_id__Fld').value;
 	var hostCmd = ssmQuery(fcn, queryId);
-	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logSSM, logResult);
+	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	return cbctx;
 }
 
 function ssmRegisterSetup() {
-	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
+	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
 	var user = {
-		name: document.getElementById('user__Fld').value,
-		pub: flattenPublicKey(document.getElementById('pub__Fld').value)
+		name: document.getElementById('user_id__Fld').value,
+		pub: flattenPublicKey(document.getElementById('user_pub__Fld').value)
 	}
-	document.getElementById('data__Fld').value = JSON.stringify(user,null,2);
-	var admin = document.getElementById('agent__Fld').value;
-	var adminKey = document.getElementById('prv__Fld').value;
+	var admin = document.getElementById('access_id__Fld').value;
+	var adminKey = document.getElementById('access_prv__Fld').value;
 	var hostCmd = ssmRegister(user, admin, adminKey);
-	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logResult);
+	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	return cbctx;
 }
 
 function ssmCreateSetup() {
-	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
-	var ssm = JSON.parse(document.getElementById('data__Fld').value);
-	var admin = document.getElementById('agent__Fld').value;
-	var adminKey = document.getElementById('prv__Fld').value;
+	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
+	var ssm = JSON.parse(document.getElementById('ssm_data__Fld').value);
+	var admin = document.getElementById('access_id__Fld').value;
+	var adminKey = document.getElementById('access_prv__Fld').value;
 	var hostCmd = ssmCreate(ssm, admin, adminKey);
-	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logResult);
+	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	return cbctx;
 }
 
 function ssmStartSetup() {
-	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
-	var session = JSON.parse(document.getElementById('data__Fld').value);
-	var admin = document.getElementById('agent__Fld').value;
-	var adminKey = document.getElementById('prv__Fld').value;
+	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
+	var session = JSON.parse(document.getElementById('session_data__Fld').value);
+	var admin = document.getElementById('access_id__Fld').value;
+	var adminKey = document.getElementById('access_prv__Fld').value;
 	var hostCmd = ssmStart(session, admin, adminKey);
-	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logResult);
+	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	return cbctx;
 }
 
 function ssmPerformSetup() {
-	var uri = "http://" + document.getElementById('host__Fld').value + ":" + document.getElementById('port__Fld').value;
-	var context = JSON.parse(document.getElementById('data__Fld').value);
-	var action = document.getElementById('action__Fld').value;
-	var user = document.getElementById('agent__Fld').value;
-	var userKey = document.getElementById('prv__Fld').value;
+	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
+	var context = JSON.parse(document.getElementById('session_data__Fld').value);
+	var action = document.getElementById('session_action__Fld').value;
+	var user = document.getElementById('access_id__Fld').value;
+	var userKey = document.getElementById('access_prv__Fld').value;
 	var hostCmd = ssmPerform(action, context, user, userKey);
-	bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logResult);
+	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	return cbctx;
 }
 
+function initView() {
+	var args = argsFromQueryString(window.location.toString().split("\?")[1]);
+	if (args.host)
+		document.getElementById('access_host__Fld').value = args.host;
+	if (args.port)
+		document.getElementById('access_port__Fld').value = args.port;
+}
 
 </script>
 
-<body>
 
-<center><h1>Signing State Machines</h1></center>
 
-<h2>Host gateway</h2>
-Host address <input type="text" size="12" value="127.0.0.1" id="host__Fld">:<input type="text" size="6" value="8080" id="port__Fld">
+<body onload="initView()">
 
-<table>
-<tr>
-<td>
-<h2>Private key</h2>
-<textarea rows="28" cols="64" id="prv__Fld">
-</textarea>
+<h1>Signing State Machines</h1>
+
+
+
+<hr>
+<h2>Access</h2>
+<div id="access__View">
+
 <br>
-<input type="button" value="generate" onclick="genPrivateKey()"/>
-<input type="button" value="public" onclick="logPublicKey()"/>
-</td>
-<td>
-<input type="button" value="query" onclick="ssmQuerySetup()"/>
+Server
+<input type="text" value="127.0.0.1" id="access_host__Fld">:<input type="text" value="8080" id="access_port__Fld">
+
+<br>
+User
+<input type="text" id="access_id__Fld">
+
+<br>
+Private key
+<textarea rows="28" cols="64" id="access_prv__Fld">
+</textarea>
+
+</div>
+
+
+
+<hr>
+<h2>User</h2>
+<div id="user__View">
+
+<br>
+User
+<input type="text" id="user_id__Fld">
+<input type="button" value="query" onclick="ssmQuerySetup('user')"/>
+<input type="button" value="admin" onclick="ssmQuerySetup('admin')"/>
+
+<br>
+Public key
+<input type="button" value="register" onclick="ssmRegisterSetup()"/>
+<textarea rows="8" cols="64" id="user_pub__Fld">
+</textarea>
+
+<br>
+Private key
+<input type="button" value="generate" onclick="usrGenerateKeyPair()"/>
+<textarea rows="28" cols="64" id="user_prv__Fld">
+</textarea>
+
+<br>
+<input type="button" value="list" onclick="ssmListSetup('user')"/>
+<input type="button" value="admin" onclick="ssmListSetup('admin')"/>
+<textarea rows="8" cols="12" id="user_list__Tbl">
+</textarea>
+</div>
+
+
+
+<hr>
+<h2>Session</h2>
+<div id="session__View">
+
+<br>
+Session
+<input type="text" id="session_id__Fld">
+<input type="button" value="query" onclick="ssmQuerySetup('session')"/>
+
+<br>
+Action
+<input type="text" id="session_action__Fld">
+<input type="button" value="perform" onclick="ssmPerformSetup()"/>
+
+<br>
+State
+<input type="button" value="start" onclick="ssmStartSetup()"/>
+<textarea rows="12" cols="64" id="session_data__Fld">
+</textarea>
+
+<br>
+<input type="button" value="list" onclick="ssmListSetup('session')"/>
+<textarea rows="8" cols="12" id="session_list__Tbl">
+</textarea>
+
+<br>
 <input type="button" value="log" onclick="ssmLogSetup()"/>
-<input type="button" value="list" onclick="ssmListSetup()"/>
-<select id="query__Sel">
-  <option value="admin" selected>Admin</option>
-  <option value="user">User</option>
-  <option value="ssm">SSM</option>
-  <option value="session">Session</option>
-</select>
-<input type="text" size="12" id="query__Fld"/>
-<br>
-<b>Signer agent: </b><input type="text" size="12" id="agent__Fld">
-<br>
-<input type="button" value="register" onclick="ssmRegisterSetup()"/> user: <input type="text" size="12" id="user__Fld"/>
-<br>
-<input type="button" value="perform" onclick="ssmPerformSetup()"/> action: <input type="text" size="12" id="action__Fld"/>
-<br>
-<input type="button" value="create SSM" onclick="ssmCreateSetup()"/>
-<input type="button" value="start session" onclick="ssmStartSetup()"/>
-<h3>Data</h3>
-<textarea rows="16" cols="32" id="data__Fld">
+<textarea rows="8" cols="12" id="session_log__Tbl">
 </textarea>
+</div>
+
+
+
+<hr>
+<h2>State Machine</h2>
+<div id="ssm__View">
+
 <br>
-</td>
+SSM
+<input type="text" id="ssm_id__Fld">
+<input type="button" value="query" onclick="ssmQuerySetup('ssm')"/>
 
-<td id="ssm__Cnv" rowspan="2" style="width:100%;height:100%">
-</td>
-
-</tr>
-<tr>
-<td colspan="2">
-<h2>Public key</h2>
-<textarea rows="8" cols="64" id="pub__Fld">
+<br>
+State Machine
+<input type="button" value="create" onclick="ssmCreateSetup()"/>
+<textarea rows="12" cols="64" id="ssm_data__Fld">
 </textarea>
-<br>
-<input type="button" value="flatten" onclick="logFlatPublicKey()"/>
 
-<h2>Text to sign</h2>
-<textarea rows="4" cols="64" id="txt__Fld">
+<br>
+<input type="button" value="list" onclick="ssmListSetup('ssm')"/>
+<textarea rows="8" cols="12" id="session_list__Tbl">
 </textarea>
-<br>
-<input type="button" value="sign" onclick="logSignature()"/>
-</td>
 
-</tr>
-</table>
+<br>
+<div style="min-width:320px;min-height:200px;border-style:solid;border-width:1px" id="ssm_graph__Cnv">
+</div>
+</div>
+
+
+<pre style="width:100%;min-height:320px" id="data__Fld">
+</pre>
+</div>
 
 </body>
 </html>
