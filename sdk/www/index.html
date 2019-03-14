@@ -1,7 +1,13 @@
 <html>
+
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Signing State Machines</title>
 </head>
+
+
+<link rel="stylesheet" type="text/css" href="mdl/material.min.css">
+<script src="mdl/material.min.js"></script>
 
 <script src="crypto-js/crypto-js.js"></script>
 <script src="jsencrypt/jsencrypt.js"></script>
@@ -170,22 +176,41 @@ function initView() {
 
 <body onload="initView()">
 
-<h1>Signing State Machines</h1>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 
-<pre id='data__Fld'>
-</pre>
+<header class="mdl-layout__header">
+  <div class="mdl-layout__header-row">
+    <span class="mdl-layout-title"><a href="https://github.com/civis-blockchain/blockchain-ssm">Signing State Machines</a></span>
+  </div>
+  <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+    <a href="#data__View" class="mdl-layout__tab">&nbsp;</a>
+    <a href="#access__View" class="mdl-layout__tab">Access</a>
+    <a href="#user__View" class="mdl-layout__tab">User</a>
+    <a href="#session__View" class="mdl-layout__tab">Session</a>
+    <a href="#ssm__View" class="mdl-layout__tab">State Machine</a>
+  </div>
+</header>
 
-<hr>
-<h2>Access</h2>
-<div id="access__View">
+<main class="mdl-layout__content">
+
+
+<section class="mdl-layout__tab-panel" id="data__View">
+<div class="page-content">
+<pre id='data__Fld'></pre>
+</div>
+</section>
+
+
+<section class="mdl-layout__tab-panel" id="access__View">
+<div class="page-content">
 
 <br>
 Server
-<input type="text" value="127.0.0.1" id="access_host__Fld">:<input type="text" value="8080" id="access_port__Fld">
+<input type="text" value="127.0.0.1" id="access_host__Fld"/>:<input type="text" value="8080" id="access_port__Fld"/>
 
 <br>
 User
-<input type="text" id="access_id__Fld">
+<input type="text" id="access_id__Fld"/>
 
 <br>
 Private key
@@ -195,12 +220,12 @@ Private key
 <br>
 <input type="button" value="clear view" onclick="clearView(viewElements['access'])"/>
 </div>
+</section>
 
 
 
-<hr>
-<h2>User</h2>
-<div id="user__View">
+<section class="mdl-layout__tab-panel" id="user__View">
+<div class="page-content">
 
 <br>
 User
@@ -229,12 +254,12 @@ Private key
 <br>
 <input type="button" value="clear view" onclick="clearView(viewElements['user'])"/>
 </div>
+</section>
 
 
 
-<hr>
-<h2>Session</h2>
-<div id="session__View">
+<section class="mdl-layout__tab-panel" id="session__View">
+<div class="page-content">
 
 <br>
 Session
@@ -265,12 +290,12 @@ State
 <br>
 <input type="button" value="clear view" onclick="clearView(viewElements['session'])"/>
 </div>
+</section>
 
 
 
-<hr>
-<h2>State Machine</h2>
-<div id="ssm__View">
+<section class="mdl-layout__tab-panel" id="ssm__View">
+<div class="page-content">
 
 <br>
 SSM
@@ -295,6 +320,14 @@ State Machine
 <br>
 <input type="button" value="clear view" onclick="clearView(viewElements['ssm'])"/>
 </div>
+</section>
+
+
+</main>
+
+</div>
+
+
 
 </body>
 </html>
