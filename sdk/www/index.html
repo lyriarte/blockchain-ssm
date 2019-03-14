@@ -204,21 +204,55 @@ function initView() {
 <section class="mdl-layout__tab-panel" id="access__View">
 <div class="page-content">
 
-<br>
-Server
-<input type="text" value="127.0.0.1" id="access_host__Fld"/>:<input type="text" value="8080" id="access_port__Fld"/>
+<div class="mdl-grid">
 
-<br>
-User
-<input type="text" id="access_id__Fld"/>
+<div class="mdl-cell mdl-cell--3-col">
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="access_host__TxtFld">
+      <input class="mdl-textfield__input" type="text" value="127.0.0.1" id="access_host__Fld">
+      <label class="mdl-textfield__label" for="access_host__TxtFld">Host addess</label>
+  </div>
+  :
+</div>
+<div class="mdl-cell mdl-cell--1-col">
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="access_port__TxtFld">
+      <input class="mdl-textfield__input" type="text" value="8080" id="access_port__Fld">
+      <label class="mdl-textfield__label" for="access_port__TxtFld">Port</label>
+  </div>
+</div>
 
-<br>
+<div class="mdl-cell mdl-cell--8-col mdl-cell--hide-phone mdl-layout-spacer">
+</div>
+
+<div class="mdl-cell mdl-cell--4-col">
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="access_id__TxtFld">
+      <input class="mdl-textfield__input" type="text" id="access_id__Fld">
+      <label class="mdl-textfield__label" for="access_id__TxtFld">User</label>
+  </div>
+</div>
+
+<div class="mdl-cell mdl-cell--8-col mdl-cell--hide-phone mdl-layout-spacer">
+</div>
+
+<div class="mdl-cell mdl-cell--4-col">
 Private key
-<textarea rows="28" cols="64" id="access_prv__Fld">
-</textarea>
+</div>
 
-<br>
-<input type="button" value="clear view" onclick="clearView(viewElements['access'])"/>
+<div class="mdl-cell mdl-cell--8-col mdl-cell--hide-phone mdl-layout-spacer">
+</div>
+
+<div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-phone">
+<div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="access_prv__TxtFld">
+<textarea rows="28" cols="64" class="mdl-textfield__input" style="font-family:monospace" id="access_prv__Fld"></textarea>
+</div>
+</div>
+
+<div class="mdl-cell mdl-cell--4-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" value="clear view" onclick="clearView(viewElements['access'])">
+Clear view
+</button>
+</div>
+
+</div>
 </div>
 </section>
 
