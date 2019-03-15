@@ -1,0 +1,9 @@
+pluginManagement {
+	repositories {
+		mavenCentral()
+	}
+}
+
+rootProject.name = 'ssm-sdk'
+
+include 'ssm-rest-client'

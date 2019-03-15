@@ -1,0 +1,54 @@
+allprojects {
+    apply plugin: 'idea'
+
+    group = 'org.civis.blockchain.ssm'
+    version = '0.0.1-SNAPSHOT'
+
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    ext {
+        fabric_version = '1.4.0'
+    }
+
+    buildscript {
+        repositories {
+            mavenCentral()
+        }
+    }
+
+    ext {
+        guava_version = '27.0.1-jre'
+        slf4j_version = '1.7.26'
+        assertj_version = '3.12.0'
+        junit_version = '5.4.0'
+        jackson_version = '2.9.8'
+    }
+
+    dependencies {
+        implementation "com.google.guava:guava:$guava_version"
+        implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
+
+        implementation "org.slf4j:slf4j-api:$slf4j_version"
+
+        testImplementation "org.assertj:assertj-core:$assertj_version"
+        testImplementation "org.junit.jupiter:junit-jupiter:$junit_version"
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+    }
+}
