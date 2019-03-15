@@ -492,28 +492,82 @@ log session
 <section class="mdl-layout__tab-panel" id="ssm__View">
 <div class="page-content">
 
-<br>
-SSM
-<input type="text" id="ssm_id__Fld">
-<input type="button" value="query SSM" onclick="ssmQuerySetup('ssm',logSSM)"/>
+<div class="mdl-grid">
 
-<br>
-State Machine
-<input type="button" value="create SSM" onclick="ssmCreateSetup()"/>
-<textarea rows="12" cols="64" id="ssm_data__Fld">
-</textarea>
+<!-- ---- ---- ---- ---- State Machine query / create box -->
+<div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-phone mdl-grid">
 
-<br>
-<input type="button" value="list SSM" onclick="ssmListSetup('ssm',listSSM)"/>
-<textarea rows="8" cols="12" id="ssm_list__Tbl">
-</textarea>
-
-<br>
-<div style="min-width:320px;min-height:200px;border-style:solid;border-width:1px" id="ssm_graph__Cnv">
+<!-- State Machine query / create buttons -->
+<div class="mdl-cell mdl-cell--4-col">
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="ssm_id__TxtFld">
+      <input class="mdl-textfield__input" type="text" id="ssm_id__Fld">
+      <label class="mdl-textfield__label" for="session_id__TxtFld">State Machine</label>
+  </div>
 </div>
 
-<br>
-<input type="button" value="clear view" onclick="clearView(viewElements['ssm'])"/>
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmQuerySetup('ssm',logSSM)">
+query SSM
+</button>
+</div>
+
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmCreateSetup()">
+create SSM
+</button>
+</div>
+
+<div class="mdl-cell mdl-cell--2-col mdl-layout-spacer">
+</div>
+
+<!-- Clear button -->
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView(viewElements['ssm']);document.getElementById('ssm_graph__Cnv').innerHTML=''">
+Clear view
+</button>
+</div>
+
+<!-- State Machine field -->
+<div class="mdl-cell mdl-cell--4-col mdl-cell--4-col-phone">
+<div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="ssm_data__TxtFld">
+<textarea rows="24" cols="32" class="mdl-textfield__input" style="font-family:monospace" id="ssm_data__Fld"></textarea>
+</div>
+</div>
+
+<!-- State Machine graph canvas -->
+<div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-phone">
+<div style="min-width:240px;min-height:320px;max-height:480px" id="ssm_graph__Cnv">
+</div>
+</div>
+
+</div>
+<!-- ---- ---- ---- ------>
+
+
+<!-- ---- ---- ---- ---- State Machines list box -->
+<div class="mdl-cell mdl-cell--4-col mdl-grid">
+	
+<!-- State Machines list button -->
+<div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-phone">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmListSetup('ssm',listSSM)">
+list state machines
+</button>
+</div>
+
+<div class="mdl-cell mdl-cell--6-col mdl-cell--hide-phone mdl-layout-spacer">
+</div>
+
+<!-- State Machines list -->
+<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+<div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="ssm_list__TxtTbl">
+<textarea class="mdl-textfield__input" style="font-family:monospace"  rows="32" cols="32" id="ssm_list__Tbl"></textarea>
+</div>
+</div>
+
+</div>
+<!-- ---- ---- ---- ------>
+
+</div>
 </div>
 </section>
 <!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ------>
