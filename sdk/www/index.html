@@ -180,7 +180,9 @@ function initView() {
 <!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- Header -->
 <header class="mdl-layout__header">
   <div class="mdl-layout__header-row">
-    <span class="mdl-layout-title"><a href="https://github.com/civis-blockchain/blockchain-ssm">Signing State Machines</a></span>
+    <span class="mdl-layout-title">
+		<a href="https://github.com/civis-blockchain/blockchain-ssm">Signing State Machines</a>
+	</span>
   </div>
   <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
     <a href="#data__View" class="mdl-layout__tab">&nbsp;</a>
@@ -202,7 +204,6 @@ function initView() {
 <!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- Data Tab View -->
 <section class="mdl-layout__tab-panel" id="data__View">
 <div class="page-content">
-<pre id='data__Fld'></pre>
 </div>
 </section>
 <!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ------>
@@ -576,6 +577,17 @@ list state machines
 </div>
 </section>
 <!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ------>
+
+
+<!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- Data result / error footer-->
+
+<div class="mdl-grid">
+<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast"  id="data__TxtFld">
+<input class="mdl-textfield__input" type="text" style="font-family:monospace" id="data__Fld" readonly>
+</div>
+</div>
+
+<!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ------>
 
 
 </main>
