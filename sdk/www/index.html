@@ -194,18 +194,24 @@ function initView() {
 <main class="mdl-layout__content">
 
 
+
+<!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- Data Tab View -->
 <section class="mdl-layout__tab-panel" id="data__View">
 <div class="page-content">
 <pre id='data__Fld'></pre>
 </div>
 </section>
+<!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ------>
 
 
+
+<!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- Access Tab View -->
 <section class="mdl-layout__tab-panel" id="access__View">
 <div class="page-content">
 
 <div class="mdl-grid">
 
+<!-- Host address / Port -->
 <div class="mdl-cell mdl-cell--3-col">
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="access_host__TxtFld">
       <input class="mdl-textfield__input" type="text" value="127.0.0.1" id="access_host__Fld">
@@ -222,6 +228,7 @@ function initView() {
 <div class="mdl-cell mdl-cell--8-col mdl-cell--hide-phone mdl-layout-spacer">
 </div>
 
+<!-- User access id -->
 <div class="mdl-cell mdl-cell--4-col">
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="access_id__TxtFld">
       <input class="mdl-textfield__input" type="text" id="access_id__Fld">
@@ -232,6 +239,7 @@ function initView() {
 <div class="mdl-cell mdl-cell--8-col mdl-cell--hide-phone mdl-layout-spacer">
 </div>
 
+<!-- Private key -->
 <div class="mdl-cell mdl-cell--4-col">
 Private key
 </div>
@@ -245,6 +253,7 @@ Private key
 </div>
 </div>
 
+<!-- Clear button -->
 <div class="mdl-cell mdl-cell--4-col">
 <button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView(viewElements['access'])">
 Clear view
@@ -254,14 +263,17 @@ Clear view
 </div>
 </div>
 </section>
+<!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ------>
 
 
 
+<!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- User Tab View -->
 <section class="mdl-layout__tab-panel" id="user__View">
 <div class="page-content">
 
 <div class="mdl-grid">
 
+<!-- User query id / buttons -->
 <div class="mdl-cell mdl-cell--4-col">
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="user_id__TxtFld">
       <input class="mdl-textfield__input" type="text" id="user_id__Fld">
@@ -281,6 +293,7 @@ query admin
 </button>
 </div>
 
+<!-- User list buttons -->
 <div class="mdl-cell mdl-cell--2-col">
 <button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmListSetup('user',listUser)">
 list users
@@ -293,6 +306,7 @@ list admins
 </button>
 </div>
 
+<!-- Public key / register button -->
 <div class="mdl-cell mdl-cell--6-col mdl-cell--2-col-phone">
 Public key
 </div>
@@ -315,6 +329,7 @@ register user
 <div class="mdl-cell mdl-cell--4-col mdl-cell--hide-phone mdl-layout-spacer">
 </div>
 
+<!-- Private key / generate button -->
 <div class="mdl-cell mdl-cell--6-col mdl-cell--2-col-phone">
 Private key
 </div>
@@ -334,6 +349,7 @@ generate key pair
 </div>
 </div>
 
+<!-- Clear button -->
 <div class="mdl-cell mdl-cell--4-col">
 <button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView(viewElements['user'])">
 Clear view
@@ -342,7 +358,7 @@ Clear view
 
 
 
-
+<!-- Users / Admins list -->
 <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
 <div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="user_list__TxtTbl">
 <textarea class="mdl-textfield__input" style="font-family:monospace"  rows="8" cols="12" id="user_list__Tbl"></textarea>
@@ -351,9 +367,11 @@ Clear view
 
 </div>
 </section>
+<!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ------>
 
 
 
+<!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- Session Tab View -->
 <section class="mdl-layout__tab-panel" id="session__View">
 <div class="page-content">
 
@@ -387,9 +405,11 @@ State
 <input type="button" value="clear view" onclick="clearView(viewElements['session'])"/>
 </div>
 </section>
+<!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ------>
 
 
 
+<!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- State Machine Tab View -->
 <section class="mdl-layout__tab-panel" id="ssm__View">
 <div class="page-content">
 
@@ -417,9 +437,11 @@ State Machine
 <input type="button" value="clear view" onclick="clearView(viewElements['ssm'])"/>
 </div>
 </section>
+<!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ------>
 
 
 </main>
+
 
 </div>
 
