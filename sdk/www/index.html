@@ -40,17 +40,16 @@ function argsFromQueryString(queryString) {
 
 function logError(result) {
 	console.log(result)
-	document.getElementById('data__Fld').innerHTML = "<b>Error:</b> " + result;
+	document.getElementById('data__Fld').value = "Error: " + result;
 }
 
 function logResult(result) {
 	console.log(result)
-	document.getElementById('data__Fld').innerHTML = JSON.stringify(JSON.parse(result),null,2);
+	document.getElementById('data__Fld').value = JSON.stringify(JSON.parse(result),null,2);
 }
 
 function clearView(elements) {
 	elements.map(function(id) {
-		document.getElementById(id).innerHTML = "";
 		document.getElementById(id).value = "";
 	});
 }
@@ -59,23 +58,23 @@ function logSSM(result) {
 	var ssm = JSON.parse(result);
 	var cnv = document.getElementById('ssm_graph__Cnv');
 	ssmView(ssm, cnv);
-	document.getElementById('ssm_data__Fld').innerHTML = JSON.stringify(ssm,null,2);
+	document.getElementById('ssm_data__Fld').value = JSON.stringify(ssm,null,2);
 }
 
 function listSSM(result) {
-	document.getElementById('ssm_list__Tbl').innerHTML = JSON.stringify(JSON.parse(result),null,2);
+	document.getElementById('ssm_list__Tbl').value = JSON.stringify(JSON.parse(result),null,2);
 }
 
 function logSession(result) {
-	document.getElementById('session_data__Fld').innerHTML = JSON.stringify(JSON.parse(result),null,2);
+	document.getElementById('session_data__Fld').value = JSON.stringify(JSON.parse(result),null,2);
 }
 
 function listSession(result) {
-	document.getElementById('session_list__Tbl').innerHTML = JSON.stringify(JSON.parse(result),null,2);
+	document.getElementById('session_list__Tbl').value = JSON.stringify(JSON.parse(result),null,2);
 }
 
 function listSessionLog(result) {
-	document.getElementById('session_log__Tbl').innerHTML = JSON.stringify(JSON.parse(result),null,2);
+	document.getElementById('session_log__Tbl').value = JSON.stringify(JSON.parse(result),null,2);
 }
 
 function logUser(result) {
@@ -85,7 +84,7 @@ function logUser(result) {
 }
 
 function listUser(result) {
-	document.getElementById('user_list__Tbl').innerHTML = JSON.stringify(JSON.parse(result),null,2);
+	document.getElementById('user_list__Tbl').value = JSON.stringify(JSON.parse(result),null,2);
 }
 
 function usrGenerateKeyPair() {
