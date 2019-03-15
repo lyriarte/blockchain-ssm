@@ -261,32 +261,95 @@ Clear view
 <section class="mdl-layout__tab-panel" id="user__View">
 <div class="page-content">
 
-<br>
-User
-<input type="text" id="user_id__Fld">
-<input type="button" value="query user" onclick="ssmQuerySetup('user',logUser)"/>
-<input type="button" value="query admin" onclick="ssmQuerySetup('admin',logUser)"/>
+<div class="mdl-grid">
 
-<br>
+<div class="mdl-cell mdl-cell--4-col">
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="user_id__TxtFld">
+      <input class="mdl-textfield__input" type="text" id="user_id__Fld">
+      <label class="mdl-textfield__label" for="user_id__TxtFld">User</label>
+  </div>
+</div>
+
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" value="query user" onclick="ssmQuerySetup('user',logUser)">
+query user
+</button>
+</div>
+
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" value="query admin" onclick="ssmQuerySetup('admin',logUser)">
+query admin
+</button>
+</div>
+
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" value="list users" onclick="ssmListSetup('user',listUser)">
+list users
+</button>
+</div>
+
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" value="list admins" onclick="ssmListSetup('admin',listUser)">
+list admins
+</button>
+</div>
+
+<div class="mdl-cell mdl-cell--6-col mdl-cell--2-col-phone">
 Public key
-<input type="button" value="register user" onclick="ssmRegisterSetup()"/>
-<textarea rows="8" cols="64" id="user_pub__Fld">
-</textarea>
+</div>
 
-<br>
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" value="register user" onclick="ssmRegisterSetup()">
+register user
+</button>
+</div>
+
+<div class="mdl-cell mdl-cell--4-col mdl-cell--hide-phone mdl-layout-spacer">
+</div>
+
+<div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-phone">
+<div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="user_pub__TxtFld">
+<textarea rows="8" cols="64" class="mdl-textfield__input" style="font-family:monospace" id="user_pub__Fld"></textarea>
+</div>
+</div>
+
+<div class="mdl-cell mdl-cell--4-col mdl-cell--hide-phone mdl-layout-spacer">
+</div>
+
+<div class="mdl-cell mdl-cell--6-col mdl-cell--2-col-phone">
 Private key
-<input type="button" value="generate key pair" onclick="usrGenerateKeyPair()"/>
-<textarea rows="28" cols="64" id="user_prv__Fld">
-</textarea>
+</div>
 
-<br>
-<input type="button" value="list users" onclick="ssmListSetup('user',listUser)"/>
-<input type="button" value="list admins" onclick="ssmListSetup('admin',listUser)"/>
-<textarea rows="8" cols="12" id="user_list__Tbl">
-</textarea>
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" value="generate key pair" onclick="usrGenerateKeyPair()">
+generate key pair
+</button>
+</div>
 
-<br>
-<input type="button" value="clear view" onclick="clearView(viewElements['user'])"/>
+<div class="mdl-cell mdl-cell--4-col mdl-cell--hide-phone mdl-layout-spacer">
+</div>
+
+<div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-phone">
+<div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="user_prv__TxtFld">
+<textarea rows="28" cols="64" class="mdl-textfield__input" style="font-family:monospace" id="user_prv__Fld"></textarea>
+</div>
+</div>
+
+<div class="mdl-cell mdl-cell--4-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" value="clear view" onclick="clearView(viewElements['user'])">
+Clear view
+</button>
+</div>
+
+
+
+
+<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+<div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="user_list__TxtTbl">
+<textarea class="mdl-textfield__input" style="font-family:monospace"  rows="8" cols="12" id="user_list__Tbl"></textarea>
+</div>
+</div>
+
 </div>
 </section>
 
