@@ -381,21 +381,70 @@ list admins
 <section class="mdl-layout__tab-panel" id="session__View">
 <div class="page-content">
 
-<br>
-Session
-<input type="text" id="session_id__Fld">
-<input type="button" value="query session" onclick="ssmQuerySetup('session',logSession)"/>
+<div class="mdl-grid">
 
-<br>
-Action
-<input type="text" id="session_action__Fld">
-<input type="button" value="perform action" onclick="ssmPerformSetup()"/>
+<!-- ---- ---- ---- ---- Session query / action box -->
+<div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-phone mdl-grid">
 
-<br>
-State
-<input type="button" value="start session" onclick="ssmStartSetup()"/>
-<textarea rows="12" cols="64" id="session_data__Fld">
-</textarea>
+<!-- Session query / start buttons -->
+<div class="mdl-cell mdl-cell--4-col">
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="session_id__TxtFld">
+      <input class="mdl-textfield__input" type="text" id="session_id__Fld">
+      <label class="mdl-textfield__label" for="session_id__TxtFld">Session</label>
+  </div>
+</div>
+
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmQuerySetup('session',logSession)">
+query session
+</button>
+</div>
+
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmStartSetup()">
+start session
+</button>
+</div>
+
+<div class="mdl-cell mdl-cell--2-col mdl-layout-spacer">
+</div>
+
+<!-- Clear button -->
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView(viewElements['session'])">
+Clear view
+</button>
+</div>
+
+<!-- Action field / perform button -->
+<div class="mdl-cell mdl-cell--4-col">
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="session_action__TxtFld">
+      <input class="mdl-textfield__input" type="text" id="session_action__Fld">
+      <label class="mdl-textfield__label" for="session_action__TxtFld">Action</label>
+  </div>
+</div>
+
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmPerformSetup()">
+perform action
+</button>
+</div>
+
+<div class="mdl-cell mdl-cell--6-col mdl-cell--2-col-phone mdl-layout-spacer">
+</div>
+
+<!-- Session field -->
+<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+<div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="session_data__TxtFld">
+<textarea rows="24" cols="64" class="mdl-textfield__input" style="font-family:monospace" id="session_data__Fld"></textarea>
+</div>
+</div>
+
+</div>
+<!-- ---- ---- ---- ------>
+
+<!-- ---- ---- ---- ---- Session list / log box -->
+<div class="mdl-cell mdl-cell--4-col mdl-grid">
 
 <br>
 <input type="button" value="list sessions" onclick="ssmListSetup('session',listSession)"/>
@@ -407,8 +456,11 @@ State
 <textarea rows="8" cols="12" id="session_log__Tbl">
 </textarea>
 
-<br>
-<input type="button" value="clear view" onclick="clearView(viewElements['session'])"/>
+
+</div>
+<!-- ---- ---- ---- ------>
+
+</div>
 </div>
 </section>
 <!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ------>
