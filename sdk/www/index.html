@@ -273,6 +273,10 @@ Clear view
 
 <div class="mdl-grid">
 
+
+<!-- ---- ---- ---- ---- User / Admin query box -->
+<div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-phone mdl-grid">
+
 <!-- User query id / buttons -->
 <div class="mdl-cell mdl-cell--4-col">
   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="user_id__TxtFld">
@@ -293,21 +297,18 @@ query admin
 </button>
 </div>
 
-<!-- User list buttons -->
+<div class="mdl-cell mdl-cell--2-col mdl-layout-spacer">
+</div>
+<!-- Clear button -->
 <div class="mdl-cell mdl-cell--2-col">
-<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmListSetup('user',listUser)">
-list users
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView(viewElements['user'])">
+Clear view
 </button>
 </div>
 
-<div class="mdl-cell mdl-cell--2-col">
-<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmListSetup('admin',listUser)">
-list admins
-</button>
-</div>
 
 <!-- Public key / register button -->
-<div class="mdl-cell mdl-cell--6-col mdl-cell--2-col-phone">
+<div class="mdl-cell mdl-cell--10-col mdl-cell--2-col-phone">
 Public key
 </div>
 
@@ -317,20 +318,14 @@ register user
 </button>
 </div>
 
-<div class="mdl-cell mdl-cell--4-col mdl-cell--hide-phone mdl-layout-spacer">
-</div>
-
-<div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-phone">
+<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
 <div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="user_pub__TxtFld">
 <textarea rows="8" cols="64" class="mdl-textfield__input" style="font-family:monospace" id="user_pub__Fld"></textarea>
 </div>
 </div>
 
-<div class="mdl-cell mdl-cell--4-col mdl-cell--hide-phone mdl-layout-spacer">
-</div>
-
 <!-- Private key / generate button -->
-<div class="mdl-cell mdl-cell--6-col mdl-cell--2-col-phone">
+<div class="mdl-cell mdl-cell--10-col mdl-cell--2-col-phone">
 Private key
 </div>
 
@@ -340,30 +335,42 @@ generate key pair
 </button>
 </div>
 
-<div class="mdl-cell mdl-cell--4-col mdl-cell--hide-phone mdl-layout-spacer">
-</div>
-
-<div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-phone">
+<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
 <div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="user_prv__TxtFld">
 <textarea rows="28" cols="64" class="mdl-textfield__input" style="font-family:monospace" id="user_prv__Fld"></textarea>
 </div>
 </div>
 
-<!-- Clear button -->
-<div class="mdl-cell mdl-cell--4-col">
-<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView(viewElements['user'])">
-Clear view
+</div>
+<!-- ---- ---- ---- ------>
+
+
+<!-- ---- ---- ---- ---- User / Admin list box -->
+<div class="mdl-cell mdl-cell--4-col mdl-grid">
+
+<!-- User list buttons -->
+<div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-phone">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmListSetup('user',listUser)">
+list users
 </button>
 </div>
 
-
+<div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-phone">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmListSetup('admin',listUser)">
+list admins
+</button>
+</div>
 
 <!-- Users / Admins list -->
 <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
 <div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="user_list__TxtTbl">
-<textarea class="mdl-textfield__input" style="font-family:monospace"  rows="8" cols="12" id="user_list__Tbl"></textarea>
+<textarea class="mdl-textfield__input" style="font-family:monospace"  rows="48" cols="32" id="user_list__Tbl"></textarea>
 </div>
 </div>
+
+</div>
+<!-- ---- ---- ---- ------>
+
 
 </div>
 </section>
