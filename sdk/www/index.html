@@ -93,18 +93,24 @@ function usrGenerateKeyPair() {
 	document.getElementById('user_pub__Fld').value = JSE.getPublicKey();
 }
 
+function hostCmdSetup(uri, cmd, fcn, args, onOk, onError) {
+	document.getElementById('data__Fld').value = "";
+	var cbctx = bccHostCmd(uri, cmd, fcn, args, onOk, onError);
+	return cbctx;
+}
+
 function ssmQuerySetup(keyType, onOk, onError) {
 	var keyId = document.getElementById((keyType == 'admin' ? 'user' : keyType) + '_id__Fld').value;
 	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
 	var hostCmd = ssmQuery(keyType, keyId);
-	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, onOk ? onOk : logResult , onError ? onError : logError);
+	var cbctx = hostCmdSetup(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, onOk, onError);
 	return cbctx;
 }
 
 function ssmListSetup(keyType, onOk, onError) {
 	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
 	var hostCmd = ssmQuery("list", keyType);
-	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, onOk ? onOk : logResult , onError ? onError : logError);
+	var cbctx = hostCmdSetup(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, onOk, onError);
 	return cbctx;
 }
 
@@ -113,7 +119,7 @@ function ssmLogSetup() {
 	var fcn = "log";
 	var queryId = document.getElementById('session_id__Fld').value;
 	var hostCmd = ssmQuery(fcn, queryId);
-	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, listSessionLog, logError);
+	var cbctx = hostCmdSetup(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, listSessionLog, logError);
 	return cbctx;
 }
 
@@ -126,7 +132,7 @@ function ssmRegisterSetup() {
 	var admin = document.getElementById('access_id__Fld').value;
 	var adminKey = document.getElementById('access_prv__Fld').value;
 	var hostCmd = ssmRegister(user, admin, adminKey);
-	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	var cbctx = hostCmdSetup(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
 	return cbctx;
 }
 
@@ -136,7 +142,7 @@ function ssmCreateSetup() {
 	var admin = document.getElementById('access_id__Fld').value;
 	var adminKey = document.getElementById('access_prv__Fld').value;
 	var hostCmd = ssmCreate(ssm, admin, adminKey);
-	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	var cbctx = hostCmdSetup(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
 	return cbctx;
 }
 
@@ -146,7 +152,7 @@ function ssmStartSetup() {
 	var admin = document.getElementById('access_id__Fld').value;
 	var adminKey = document.getElementById('access_prv__Fld').value;
 	var hostCmd = ssmStart(session, admin, adminKey);
-	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	var cbctx = hostCmdSetup(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
 	return cbctx;
 }
 
@@ -157,7 +163,7 @@ function ssmPerformSetup() {
 	var user = document.getElementById('access_id__Fld').value;
 	var userKey = document.getElementById('access_prv__Fld').value;
 	var hostCmd = ssmPerform(action, context, user, userKey);
-	var cbctx = bccHostCmd(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	var cbctx = hostCmdSetup(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
 	return cbctx;
 }
 
