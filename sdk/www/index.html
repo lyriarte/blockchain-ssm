@@ -178,6 +178,11 @@ function initView() {
 		document.getElementById('access_port__Fld').value = args.port;
 	if (args.view)
 		defaultView = args.view;
+	if (args.fcn && args.arg && (args.fcn == "session" || args.fcn == "ssm")) {
+		defaultView = args.fcn;
+		document.getElementById(args.fcn + '_id__Fld').value = args.arg;
+		ssmQuerySetup(args.fcn, args.fcn == "session" ? logSession : logSSM);
+	}
 	document.getElementById(defaultView + "View__Tab").click();
 }
 
