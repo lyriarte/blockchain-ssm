@@ -168,11 +168,15 @@ function ssmPerformSetup() {
 }
 
 function initView() {
+	var defaultView = "access"
 	var args = argsFromQueryString(window.location.toString().split("\?")[1]);
 	if (args.host)
 		document.getElementById('access_host__Fld').value = args.host;
 	if (args.port)
 		document.getElementById('access_port__Fld').value = args.port;
+	if (args.view)
+		defaultView = args.view;
+	document.getElementById(defaultView + "View__Tab").click();
 }
 
 </script>
@@ -191,11 +195,11 @@ function initView() {
 	</span>
   </div>
   <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-    <a href="#data__View" class="mdl-layout__tab">&nbsp;</a>
-    <a href="#access__View" class="mdl-layout__tab">Access</a>
-    <a href="#user__View" class="mdl-layout__tab">User</a>
-    <a href="#session__View" class="mdl-layout__tab">Session</a>
-    <a href="#ssm__View" class="mdl-layout__tab">State Machine</a>
+    <a href="#data__View" class="mdl-layout__tab" id="dataView__Tab">&nbsp;</a>
+    <a href="#access__View" class="mdl-layout__tab" id="accessView__Tab">Access</a>
+    <a href="#user__View" class="mdl-layout__tab" id="userView__Tab">User</a>
+    <a href="#session__View" class="mdl-layout__tab" id="sessionView__Tab">Session</a>
+    <a href="#ssm__View" class="mdl-layout__tab" id="ssmView__Tab">State Machine</a>
   </div>
 </header>
 <!-- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ------>
