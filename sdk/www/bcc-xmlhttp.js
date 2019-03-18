@@ -23,9 +23,8 @@ function bccHostCmd(uri, cmd, fcn, args, onOk, onError) {
 		}
 	};
 
-	var query = "cmd=" + cmd + "&fcn=" + fcn;
-	args.map(function(arg) {query += "&args=" + arg;});
-	query = query.replace(/\+/g,'%2B')
+	var query = "cmd=" + encodeURIComponent(cmd) + "&fcn=" + encodeURIComponent(fcn);
+	args.map(function(arg) {query += "&args=" + encodeURIComponent(arg);});
 
 	xmlhttp.open("GET", uri + "?" + query, true);
 	xmlhttp.send();
