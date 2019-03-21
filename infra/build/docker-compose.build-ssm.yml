@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  package-chaincode:
+    container_name: package-chaincode
+    image: hyperledger/fabric-tools
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    volumes:
+      - ../../build:/opt/gopath/src/github.com/hyperledger/fabric/peer
+      - ../../chaincode:/opt/gopath/src/blockchain-coop
+    command: peer chaincode package -n ssm -p blockchain-coop/go/ssm -v $VERSION ssm-$VERSION.pak
