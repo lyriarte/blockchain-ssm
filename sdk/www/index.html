@@ -20,6 +20,9 @@
 <script src="ssm-view.js"></script>
 <script type="text/javascript">
 
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- Args parsing and globals
+
 var viewElements = {
 	"access": ['access_host__Fld', 'access_port__Fld', 'access_id__Fld', 'access_prv__Fld', 'data__Fld'],
 	"user": ['user_id__Fld', 'user_pub__Fld', 'user_prv__Fld', 'user_list__Tbl', 'data__Fld'],
@@ -39,6 +42,9 @@ function argsFromQueryString(queryString) {
 	}
 	return args;
 }
+
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- Views management
 
 function logError(result) {
 	console.log(result)
@@ -88,6 +94,9 @@ function logUser(result) {
 function listUser(result) {
 	document.getElementById('user_list__Tbl').value = JSON.stringify(JSON.parse(result),null,2);
 }
+
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- SSM API wrappers
 
 function usrGenerateKeyPair() {
 	JSE.key = null;
@@ -168,6 +177,9 @@ function ssmPerformSetup() {
 	var cbctx = hostCmdSetup(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
 	return cbctx;
 }
+
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- View initialization
 
 function initView() {
 	var defaultView = "access"
