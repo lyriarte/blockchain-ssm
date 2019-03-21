@@ -3,7 +3,7 @@ version: '2'
 services:
   package-chaincode:
     container_name: package-chaincode
-    image: hyperledger/fabric-tools
+    image: hyperledger/fabric-tools:1.4.0
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     volumes:
       - ../../build:/opt/gopath/src/github.com/hyperledger/fabric/peer
