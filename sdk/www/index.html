@@ -14,6 +14,7 @@
 <script src="crypto-js/crypto-js.js"></script>
 <script src="jsencrypt/jsencrypt.js"></script>
 <script src="vis/vis.js"></script>
+<script src="angularjs/1.6.10/angular.min.js"></script>
 
 <script src="bcc-xmlhttp.js"></script>
 <script src="ssm-api.js"></script>
@@ -44,6 +45,21 @@ function argsFromQueryString(queryString) {
 }
 
 
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- AngularJS modules
+
+var angularModules = {
+	"ssm": angular.module('ssm', [])
+}
+
+angularModules.ssm.controller('ssmTableCtrl', function($scope) {
+	$scope.ssmList = [];
+	$scope.loadStateMachines = function(lst) {
+		$scope.ssmList = lst;
+	};
+});
+
+
+
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- Views management
 
 function logError(result) {
@@ -70,7 +86,11 @@ function logSSM(result) {
 }
 
 function listSSM(result) {
-	document.getElementById('ssm_list__Tbl').value = JSON.stringify(JSON.parse(result),null,2);
+	var ssmListTable = document.getElementById('ssm_list__Tbl');
+	var scope = angular.element(ssmListTable).scope();
+	scope.$apply(function() {
+		scope.loadStateMachines(JSON.parse(result));
+	}); 
 }
 
 function logSession(result) {
@@ -592,9 +612,24 @@ list state machines
 </div>
 
 <!-- State Machines list -->
-<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone"  ng-app="ssm" ng-controller="ssmTableCtrl">
+<!--
 <div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="ssm_list__TxtTbl">
 <textarea class="mdl-textfield__input" style="font-family:monospace"  rows="30" cols="32" id="ssm_list__Tbl"></textarea>
+-->
+<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width">
+<thead>
+<tr class="mdl-color--primary">
+	<th class="mdl-data-table__cell--non-numeric mdl-color-text--primary-contrast">State Machine</th>
+</tr>
+</thead>
+<tbody id="ssm_list__Tbl">
+<tr ng-repeat="ssmItem in ssmList">
+	<td class="mdl-data-table__cell--non-numeric">{{ssmItem}}</td>
+</tr>
+</tbody>
+</table>
+
 </div>
 </div>
 
