@@ -83,10 +83,20 @@ function logResult(result) {
 	document.getElementById('data__Fld').value = JSON.stringify(JSON.parse(result),null,2);
 }
 
-function clearView(elements) {
-	elements.map(function(id) {
+function clearView(tag) {
+	viewElements[tag].map(function(id) {
 		document.getElementById(id).value = "";
 	});
+	if (tag == 'user') {
+		listUser('[]');
+	}
+	if (tag == 'session') {
+		listSession('[]');
+	}
+	if (tag == 'ssm') {
+		listSSM('[]');
+		document.getElementById('ssm_graph__Cnv').innerHTML='';
+	}
 }
 
 function logSSM(result) {
@@ -327,7 +337,7 @@ Private key
 
 <!-- Clear button -->
 <div class="mdl-cell mdl-cell--4-col">
-<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView(viewElements['access'])">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView('access')">
 Clear view
 </button>
 </div>
@@ -373,7 +383,7 @@ query admin
 </div>
 <!-- Clear button -->
 <div class="mdl-cell mdl-cell--2-col">
-<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView(viewElements['user'])">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView('user')">
 Clear view
 </button>
 </div>
@@ -496,7 +506,7 @@ start session
 
 <!-- Clear button -->
 <div class="mdl-cell mdl-cell--2-col">
-<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView(viewElements['session'])">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView('session')">
 Clear view
 </button>
 </div>
@@ -621,7 +631,7 @@ create SSM
 
 <!-- Clear button -->
 <div class="mdl-cell mdl-cell--2-col">
-<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView(viewElements['ssm']);document.getElementById('ssm_graph__Cnv').innerHTML=''">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="clearView('ssm');">
 Clear view
 </button>
 </div>
