@@ -54,6 +54,10 @@ ssmApp.controller('ssmTableCtrl', function($scope) {
 	$scope.loadStateMachines = function(lst) {
 		$scope.ssmList = lst;
 	};
+	$scope.ssmQuery = function(item) {
+		document.getElementById('ssm_id__TxtFld').MaterialTextfield.change(item);
+		ssmQuerySetup('ssm',logSSM);
+	};
 });
 
 ssmApp.controller('sessionTableCtrl', function($scope) {
@@ -61,12 +65,19 @@ ssmApp.controller('sessionTableCtrl', function($scope) {
 	$scope.loadSessions = function(lst) {
 		$scope.sessionList = lst;
 	};
+	$scope.sessionQuery = function(item) {
+		document.getElementById('session_id__TxtFld').MaterialTextfield.change(item);
+		ssmQuerySetup('session',logSession);
+	};
 });
 
 ssmApp.controller('userTableCtrl', function($scope) {
 	$scope.userList = [];
 	$scope.loadUsers = function(lst) {
 		$scope.userList = lst;
+	};
+	$scope.userFieldSet = function(item) {
+		document.getElementById('user_id__TxtFld').MaterialTextfield.change(item);
 	};
 });
 
@@ -457,7 +468,7 @@ list admins
 </thead>
 <tbody id="user_list__Tbl">
 <tr ng-repeat="userItem in userList">
-	<td class="mdl-data-table__cell--non-numeric">{{userItem}}</td>
+	<td class="mdl-data-table__cell--non-numeric" ng-click="userFieldSet(userItem)">{{userItem}}</td>
 </tr>
 </tbody>
 </table>
@@ -564,7 +575,7 @@ list sessions
 </thead>
 <tbody id="session_list__Tbl">
 <tr ng-repeat="sessionItem in sessionList">
-	<td class="mdl-data-table__cell--non-numeric">{{sessionItem}}</td>
+	<td class="mdl-data-table__cell--non-numeric" ng-click="sessionQuery(sessionItem)">{{sessionItem}}</td>
 </tr>
 </tbody>
 </table>
@@ -680,7 +691,7 @@ list state machines
 </thead>
 <tbody id="ssm_list__Tbl">
 <tr ng-repeat="ssmItem in ssmList">
-	<td class="mdl-data-table__cell--non-numeric">{{ssmItem}}</td>
+	<td class="mdl-data-table__cell--non-numeric" ng-click="ssmQuery(ssmItem)">{{ssmItem}}</td>
 </tr>
 </tbody>
 </table>
