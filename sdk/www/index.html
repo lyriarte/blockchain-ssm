@@ -47,17 +47,28 @@ function argsFromQueryString(queryString) {
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- AngularJS modules
 
-var angularModules = {
-	"ssm": angular.module('ssm', [])
-}
+var ssmApp = angular.module('ssm', []);
 
-angularModules.ssm.controller('ssmTableCtrl', function($scope) {
+ssmApp.controller('ssmTableCtrl', function($scope) {
 	$scope.ssmList = [];
 	$scope.loadStateMachines = function(lst) {
 		$scope.ssmList = lst;
 	};
 });
 
+ssmApp.controller('sessionTableCtrl', function($scope) {
+	$scope.sessionList = [];
+	$scope.loadSessions = function(lst) {
+		$scope.sessionList = lst;
+	};
+});
+
+ssmApp.controller('userTableCtrl', function($scope) {
+	$scope.userList = [];
+	$scope.loadUsers = function(lst) {
+		$scope.userList = lst;
+	};
+});
 
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- Views management
@@ -98,7 +109,11 @@ function logSession(result) {
 }
 
 function listSession(result) {
-	document.getElementById('session_list__Tbl').value = JSON.stringify(JSON.parse(result),null,2);
+	var sessionListTable = document.getElementById('session_list__Tbl');
+	var scope = angular.element(sessionListTable).scope();
+	scope.$apply(function() {
+		scope.loadSessions(JSON.parse(result));
+	}); 
 }
 
 function listSessionLog(result) {
@@ -112,7 +127,11 @@ function logUser(result) {
 }
 
 function listUser(result) {
-	document.getElementById('user_list__Tbl').value = JSON.stringify(JSON.parse(result),null,2);
+	var userListTable = document.getElementById('user_list__Tbl');
+	var scope = angular.element(userListTable).scope();
+	scope.$apply(function() {
+		scope.loadUsers(JSON.parse(result));
+	}); 
 }
 
 
@@ -222,7 +241,7 @@ function initView() {
 
 
 
-<body onload="initView()">
+<body onload="initView()"  ng-app="ssm">
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 
@@ -415,11 +434,23 @@ list admins
 </div>
 
 <!-- Users / Admins list -->
-<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone"  ng-controller="userTableCtrl">
+<!--
 <div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="user_list__TxtTbl">
 <textarea class="mdl-textfield__input" style="font-family:monospace"  rows="30" cols="32" id="user_list__Tbl"></textarea>
-</div>
-</div>
+-->
+<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width">
+<thead>
+<tr class="mdl-color--primary">
+	<th class="mdl-data-table__cell--non-numeric mdl-color-text--primary-contrast">User / Admin</th>
+</tr>
+</thead>
+<tbody id="user_list__Tbl">
+<tr ng-repeat="userItem in userList">
+	<td class="mdl-data-table__cell--non-numeric">{{userItem}}</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 <!-- ---- ---- ---- ------>
@@ -510,10 +541,24 @@ list sessions
 <div class="mdl-cell mdl-cell--6-col mdl-cell--hide-phone mdl-layout-spacer">
 </div>
 
-<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone"  ng-controller="sessionTableCtrl">
+<!--
 <div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="session_list__TxtTbl">
 <textarea class="mdl-textfield__input" style="font-family:monospace"  rows="12" cols="32" id="session_list__Tbl"></textarea>
-</div>
+-->
+<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp full-width">
+<thead>
+<tr class="mdl-color--primary">
+	<th class="mdl-data-table__cell--non-numeric mdl-color-text--primary-contrast">Session</th>
+</tr>
+</thead>
+<tbody id="session_list__Tbl">
+<tr ng-repeat="sessionItem in sessionList">
+	<td class="mdl-data-table__cell--non-numeric">{{sessionItem}}</td>
+</tr>
+</tbody>
+</table>
+
 </div>
 
 <!-- Session log button / box -->
@@ -612,7 +657,7 @@ list state machines
 </div>
 
 <!-- State Machines list -->
-<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone"  ng-app="ssm" ng-controller="ssmTableCtrl">
+<div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone"  ng-controller="ssmTableCtrl">
 <!--
 <div style="width:95%" class="mdl-textfield mdl-js-textfield mdl-color--primary mdl-color-text--primary-contrast" id="ssm_list__TxtTbl">
 <textarea class="mdl-textfield__input" style="font-family:monospace"  rows="30" cols="32" id="ssm_list__Tbl"></textarea>
@@ -630,7 +675,6 @@ list state machines
 </tbody>
 </table>
 
-</div>
 </div>
 
 </div>
