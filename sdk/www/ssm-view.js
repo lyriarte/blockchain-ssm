@@ -1,13 +1,11 @@
 function ssmToVis(ssm) {
-	var visData = {
-		nodes: [],
-		edges: []
-	};
+	var nodes = [];
+	var edges = [];
 	
 	var nbNodes = 0;
 	ssm.transitions.map(function(trans) {
 		nbNodes = Math.max(nbNodes,Math.max(trans.to+1,trans.from+1));
-		visData.edges.push({
+		edges.push({
 			from: trans.from,
 			to: trans.to,
 			label: trans.role + ": " + trans.action,
@@ -16,8 +14,22 @@ function ssmToVis(ssm) {
 	});
 	
 	for (var i=0; i<nbNodes; i++)
-		visData.nodes.push({id:i, label: i});
+		nodes.push({id:i, label: i});
 	
+	var visData = {
+		nodes: new vis.DataSet(nodes),
+		edges: new vis.DataSet(edges)
+	};
+
+	visData.nodes.on('*', function (event, properties, senderId) {
+		console.log('---- nodes event:', event, 'properties:', properties, 'senderId:', senderId);
+		visData.nodes.forEach(function(item){console.log(item.toSource())});
+	});
+	visData.edges.on('*', function (event, properties, senderId) {
+		console.log('---- edges event:', event, 'properties:', properties, 'senderId:', senderId);
+		visData.edges.forEach(function(item){console.log(item.toSource())});
+	});
+
 	return visData;
 }
 
