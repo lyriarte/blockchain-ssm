@@ -24,14 +24,11 @@ function ssmToVis(ssm) {
 	};
 
 	visData.nodes.on('*', function (event, properties, senderId) {
-		console.log('---- nodes event:', event, 'properties:', properties, 'senderId:', senderId);
 		if (event == 'add') {
 			visData.nodes.update({id:properties.items[0], label:visData.nbNodes++});
 		}
-		visData.nodes.forEach(function(item){console.log(item.toSource())});
 	});
 	visData.edges.on('*', function (event, properties, senderId) {
-		console.log('---- edges event:', event, 'properties:', properties, 'senderId:', senderId);
 		if (event == 'add') {
 			newEdge = visData.edges.get(properties.items[0]);
 			fromLabel = visData.nodes.get(newEdge.from).label;
@@ -39,8 +36,6 @@ function ssmToVis(ssm) {
 			visData.edges.update({id:properties.items[0], arrows:"to"});
 			visData.ssm.transitions.push({from: fromLabel, to: toLabel, role: "", action: ""});
 		}
-		visData.edges.forEach(function(item){console.log(item.toSource())});
-		console.log(JSON.stringify(visData.ssm,null,2));
 		if (visData.ssm.onchange)
 			visData.ssm.onchange();
 	});
