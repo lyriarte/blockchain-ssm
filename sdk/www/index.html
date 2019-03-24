@@ -115,7 +115,10 @@ function logSSM(result) {
 	var ssm = JSON.parse(result);
 	var cnv = document.getElementById('ssm_graph__Cnv');
 	ssmView(ssm, cnv);
-	document.getElementById('ssm_data__Fld').value = JSON.stringify(ssm,null,2);
+	ssm.onchange = function() {
+		document.getElementById('ssm_data__Fld').value = JSON.stringify(this,null,2);
+	};
+	ssm.onchange();
 }
 
 function listSSM(result) {

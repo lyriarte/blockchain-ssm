@@ -41,6 +41,8 @@ function ssmToVis(ssm) {
 		}
 		visData.edges.forEach(function(item){console.log(item.toSource())});
 		console.log(JSON.stringify(visData.ssm,null,2));
+		if (visData.ssm.onchange)
+			visData.ssm.onchange();
 	});
 
 	return visData;
