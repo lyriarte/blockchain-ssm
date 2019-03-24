@@ -18,11 +18,16 @@ function ssmToVis(ssm) {
 	
 	var visData = {
 		nodes: new vis.DataSet(nodes),
-		edges: new vis.DataSet(edges)
+		edges: new vis.DataSet(edges),
+		ssm: ssm,
+		nbNodes: nbNodes
 	};
 
 	visData.nodes.on('*', function (event, properties, senderId) {
 		console.log('---- nodes event:', event, 'properties:', properties, 'senderId:', senderId);
+		if (event == 'add') {
+			visData.nodes.update({id:properties.items[0], label:visData.nbNodes++});
+		}
 		visData.nodes.forEach(function(item){console.log(item.toSource())});
 	});
 	visData.edges.on('*', function (event, properties, senderId) {
