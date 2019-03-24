@@ -32,6 +32,9 @@ function ssmView(ssm, canvas) {
 				"springLength": 300,
 				"nodeDistance": 100
 			}
+		},
+		"manipulation": {
+			"enabled": true
 		}
 	};
 	var data = ssmToVis(ssm);
