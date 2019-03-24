@@ -32,7 +32,15 @@ function ssmToVis(ssm) {
 	});
 	visData.edges.on('*', function (event, properties, senderId) {
 		console.log('---- edges event:', event, 'properties:', properties, 'senderId:', senderId);
+		if (event == 'add') {
+			newEdge = visData.edges.get(properties.items[0]);
+			fromLabel = visData.nodes.get(newEdge.from).label;
+			toLabel = visData.nodes.get(newEdge.to).label;
+			visData.edges.update({id:properties.items[0], arrows:"to"});
+			visData.ssm.transitions.push({from: fromLabel, to: toLabel, role: "", action: ""});
+		}
 		visData.edges.forEach(function(item){console.log(item.toSource())});
+		console.log(JSON.stringify(visData.ssm,null,2));
 	});
 
 	return visData;
