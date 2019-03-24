@@ -1,3 +1,22 @@
+function ssmSeekVisEdge(from, to, label, visEdges) {
+	var items = visEdges.get();
+	for (var i=0; i<items.length; i++) {
+		item = items[i];
+		if (item.to == to && item.from == from && item.label == label)
+			return item;
+	}
+	return null;
+}
+
+function ssmPruneVisEdges(ssm, visEdges) {
+	var newTrans = [];
+	ssm.transitions.map(function(trans) {
+		if (ssmSeekVisEdge(trans.from, trans.to, trans.role + ": " + trans.action, visEdges))
+			newTrans.push(trans);
+	});
+	ssm.transitions = newTrans;
+}
+
 function ssmToVis(ssm) {
 	var nodes = [];
 	var edges = [];
@@ -27,14 +46,22 @@ function ssmToVis(ssm) {
 		if (event == 'add') {
 			visData.nodes.update({id:properties.items[0], label:visData.nbNodes++});
 		}
+		else if (event == 'remove') {
+			ssmPruneVisEdges(visData.ssm,visData.edges);
+			if (visData.ssm.onchange)
+				visData.ssm.onchange();
+		}
 	});
 	visData.edges.on('*', function (event, properties, senderId) {
 		if (event == 'add') {
 			newEdge = visData.edges.get(properties.items[0]);
 			fromLabel = visData.nodes.get(newEdge.from).label;
 			toLabel = visData.nodes.get(newEdge.to).label;
-			visData.edges.update({id:properties.items[0], arrows:"to"});
+			visData.edges.update({id:properties.items[0], arrows:"to", label: ": "});
 			visData.ssm.transitions.push({from: fromLabel, to: toLabel, role: "", action: ""});
+		}
+		else if (event == 'remove') {
+			ssmPruneVisEdges(visData.ssm,visData.edges);
 		}
 		if (visData.ssm.onchange)
 			visData.ssm.onchange();
