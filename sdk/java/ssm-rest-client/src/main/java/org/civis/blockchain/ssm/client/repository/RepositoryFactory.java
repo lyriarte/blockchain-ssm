@@ -1,4 +1,4 @@
-package org.civis.blockchain.ssm.client.fabric;
+package org.civis.blockchain.ssm.client.repository;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
