@@ -1,4 +1,4 @@
-package org.civis.blockchain.ssm.client.fabric;
+package org.civis.blockchain.ssm.client.repository;
 
 import org.civis.blockchain.ssm.client.command.InvokeArgs;
 import okhttp3.ResponseBody;
@@ -19,15 +19,15 @@ public interface CoopRepository {
             @Query("args") List<String> args
     );
 
-//    @GET("v2")
-//    CompletableFuture<ResponseBody> query(
-//            @Query("fcn") String fcn,
-//            @Query("args") List<String> args
-//    );
-//
-//    @POST("v2")
-//    CompletableFuture<ResponseBody> invoke(
-//            @Body InvokeArgs args
-//    );
+    @GET("v2")
+    CompletableFuture<ResponseBody> query(
+            @Query("fcn") String fcn,
+            @Query("args") List<String> args
+    );
+
+    @POST("v2")
+    CompletableFuture<ResponseBody> invoke(
+            @Body InvokeArgs args
+    );
 
 }
