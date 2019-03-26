@@ -1,0 +1,26 @@
+ARG BUILD_DIR=/opt/gopath/src/github.com/hyperledger/fabric/peer
+
+FROM hyperledger/fabric-tools:1.4.0 as builder
+
+ARG VERSION
+ARG BUILD_DIR
+
+WORKDIR $BUILD_DIR
+
+COPY ./chaincode /opt/gopath/src/blockchain-ssm/chaincode
+
+RUN peer chaincode package -n ssm -p blockchain-ssm/chaincode/go/ssm -v $VERSION ssm-$VERSION.pak
+
+FROM alpine:latest
+
+ARG VERSION
+ARG BUILD_DIR
+
+WORKDIR /opt/civis-blockchain/ssm
+
+RUN echo CHAINCODE=ssm >> env
+RUN echo VERSION=$VERSION >> env
+
+COPY --from=builder /opt/gopath/src/blockchain-ssm ./
+COPY --from=builder $BUILD_DIR/ssm-$VERSION.pak ./
+COPY ./sdk/cli/util ./util
