@@ -2,6 +2,9 @@ package org.civis.blockchain.ssm.client.Utils;
 
 import com.google.common.io.Resources;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -14,5 +17,10 @@ public class FileUtils {
             return new URL(filename);
         }
         return Resources.getResource(filename);
+    }
+
+    public static Reader getReader(String filename) throws IOException {
+        URL url = getUrl(filename);
+        return new InputStreamReader(url.openStream());
     }
 }

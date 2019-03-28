@@ -1,12 +1,11 @@
 package org.civis.blockchain.ssm.client.Utils;
 
-import com.google.common.io.Resources;
 import org.bouncycastle.asn1.pkcs.RSAPrivateKey;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 
-import java.io.FileReader;
-import java.net.URL;
+import java.io.IOException;
+import java.io.Reader;
 import java.security.*;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPrivateCrtKeySpec;
@@ -21,11 +20,7 @@ public class KeyPairReader {
     }
 
     public static PrivateKey loadPrivateKey(String filename) throws Exception {
-        URL path = Resources.getResource(filename);
-
-        FileReader reader = new FileReader(path.getFile());
-        PemReader rpem = new PemReader(reader);
-        PemObject pem =  rpem.readPemObject();
+        PemObject pem = getPemObject(filename);
         RSAPrivateKey key = RSAPrivateKey.getInstance(pem.getContent());
         KeyFactory kf = KeyFactory.getInstance("RSA");
         RSAPrivateCrtKeySpec privSpec = new RSAPrivateCrtKeySpec(key.getModulus(), key.getPublicExponent(), key.getPrivateExponent(), key.getPrime1(), key.getPrime2(), key.getExponent1(), key.getExponent2(), key.getCoefficient());
@@ -36,9 +31,7 @@ public class KeyPairReader {
         if(!filename.endsWith(".pub")) {
             filename = filename.concat(".pub");
         }
-        URL path = Resources.getResource(filename);
-        FileReader reader = new FileReader(path.getFile());
-        PemObject pem = new PemReader(reader).readPemObject();
+        PemObject pem = getPemObject(filename);
         byte[] pubKeyBytes = pem.getContent();
 
         X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(pubKeyBytes);
@@ -51,6 +44,12 @@ public class KeyPairReader {
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
         kpg.initialize(2048);
         return kpg.generateKeyPair();
+    }
+
+    private static PemObject getPemObject(String filename) throws IOException {
+        Reader reader = FileUtils.getReader(filename);
+        PemReader rpem = new PemReader(reader);
+        return rpem.readPemObject();
     }
 
 }
