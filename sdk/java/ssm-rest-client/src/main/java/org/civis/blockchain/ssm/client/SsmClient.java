@@ -29,6 +29,11 @@ public class SsmClient {
         return new SsmClient(factory.buildCoopRepository());
     }
 
+    public static SsmClient fromConfig(SsmClientConfig config) throws IOException {
+        RepositoryFactory factory = new RepositoryFactory(config.getBaseUrl());
+        return new SsmClient(factory.buildCoopRepository());
+    }
+
     private final CoopRepository coopRepository;
 
     public SsmClient(CoopRepository coopRepository) {
