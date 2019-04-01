@@ -1,6 +1,7 @@
 package org.civis.blockchain.ssm.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.common.base.Strings;
 import org.civis.blockchain.ssm.client.Utils.JsonUtils;
 import org.civis.blockchain.ssm.client.command.*;
 import org.civis.blockchain.ssm.client.domain.*;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.function.Function;
@@ -66,7 +68,7 @@ public class SsmClient {
         return list(query, String.class);
     }
 
-    public CompletableFuture<Agent> getAdmin(String username) {
+    public CompletableFuture<Optional<Agent>> getAdmin(String username) {
         AdminQuery query = new AdminQuery();
         return query(username, query, Agent.class);
     }
@@ -76,7 +78,7 @@ public class SsmClient {
         return list(query, String.class);
     }
 
-    public CompletableFuture<Agent> getAgent(String agentName)  {
+    public CompletableFuture<Optional<Agent>> getAgent(String agentName)  {
         AgentQuery query = new AgentQuery();
         return query(agentName, query, Agent.class);
     }
@@ -86,12 +88,12 @@ public class SsmClient {
         return list(query, String.class);
     }
 
-    public CompletableFuture<Ssm> getSsm(String name) {
+    public CompletableFuture<Optional<Ssm>> getSsm(String name) {
         SsmQuery query = new SsmQuery();
         return query(name, query, Ssm.class);
     }
 
-    public CompletableFuture<SessionState> getSession(String sessionId) {
+    public CompletableFuture<Optional<SessionState>> getSession(String sessionId) {
         SessionQuery query = new SessionQuery();
         return query(sessionId, query, SessionState.class);
     }
@@ -101,22 +103,18 @@ public class SsmClient {
         return list(query, String.class);
     }
 
-    private <T> CompletableFuture<T> query(String value, HasGet query, Class<T> clazz) {
+    private <T> CompletableFuture<Optional<T>> query(String value, HasGet query, Class<T> clazz) {
         InvokeArgs args = query.queryArgs(value);
         return query(clazz, args);
     }
 
-    private <T> CompletableFuture<List<T>> list(HasList query, Class<T> agentClass) {
+    private <T> CompletableFuture<List<T>> list(HasList query, Class<T> clazz) {
         InvokeArgs args = query.listArgs();
-        return query(new TypeReference<List<T>>(){}, args);
-    }
-
-    private <T> CompletableFuture<T> query(TypeReference<T> clazz, InvokeArgs args) {
         CompletableFuture<ResponseBody> request = coopRepository.command("query", args.getFcn(), args.getArgs());
-        return request.thenApply(toCompetableObject(clazz));
+        return request.thenApply(toCompetableObjects(clazz));
     }
 
-    private <T> CompletableFuture<T> query(Class<T> clazz, InvokeArgs args) {
+    private <T> CompletableFuture<Optional<T>> query(Class<T> clazz, InvokeArgs args) {
         CompletableFuture<ResponseBody> request = coopRepository.command("query", args.getFcn(), args.getArgs());
         return request.thenApply(toCompetableObject(clazz));
     }
@@ -124,23 +122,30 @@ public class SsmClient {
     private CompletableFuture<InvokeReturn> invoke(Command cmd) throws Exception {
         InvokeArgs invokeArgs = cmd.invoke();
         logger.info("Send to the blockchain command[{}] with args:{}", cmd.getCommandName(), invokeArgs);
-        return coopRepository.command("invoke",invokeArgs.getFcn(), invokeArgs.getArgs()).thenApply(toCompetableObject(InvokeReturn.class));
+        return coopRepository.command("invoke",invokeArgs.getFcn(), invokeArgs.getArgs())
+                .thenApply(toCompetableObject(InvokeReturn.class))
+                .thenApply(opt -> opt.get());
     }
 
-    public static <T> Function<ResponseBody, T> toCompetableObject(TypeReference<T> clazz) {
+    public static <T> Function<ResponseBody, List<T>> toCompetableObjects(Class<T> clazz) {
+        TypeReference<List<T>> type = new TypeReference<List<T>>(){};
         return value -> {
             try {
-                return JsonUtils.toObject(value.string(), clazz);
+                return JsonUtils.toObject(value.string(), type);
             } catch (IOException e) {
                 throw new CompletionException(e);
             }
         };
     }
 
-    public static <T> Function<ResponseBody, T> toCompetableObject(Class<T> clazz) {
+    public static <T> Function<ResponseBody, Optional<T>> toCompetableObject(Class<T> clazz) {
         return value -> {
             try {
-                return JsonUtils.toObject(value.string(), clazz);
+                String respnse = value.string();
+                if(Strings.isNullOrEmpty(respnse)){
+                    return Optional.empty();
+                }
+                return  Optional.of(JsonUtils.toObject(respnse, clazz));
             } catch (IOException e) {
                 throw new CompletionException(e);
             }
