@@ -9,6 +9,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -81,9 +82,9 @@ public class SsmClientItTest {
     @Test
     @Order(10)
     public void getAdminUser() throws Exception {
-        CompletableFuture<Agent> agentRet = client.getAdmin(ADMIN_NAME);
-        Agent agentFormClient = agentRet.get();
-        assertThat(agentFormClient).isEqualTo(agentAdmin);
+        CompletableFuture<Optional<Agent>> agentRet = client.getAdmin(ADMIN_NAME);
+        Optional<Agent> agentFormClient = agentRet.get();
+        assertThat(agentFormClient.get()).isEqualTo(agentAdmin);
     }
 
     @Test
@@ -101,9 +102,9 @@ public class SsmClientItTest {
     @Test
     @Order(30)
     public void getAgentUser1() throws Exception {
-        CompletableFuture<Agent> agentRet = client.getAgent(agentUser1.getName());
-        Agent agentFormClient = agentRet.get();
-        assertThat(agentFormClient).isEqualTo(agentUser1);
+        CompletableFuture<Optional<Agent>> agentRet = client.getAgent(agentUser1.getName());
+        Optional<Agent> agentFormClient = agentRet.get();
+        assertThat(agentFormClient.get()).isEqualTo(agentUser1);
     }
 
     @Test
@@ -119,9 +120,9 @@ public class SsmClientItTest {
     @Test
     @Order(50)
     public void getAgentUser2() throws Exception {
-        CompletableFuture<Agent> agentRet = client.getAgent(agentUser2.getName());
-        Agent agentFormClient = agentRet.get();
-        assertThat(agentFormClient).isEqualTo(agentUser2);
+        CompletableFuture<Optional<Agent>> agentRet = client.getAgent(agentUser2.getName());
+        Optional<Agent> agentFormClient = agentRet.get();
+        assertThat(agentFormClient.get()).isEqualTo(agentUser2);
     }
 
     @Test
@@ -150,10 +151,10 @@ public class SsmClientItTest {
     @Test
     @Order(70)
     public void getSsm() throws Exception {
-        CompletableFuture<Ssm> ssmReq = client.getSsm(ssmName);
-        Ssm ssm = ssmReq.get();
-        assertThat(ssm).isNotNull();
-        assertThat(ssm.getName()).isEqualTo(ssmName);
+        CompletableFuture<Optional<Ssm>> ssmReq = client.getSsm(ssmName);
+        Optional<Ssm> ssm = ssmReq.get();
+        assertThat(ssm).isPresent();
+        assertThat(ssm.get().getName()).isEqualTo(ssmName);
     }
 
     @Test
@@ -173,17 +174,17 @@ public class SsmClientItTest {
     @Test
     @Order(90)
     public void getSession() throws Exception {
-        CompletableFuture<SessionState> ses = client.getSession(sessionName);
-        SessionState sesReq = ses.get();
+        CompletableFuture<Optional<SessionState>> ses = client.getSession(sessionName);
+        Optional<SessionState> sesReq = ses.get();
 
-        assertThat(sesReq.getCurrent()).isEqualTo(0);
-        assertThat(sesReq.getIteration()).isEqualTo(0);
-        assertThat(sesReq.getOrigin()).isNull();
+        assertThat(sesReq.get().getCurrent()).isEqualTo(0);
+        assertThat(sesReq.get().getIteration()).isEqualTo(0);
+        assertThat(sesReq.get().getOrigin()).isNull();
 
-        assertThat(sesReq.getSsm()).isEqualTo(ssmName);
-        assertThat(sesReq.getRoles()).isEqualTo(session.getRoles());
-        assertThat(sesReq.getSession()).isEqualTo(session.getSession());
-        assertThat(sesReq.getPublicMessage()).isEqualTo(session.getPublicMessage());
+        assertThat(sesReq.get().getSsm()).isEqualTo(ssmName);
+        assertThat(sesReq.get().getRoles()).isEqualTo(session.getRoles());
+        assertThat(sesReq.get().getSession()).isEqualTo(session.getSession());
+        assertThat(sesReq.get().getPublicMessage()).isEqualTo(session.getPublicMessage());
 
     }
 
@@ -202,10 +203,10 @@ public class SsmClientItTest {
     @Order(110)
     public void getSessionAfterSell() throws Exception {
         Ssm.Transition sell = new Ssm.Transition(0, 1, "Seller", "Sell");
-        CompletableFuture<SessionState> sesReq = client.getSession(sessionName);
-        SessionState state = sesReq.get();
+        CompletableFuture<Optional<SessionState>> sesReq = client.getSession(sessionName);
+        Optional<SessionState> state = sesReq.get();
         SessionState stateExcpected = new SessionState(ssmName, sessionName, "100 dollars 1978 Camaro", session.getRoles(), sell, 1, 1);
-        assertThat(state).isEqualTo(stateExcpected);
+        assertThat(state.get()).isEqualTo(stateExcpected);
 
     }
 
@@ -217,17 +218,16 @@ public class SsmClientItTest {
         InvokeReturn trans = transactionEvent.get();
         assertThat(trans).isNotNull();
         assertThat(trans.getStatus()).isEqualTo("SUCCESS");
-//        assertThat(trans.getTransactionId()).isNotNull();
     }
 
     @Test
     @Order(130)
     public void getSessionAfterBuy() throws Exception {
         Ssm.Transition buy = new Ssm.Transition(1, 2, "Buyer", "Buy");
-        CompletableFuture<SessionState> sesReq = client.getSession(sessionName);
-        SessionState state = sesReq.get();
+        CompletableFuture<Optional<SessionState>> sesReq = client.getSession(sessionName);
+        Optional<SessionState> state = sesReq.get();
         SessionState stateExcpected = new SessionState(ssmName, sessionName, "Deal !", session.getRoles(), buy, 2, 2);
-        assertThat(state).isEqualTo(stateExcpected);
+        assertThat(state.get()).isEqualTo(stateExcpected);
     }
 
     @Test
