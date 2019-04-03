@@ -17,7 +17,29 @@ CHAINCODE=ssm
 VERSION=0.4.2
 ```
 
-### Build docker image
+## Release process
+*  Define version
+```
+VERSION=0.4.2
+```
+
+*  Prepare git tag
+```
+git tag -a ${VERSION} -m "${VERSION} version"
+git checkout ${VERSION}
+```
+
+* Build, tag as latest version and push docker images
+```
+make build tag-latest push -e VERSION=${VERSION}
+```
+
+* Push git tag
+```
+git push origin ${VERSION}
+```
+
+## Build docker image
 
 ```
 make build -e VERSION=0.4.2
