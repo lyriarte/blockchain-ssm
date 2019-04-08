@@ -1,0 +1,12 @@
+#!/bin/bash
+
+usage() 
+{
+    echo "Usage: `basename $0` <FILE>"
+    exit 1
+}
+
+[[ $# -ne 1 ]] && usage
+FILE="$1"
+
+openssl dgst -sha256 ${FILE}
