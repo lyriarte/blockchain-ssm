@@ -133,6 +133,28 @@ function logSession(result) {
 	document.getElementById('session_data__Fld').value = JSON.stringify(JSON.parse(result),null,2);
 }
 
+function digestFile(file) {
+	var reader = new FileReader();
+
+	reader.onloadend = function (e) {
+		var words = CryptoJS.lib.WordArray.create(reader.result);
+		logFileDigest(CryptoJS.SHA256(words).toString(CryptoJS.enc.Hex));
+	}
+
+	reader.readAsArrayBuffer(file); 
+}
+
+function logFileDigest(digest) {
+	var sessObj = {};
+	try {
+		sessObj = JSON.parse(document.getElementById('session_data__Fld').value);
+	}
+	catch (e) {
+	}
+	sessObj.public = digest;
+	document.getElementById('session_data__Fld').value = JSON.stringify(sessObj,null,2);
+}
+
 function listSession(result) {
 	var sessionListTable = document.getElementById('session_list__Tbl');
 	var scope = angular.element(sessionListTable).scope();
@@ -540,7 +562,14 @@ perform action
 </button>
 </div>
 
-<div class="mdl-cell mdl-cell--6-col mdl-cell--2-col-phone mdl-layout-spacer">
+<div class="mdl-cell mdl-cell--2-col">
+<label class="file-input mdl-button mdl-js-button mdl-button--raised">
+digest file
+<input type="file" onchange="digestFile(this.files[0])">
+</label>
+</div>
+
+<div class="mdl-cell mdl-cell--4-col mdl-cell--hide-phone mdl-layout-spacer">
 </div>
 
 <!-- Session field -->
