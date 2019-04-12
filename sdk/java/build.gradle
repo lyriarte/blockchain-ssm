@@ -1,13 +1,14 @@
 allprojects {
     apply plugin: 'idea'
-
-    group = 'org.civis.blockchain.ssm'
-    version = '0.0.1-SNAPSHOT'
-
 }
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
+
+    group = 'org.civis-blockchain.ssm'
+    version = version
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -19,12 +20,6 @@ subprojects {
 
     ext {
         fabric_version = '1.4.0'
-    }
-
-    buildscript {
-        repositories {
-            mavenCentral()
-        }
     }
 
     ext {
@@ -50,5 +45,10 @@ subprojects {
         testLogging {
             events "passed", "skipped", "failed"
         }
+    }
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+        archiveClassifier = 'sources'
     }
 }
