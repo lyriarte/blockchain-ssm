@@ -6,4 +6,4 @@ pluginManagement {
 
 rootProject.name = 'ssm-sdk'
 
-include 'ssm-rest-client'
+include 'ssm-rest-client', 'ssm-client-spring'

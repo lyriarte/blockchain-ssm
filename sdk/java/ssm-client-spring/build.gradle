@@ -1,0 +1,17 @@
+apply plugin: 'java'
+
+jar {
+    baseName 'ssm-client-spring'
+}
+
+ext {
+    springVersion = '2.1.4.RELEASE'
+}
+
+dependencies {
+    implementation project(':ssm-rest-client')
+    implementation("org.springframework.boot:spring-boot-autoconfigure:$springVersion")
+    implementation("org.springframework.boot:spring-boot-autoconfigure-processor:$springVersion")
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$springVersion"
+}

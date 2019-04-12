@@ -1,0 +1,11 @@
+ssm:
+  name: docstampr-loop
+  coop:
+    url: http://localhost:9090
+  signer:
+    admin:
+      name: adam
+      file: file:./infra/dev/user/adam
+    user:
+      name: bob
+      file: file:./infra/dev/user/bob
