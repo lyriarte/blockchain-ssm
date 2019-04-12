@@ -15,3 +15,15 @@ Ex: `ssm-rest-client/src/test/resources/ssm-client.properties`
 ``` 
 sdk-core/src/test/java/io/civis/ssm/sdk/client/SsmClientItTest.java
 ```
+
+## Gradle
+
+ * Build
+ ```bash
+./gradlew build
+```
+
+ * Publish
+ ```bash
+./gradlew publish -P version=0.1.0-SNAPSHOT
+```
