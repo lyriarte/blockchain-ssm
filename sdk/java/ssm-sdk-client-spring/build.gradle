@@ -3,7 +3,7 @@ ext {
 }
 
 dependencies {
-    implementation project(':ssm-sdk-client')
+    compile project(':ssm-sdk-client')
     implementation("org.springframework.boot:spring-boot-autoconfigure:$springVersion")
     implementation("org.springframework.boot:spring-boot-autoconfigure-processor:$springVersion")
 
