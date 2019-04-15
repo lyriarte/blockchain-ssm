@@ -13,13 +13,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
 }
 
-test {
-    useJUnitPlatform()
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-}
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
