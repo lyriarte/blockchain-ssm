@@ -1,10 +1,5 @@
-apply plugin: 'java'
-
-jar {
-    baseName 'ssm-client-spring'
-}
-
 ext {
+    artifactId = 'ssm-client-spring'
     springVersion = '2.1.4.RELEASE'
 }
 

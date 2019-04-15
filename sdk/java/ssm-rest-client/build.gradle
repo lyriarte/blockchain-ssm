@@ -1,4 +1,5 @@
 ext {
+    artifactId = 'ssm-rest-client'
     bouncycastleVersion = '1.61'
     okhttpVersion = '3.14.0'
     retrofitVersion = '2.5.0'
@@ -11,60 +12,4 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
     implementation("com.squareup.retrofit2:retrofit:${retrofitVersion}")
     implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId = 'ssm-rest-client'
-            from components.java
-            artifact sourcesJar
-            versionMapping {
-                usage('java-api') {
-                    fromResolutionOf('runtimeClasspath')
-                }
-                usage('java-runtime') {
-                    fromResolutionResult()
-                }
-            }
-            pom {
-                name = 'Ssm SDK'
-                description = 'A SDK to interact with signing state machines chaincode developped for Hyperleger Fabric.  '
-                url = 'https://github.com/civis-blockchain/blockchain-ssm'
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'adrienp'
-                        name = 'Adrien Poupard'
-                    }
-                }
-                scm {
-                    connection = 'scm:git:git://https://github.com/civis-blockchain/blockchain-ssm.git'
-                    developerConnection = 'scm:git:https://github.com/civis-blockchain/blockchain-ssm.git'
-                    url = 'https://github.com/civis-blockchain/blockchain-ssm'
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            // change URLs to point to your repos, e.g. http://my.org/repo
-            def releasesRepoUrl = "$mavenRepo/repositories/releases"
-            def snapshotsRepoUrl = "$mavenRepo/repositories/snapshots"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-            credentials {
-                username sonatypeUsername
-                password sonatypePassword
-            }
-        }
-    }
-}
-
-signing {
-    sign publishing.publications.mavenJava
 }
