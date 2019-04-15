@@ -1,5 +1,7 @@
 package org.civis.blockchain.ssm.client.spring;
 
+import org.civis.blockchain.ssm.client.domain.SignerAdmin;
+import org.civis.blockchain.ssm.client.domain.Signer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.StringJoiner;
@@ -9,16 +11,17 @@ import java.util.StringJoiner;
 //  name: docstampr-loop
 //  coop:
 //    url: http://localhost:9090
-//  admin:
-//    name: adam
-//    file: file:./infra/dev/user/adam
+//  signer:
+//    admin:
+//      name: adam
+//      file: file:./infra/dev/user/adam
 
 @ConfigurationProperties(prefix = "ssm")
 public class SsmConfiguration {
 
     private String name;
     private Coop coop;
-    private Signer admin;
+    private SignerConfig signer;
 
     public String getName() {
         return name;
@@ -29,12 +32,12 @@ public class SsmConfiguration {
         return this;
     }
 
-    public Signer getAdmin() {
-        return admin;
+    public SignerConfig getSigner() {
+        return signer;
     }
 
-    public SsmConfiguration setAdmin(Signer admin) {
-        this.admin = admin;
+    public SsmConfiguration setSigner(SignerConfig signer) {
+        this.signer = signer;
         return this;
     }
 
@@ -47,16 +50,47 @@ public class SsmConfiguration {
         return this;
     }
 
+    public SignerAdmin adminSigner() throws Exception {
+        if(signer== null|| signer.admin == null) {
+            return null;
+        }
+        Signer sign = Signer.loadFromFile(signer.admin.getName(), signer.admin.getKey());
+        return new SignerAdmin(sign);
+    }
+
+
+
     @Override
     public String toString() {
         return new StringJoiner(", ", SsmConfiguration.class.getSimpleName() + "[", "]")
                 .add("name='" + name + "'")
-                .add("admin=" + admin)
+                .add("signer=" + signer)
                 .add("coop=" + coop)
                 .toString();
     }
 
-    public static class Signer {
+    public static class SignerConfig {
+
+        private SignerUserConfig admin;
+
+        public SignerUserConfig getAdmin() {
+            return admin;
+        }
+
+        public SignerConfig setAdmin(SignerUserConfig admin) {
+            this.admin = admin;
+            return this;
+        }
+
+        @Override
+        public String toString() {
+            return new StringJoiner(", ", SignerConfig.class.getSimpleName() + "[", "]")
+                    .add("admin=" + admin)
+                    .toString();
+        }
+    }
+
+    public static class SignerUserConfig {
 
         private String name;
         private String key;
@@ -65,7 +99,7 @@ public class SsmConfiguration {
             return name;
         }
 
-        public Signer setName(String name) {
+        public SignerUserConfig setName(String name) {
             this.name = name;
             return this;
         }
@@ -74,14 +108,14 @@ public class SsmConfiguration {
             return key;
         }
 
-        public Signer setKey(String key) {
+        public SignerUserConfig setKey(String key) {
             this.key = key;
             return this;
         }
 
         @Override
         public String toString() {
-            return new StringJoiner(", ", Signer.class.getSimpleName() + "[", "]")
+            return new StringJoiner(", ", SignerConfig.class.getSimpleName() + "[", "]")
                     .add("name='" + name + "'")
                     .add("key='" + key + "'")
                     .toString();
