@@ -1,5 +1,7 @@
 ext {
-    artifactId = 'ssm-rest-client'
+    artifactId = 'ssm-sdk-client'
+    
+    
     bouncycastleVersion = '1.61'
     okhttpVersion = '3.14.0'
     retrofitVersion = '2.5.0'

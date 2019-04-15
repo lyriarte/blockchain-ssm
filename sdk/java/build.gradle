@@ -69,7 +69,7 @@ subprojects {
                     }
                     pom {
                         name = 'Ssm SDK'
-                        description = 'A SDK to interact with signing state machines chaincode developped for Hyperleger Fabric.  '
+                        description = 'A SDK HTTP Client implementation to interact with signing state machines chaincode developped for Hyperleger Fabric.'
                         url = 'https://github.com/civis-blockchain/blockchain-ssm'
                         licenses {
                             license {

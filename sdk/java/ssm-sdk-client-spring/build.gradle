@@ -1,10 +1,12 @@
 ext {
-    artifactId = 'ssm-client-spring'
+    artifactId = 'ssm-sdk-client-spring'
+    
+    
     springVersion = '2.1.4.RELEASE'
 }
 
 dependencies {
-    implementation project(':ssm-rest-client')
+    implementation project(':ssm-sdk-client')
     implementation("org.springframework.boot:spring-boot-autoconfigure:$springVersion")
     implementation("org.springframework.boot:spring-boot-autoconfigure-processor:$springVersion")
 
