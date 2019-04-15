@@ -56,7 +56,7 @@ subprojects {
         publishing {
             publications {
                 mavenJava(MavenPublication) {
-                    artifactId = project.artifactId
+                    artifactId = project.name
                     from components.java
                     artifact sourcesJar
                     versionMapping {

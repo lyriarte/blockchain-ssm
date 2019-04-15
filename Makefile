@@ -38,4 +38,4 @@ build-ssm-java:
 	./sdk/java/gradlew -p ./sdk/java build
 
 push-ssm-java:
-	./sdk/java/gradlew -p ./sdk/java build publish -P version=${VERSION}
+	./sdk/java/gradlew -p ./sdk/java publish -P version=${VERSION}

@@ -1,7 +1,4 @@
 ext {
-    artifactId = 'ssm-sdk-client-spring'
-    
-    
     springVersion = '2.1.4.RELEASE'
 }
 
