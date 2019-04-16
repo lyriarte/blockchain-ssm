@@ -39,30 +39,54 @@ make build tag-latest push -e VERSION=${VERSION}
 git push origin ${VERSION}
 ```
 
-## Build docker image
+## Docker image
+ * Clean docker image
+ ```
+ make clean-ssm
+ ```
+
+ * Build docker image
 
 ```
-make build -e VERSION=0.4.2
+make build-ssm -e VERSION=0.4.2
 ```
 
-### Push docker image
+ * Push docker image
 
 ```
-make push -e VERSION=0.4.2
+make push-ssm -e VERSION=0.4.2
 ```
 
-### Inspect docker image
+ * Inspect docker image
 
 ```
-make inspect -e VERSION=0.4.2
+make inspect-ssm -e VERSION=0.4.2
 ```
 
 ### Package Chaincode and manualy install
 ```
-make clean package-ssm -e VERSION=0.4.2
+make clean-ssm package-ssm -e VERSION=0.4.2
 ```
 Package will be created in build/ssm-0.4.2.pak
 ```
 docker cp build/ssm-0.4.2.pak cli-bclan:/opt/gopath/src/github.com/hyperledger/fabric/peer
 docker exec -it cli-bclan peer chaincode install ssm-0.4.2.pak
+```
+
+## Build java sdk
+ * Clean 
+ ```
+ make clean-ssm-java
+ ```
+
+ * Build
+
+```
+make build-ssm-java -e VERSION=0.4.2
+```
+
+ * Push
+
+```
+make push-ssm-java -e VERSION=0.4.2
 ```
