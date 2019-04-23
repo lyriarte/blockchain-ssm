@@ -1,8 +1,9 @@
-package org.civis.blockchain.ssm.client.Utils;
+package org.civis.blockchain.ssm.client.crypto;
 
 import org.bouncycastle.asn1.pkcs.RSAPrivateKey;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
+import org.civis.blockchain.ssm.client.Utils.FileUtils;
 
 import java.io.IOException;
 import java.io.Reader;

@@ -1,7 +1,7 @@
 package org.civis.blockchain.ssm.client.command;
 
 import com.google.common.collect.ImmutableMap;
-import org.civis.blockchain.ssm.client.Utils.SignUtils;
+import org.civis.blockchain.ssm.client.crypto.Sha256RSASigner;
 import org.civis.blockchain.ssm.client.domain.Session;
 import org.civis.blockchain.ssm.client.domain.Signer;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ public class StartCommandTest {
                 .containsExactly(
                         expectedJson,
                         "adam",
-                        SignUtils.rsaSignAsB64(expectedJson, signer.getPair().getPrivate())
+                        Sha256RSASigner.rsaSignAsB64(expectedJson, signer.getPair().getPrivate())
                 );
 
     }

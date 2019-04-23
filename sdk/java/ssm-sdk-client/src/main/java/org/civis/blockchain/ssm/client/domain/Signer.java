@@ -1,6 +1,6 @@
 package org.civis.blockchain.ssm.client.domain;
 
-import org.civis.blockchain.ssm.client.Utils.KeyPairReader;
+import org.civis.blockchain.ssm.client.crypto.KeyPairReader;
 
 import java.security.KeyPair;
 import java.util.Objects;

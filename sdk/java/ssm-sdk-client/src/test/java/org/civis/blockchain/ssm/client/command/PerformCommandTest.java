@@ -2,7 +2,7 @@ package org.civis.blockchain.ssm.client.command;
 
 import org.civis.blockchain.ssm.client.domain.Context;
 import org.civis.blockchain.ssm.client.domain.Signer;
-import org.civis.blockchain.ssm.client.Utils.KeyPairReader;
+import org.civis.blockchain.ssm.client.crypto.KeyPairReader;
 import org.junit.jupiter.api.Test;
 
 import java.security.KeyPair;

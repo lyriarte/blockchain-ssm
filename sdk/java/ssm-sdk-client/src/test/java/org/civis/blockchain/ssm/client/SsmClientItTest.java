@@ -202,7 +202,7 @@ public class SsmClientItTest {
     @Test
     @Order(110)
     public void getSessionAfterSell() throws Exception {
-        Ssm.Transition sell = new Ssm.Transition(0, 1, "Seller", "Sell");
+        Ssm.Transition sell = new Ssm.Transition(0, 1, "Seller","Sell");
         CompletableFuture<Optional<SessionState>> sesReq = client.getSession(sessionName);
         Optional<SessionState> state = sesReq.get();
         SessionState stateExcpected = new SessionState(ssmName, sessionName, "100 dollars 1978 Camaro", session.getRoles(), sell, 1, 1);

@@ -2,7 +2,7 @@ package org.civis.blockchain.ssm.client.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.civis.blockchain.ssm.client.Utils.KeyPairReader;
+import org.civis.blockchain.ssm.client.crypto.KeyPairReader;
 
 import java.security.PublicKey;
 import java.util.Arrays;
