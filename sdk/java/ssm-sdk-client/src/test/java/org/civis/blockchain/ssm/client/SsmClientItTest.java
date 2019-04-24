@@ -20,11 +20,11 @@ public class SsmClientItTest {
 
     private static String uuid = UUID.randomUUID().toString();
     private static final String NETWORK = "bclan-it/";
-    private static final String ADMIN_NAME = "adam";
-    private static final String USER1_NAME = "bob"+"-"+uuid;
-    private static final String USER2_NAME = "sam"+"-"+uuid;
-    private static final String USER1_FILENAME = NETWORK+"bob";
-    private static final String USER2_FILENAME = NETWORK+"sam";
+    public static final String ADMIN_NAME = "adam";
+    public static final String USER1_NAME = "bob"+"-"+uuid;
+    public static final String USER2_NAME = "sam"+"-"+uuid;
+    public static final String USER1_FILENAME = NETWORK+"bob";
+    public static final String USER2_FILENAME = NETWORK+"sam";
 
 //    private static final String NETWORK = "bc1/";
 //    private static final String ADMIN_NAME = "adrien";
@@ -184,14 +184,19 @@ public class SsmClientItTest {
         assertThat(sesReq.get().getSsm()).isEqualTo(ssmName);
         assertThat(sesReq.get().getRoles()).isEqualTo(session.getRoles());
         assertThat(sesReq.get().getSession()).isEqualTo(session.getSession());
-        assertThat(sesReq.get().getPublicMessage()).isEqualTo(session.getPublicMessage());
+        assertThat(sesReq.get().getPublic()).isEqualTo(session.getPublic());
 
     }
+
+    private static Map<String, String> privateMessage;
 
     @Test
     @Order(100)
     public void performSell() throws Exception {
         Context context = new Context(sessionName, "100 dollars 1978 Camaro", 0);
+        context.addPrivateMessage("Message to signer1", agentUser1);
+
+        privateMessage = context.getPrivate();
         CompletableFuture<InvokeReturn> transactionEvent = client.perform(signerUser2, "Sell", context);
         InvokeReturn trans = transactionEvent.get();
         assertThat(trans).isNotNull();
@@ -205,11 +210,22 @@ public class SsmClientItTest {
         Ssm.Transition sell = new Ssm.Transition(0, 1, "Seller","Sell");
         CompletableFuture<Optional<SessionState>> sesReq = client.getSession(sessionName);
         Optional<SessionState> state = sesReq.get();
-        SessionState stateExcpected = new SessionState(ssmName, sessionName, "100 dollars 1978 Camaro", session.getRoles(), sell, 1, 1);
+        SessionState stateExcpected = new SessionState(ssmName, sessionName, "100 dollars 1978 Camaro", session.getRoles(), sell, 1, 1, privateMessage);
         assertThat(state.get()).isEqualTo(stateExcpected);
-
+        String expectedMessage = stateExcpected.getPrivateMessage(signerUser1.getName(), signerUser1.getPair().getPrivate());
     }
 
+
+    @Test
+    @Order(110)
+    public void getSessionAfterSellShouldReturnEncryptMessage() throws Exception {
+        Ssm.Transition sell = new Ssm.Transition(0, 1, "Seller","Sell");
+        CompletableFuture<Optional<SessionState>> sesReq = client.getSession(sessionName);
+        Optional<SessionState> state = sesReq.get();
+        String expectedMessage = state.get().getPrivateMessage(signerUser1.getName(), signerUser1.getPair().getPrivate());
+        assertThat(expectedMessage).isEqualTo("Message to signer1");
+
+    }
     @Test
     @Order(120)
     public void performBuy() throws Exception {

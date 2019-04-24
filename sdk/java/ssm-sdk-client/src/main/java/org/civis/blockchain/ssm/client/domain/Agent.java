@@ -2,9 +2,13 @@ package org.civis.blockchain.ssm.client.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.bouncycastle.crypto.CryptoException;
 import org.civis.blockchain.ssm.client.crypto.KeyPairReader;
 
+import java.beans.Transient;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Objects;
@@ -36,6 +40,11 @@ public class Agent {
 
     public byte[] getPub() {
         return pub;
+    }
+
+    @Transient
+    public PublicKey getPubAsKey() throws CryptoException {
+        return KeyPairReader.fromByteArray(pub);
     }
 
     @Override
