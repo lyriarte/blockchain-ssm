@@ -1,9 +1,9 @@
 package org.civis.blockchain.ssm.client.command;
 
-import org.civis.blockchain.ssm.client.Utils.SignUtils;
+import org.civis.blockchain.ssm.client.crypto.Sha256RSASigner;
 import org.civis.blockchain.ssm.client.domain.Signer;
 import org.civis.blockchain.ssm.client.domain.Ssm;
-import org.civis.blockchain.ssm.client.Utils.KeyPairReader;
+import org.civis.blockchain.ssm.client.crypto.KeyPairReader;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
@@ -64,7 +64,7 @@ public class CreateCommandTest {
                 .containsExactly(
                         expectedJson,
                         "adam",
-                        SignUtils.rsaSignAsB64(expectedJson, signer.getPair().getPrivate())
+                        Sha256RSASigner.rsaSignAsB64(expectedJson, signer.getPair().getPrivate())
                 );
 
     }

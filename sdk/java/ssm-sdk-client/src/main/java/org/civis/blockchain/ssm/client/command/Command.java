@@ -1,8 +1,10 @@
 package org.civis.blockchain.ssm.client.command;
 
 import org.civis.blockchain.ssm.client.Utils.JsonUtils;
-import org.civis.blockchain.ssm.client.Utils.SignUtils;
+import org.civis.blockchain.ssm.client.crypto.Sha256RSASigner;
 import org.civis.blockchain.ssm.client.domain.Signer;
+
+import java.util.Base64;
 
 public abstract class Command<T> {
 
@@ -19,8 +21,8 @@ public abstract class Command<T> {
     public InvokeArgs invoke() throws Exception {
         String json = JsonUtils.toJson(value);
         String toSign = valueToSign(json);
-        byte[] signature = SignUtils.rsaSign(toSign, signer.getPair().getPrivate());
-        String b64Signature = SignUtils.b64Encode(signature);
+        byte[] signature = Sha256RSASigner.rsaSign(toSign, signer.getPair().getPrivate());
+        String b64Signature = Base64.getEncoder().encodeToString(signature);
         return buildArgs(command, json, signer.getName(), b64Signature);
     }
 

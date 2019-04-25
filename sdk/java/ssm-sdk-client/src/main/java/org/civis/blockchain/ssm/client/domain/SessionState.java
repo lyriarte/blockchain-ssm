@@ -13,12 +13,20 @@ public class SessionState extends Session {
     private Integer current;
     private Ssm.Transition origin;
 
-    @JsonCreator
     public SessionState(@JsonProperty("ssm") String ssm, @JsonProperty("session") String session,
                         @JsonProperty("public") String publicMessage, @JsonProperty("roles") Map<String, String> roles,
                         @JsonProperty("origin") Ssm.Transition origin, @JsonProperty("current") Integer current,
                         @JsonProperty("iteration") Integer iteration) {
-        super(ssm, session, publicMessage, roles);
+        this(ssm, session, publicMessage, roles, origin, current, iteration, null);
+    }
+
+    @JsonCreator
+    public SessionState(@JsonProperty("ssm") String ssm, @JsonProperty("session") String session,
+                        @JsonProperty("public") String publicMessage, @JsonProperty("roles") Map<String, String> roles,
+                        @JsonProperty("origin") Ssm.Transition origin, @JsonProperty("current") Integer current,
+                        @JsonProperty("iteration") Integer iteration,
+                        @JsonProperty("private") Map<String, String> privateMessage) {
+        super(ssm, session, publicMessage, roles, privateMessage);
         this.iteration = iteration;
         this.current = current;
         this.origin = origin;
@@ -54,7 +62,9 @@ public class SessionState extends Session {
 
     @Override
     public String toString() {
+
         return new StringJoiner(", ", SessionState.class.getSimpleName() + "[", "]")
+                .add( super.toString())
                 .add("iteration=" + iteration)
                 .add("current=" + current)
                 .add("origin=" + origin)
