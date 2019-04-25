@@ -52,7 +52,7 @@ public class AESCipher {
         }
     }
 
-    private static void encrypt(InputStream fileInput, OutputStream outputStream, SecretKey key) throws CryptoException {
+    public static void encrypt(InputStream fileInput, OutputStream outputStream, SecretKey key) throws CryptoException {
         OutputStream output = null;
         try {
             output =  getEncryptCipher(outputStream, key);
