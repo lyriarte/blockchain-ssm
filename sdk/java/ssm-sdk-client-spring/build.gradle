@@ -4,10 +4,10 @@ ext {
 
 dependencies {
     compile project(':ssm-sdk-client')
-    implementation("org.springframework.boot:spring-boot-autoconfigure:$springVersion")
-    implementation("org.springframework.boot:spring-boot-autoconfigure-processor:$springVersion")
 
-    annotationProcessor "org.springframework.boot:qa:$springVersion"
+    implementation "org.springframework.boot:spring-boot-autoconfigure:$springVersion"
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$springVersion"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test:$springVersion"
 }

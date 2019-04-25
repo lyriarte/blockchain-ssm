@@ -1,2 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration= \
-  org.civis.blockchain.ssm.client.spring.SsmBeanConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.civis.blockchain.ssm.client.spring.SsmBeanConfiguration
