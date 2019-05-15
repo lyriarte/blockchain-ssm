@@ -23,18 +23,18 @@ function bccHostCmd(uri, cmd, fcn, args, onOk, onError) {
 		}
 	};
 
-	var query = "cmd=" + encodeURIComponent(cmd) + "&fcn=" + encodeURIComponent(fcn);
-	args.map(function(arg) {query += "&args=" + encodeURIComponent(arg);});
 	if(cmd === 'invoke') {
 		var json = {
 			cmd: cmd,
 			fcn: fcn,
 			args: args
-		}
+		};
 		xmlhttp.open("POST", uri, true);
 		xmlhttp.setRequestHeader("Content-Type", "application/json");
 		xmlhttp.send(JSON.stringify(json));
 	} else {
+		var query = "cmd=" + encodeURIComponent(cmd) + "&fcn=" + encodeURIComponent(fcn);
+		args.map(function(arg) {query += "&args=" + encodeURIComponent(arg);});
 		xmlhttp.open("GET", uri + "?" + query, true);
 		xmlhttp.send();
 	}
