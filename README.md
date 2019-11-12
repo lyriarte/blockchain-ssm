@@ -74,12 +74,14 @@ There are two kind of agents:
 #### SSM state
 
 The SSM state represents a snapshot of a run session on a given state machine. It can be queried and updated from the SSM chaicode API. It holds the current state index, public and private data relevant to the SSM session. The iteration is incremented at every transition. The originating transition allows to track the SSM run session history in the ledger.
+The limit is an optional maximum iterations count. Transitions can be performed until the current iteration count is greater than the limit.
 
 ```
 "State": {
 	ssm: "Negociation",
 	session: "carsale20190301",
 	iteration: 1,
+	limit: 10,
 	roles: {
 		"Bob": "Validator",
 		"Sam": "Initiator"
