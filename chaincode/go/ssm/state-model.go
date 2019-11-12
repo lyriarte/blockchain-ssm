@@ -7,6 +7,7 @@ type StateModel struct {
 	Ssm			string	`json:"ssm,omitempty"`
 	Session		string	`json:"session"`
 	Iteration	int		`json:"iteration"`
+	Limit		*int	`json:"limit,omitempty"`
 	Roles		map[string]string	`json:"roles"`
 	Current		int		`json:"current"`
 	Origin		*Transition	`json:"origin,omitempty"`
