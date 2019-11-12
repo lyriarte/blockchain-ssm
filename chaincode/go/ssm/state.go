@@ -52,7 +52,7 @@ func (self *State) Deserialize(data []byte) error {
 
 func (self *State) Perform(update *State, role string, action string) error {
 	// Check if current iteration count passed the limit
-	if self.Limit != nil && self.Iteration > *self.Limit {
+	if self.Limit != nil && self.Iteration >= *self.Limit {
 		return errors.New("Passed limit iterations count.")
 	}
 	// Check the proposed update iteration
