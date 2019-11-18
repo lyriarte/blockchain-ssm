@@ -187,6 +187,18 @@ Result
   State is stored in the DB.
 ```
 
+  * **limit:** Sets a limit to the maximum iterations count of an existing SSM session. The SSM session and limit count are signed with the admin private key.
+
+```
+Command
+-------
+  "limit", session:State, limit:int, admin_name:string, signature:b64
+
+Result
+------
+  Session state is updated. 
+```
+
 #### SSM execution
 
   * **perform:** A user performs an action on a SSM session. The action to perform and the new session state are signed with the user private key.
