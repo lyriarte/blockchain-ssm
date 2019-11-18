@@ -105,6 +105,25 @@ func TestState(test *testing.T) {
 		test.Fatal("Should fail due to iteration.")
 	}
 
+	fmt.Println("---- ---- ---- ---- Deserialize ---- iteration 0, limit 0")
+	strState = "{\"ssm\": \"Car dealership\", \"session\": \"deal20181201\", \"iteration\": 0, \"limit\": 0, \"public\": \"Used car for 100 dollars.\", \"roles\": {\"Bob\": \"Buyer\", \"Sam\": \"Seller\"}}"
+	err = state.Deserialize([]byte(strState))
+	if err != nil {
+		test.Fatal(err)
+	}
+	fmt.Println("---- ---- Perform ---- negative")
+	err = state.Perform(&update, "Role", "Action")
+	if err == nil {
+		test.Fatal("Should fail due to limit.")
+	}
+	fmt.Println("---- ---- Limit ---- 1")
+	*state.Limit = 1
+	fmt.Println("---- ---- Perform ---- positive")
+	err = state.Perform(&update, "Role", "Action")
+	if err != nil {
+		test.Fatal(err)
+	}
+	
 	fmt.Println("---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ")
 }
 
