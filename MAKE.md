@@ -7,20 +7,20 @@ It contains:
 ```
 /opt/civis-blockchain/ssm/chaincode/go/ssm/  --> Sources of the chaincode
 /opt/civis-blockchain/ssm/util               --> Bash script to instanciate, invoke and query the chaincode
-/opt/civis-blockchain/ssm/env                --> Env properties: CHAINCODE=ssm VERSION=0.4.2
-/opt/civis-blockchain/ssm/ssm-0.4.2.pak      --> Packaged chaincode
+/opt/civis-blockchain/ssm/env                --> Env properties: CHAINCODE=ssm VERSION=0.6.0
+/opt/civis-blockchain/ssm/ssm-0.6.0.pak      --> Packaged chaincode
 ```
 
 `/opt/civis-blockchain/ssm/env` contains:
 ```
 CHAINCODE=ssm
-VERSION=0.4.2
+VERSION=0.6.0
 ```
 
 ## Release process
 *  Define version
 ```
-VERSION=0.4.2
+VERSION=0.6.0
 ```
 
 *  Prepare git tag
@@ -48,29 +48,29 @@ git push origin ${VERSION}
  * Build docker image
 
 ```
-make build-ssm -e VERSION=0.4.2
+make build-ssm -e VERSION=0.6.0
 ```
 
  * Push docker image
 
 ```
-make push-ssm -e VERSION=0.4.2
+make push-ssm -e VERSION=0.6.0
 ```
 
  * Inspect docker image
 
 ```
-make inspect-ssm -e VERSION=0.4.2
+make inspect-ssm -e VERSION=0.6.0
 ```
 
 ### Package Chaincode and manualy install
 ```
-make clean-ssm package-ssm -e VERSION=0.4.2
+make clean-ssm package-ssm -e VERSION=0.6.0
 ```
-Package will be created in build/ssm-0.4.2.pak
+Package will be created in build/ssm-0.6.0.pak
 ```
-docker cp build/ssm-0.4.2.pak cli-bclan:/opt/gopath/src/github.com/hyperledger/fabric/peer
-docker exec -it cli-bclan peer chaincode install ssm-0.4.2.pak
+docker cp build/ssm-0.6.0.pak cli-bclan:/opt/gopath/src/github.com/hyperledger/fabric/peer
+docker exec -it cli-bclan peer chaincode install ssm-0.6.0.pak
 ```
 
 ## Build java sdk
@@ -82,11 +82,11 @@ docker exec -it cli-bclan peer chaincode install ssm-0.4.2.pak
  * Build
 
 ```
-make build-ssm-java -e VERSION=0.4.2
+make build-ssm-java -e VERSION=0.6.0
 ```
 
  * Push
 
 ```
-make push-ssm-java -e VERSION=0.4.2
+make push-ssm-java -e VERSION=0.6.0
 ```
