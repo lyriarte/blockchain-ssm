@@ -39,6 +39,18 @@ function ssmStart(session, admin, adminKey) {
 	return hostCmd;
 }
 
+function ssmLimit(session, limit, user, userKey) {
+	JSE.setPrivateKey(userKey);
+	var signStr = JSE.sign(session + limit, CryptoJS.SHA256, "sha256");
+	var hostCmd = {
+		cmd: "invoke",
+		fcn: "limit",
+		args: [session, limit, user, signStr]
+	};
+
+	return hostCmd;
+}
+
 function ssmPerform(action, context, user, userKey) {
 	JSE.setPrivateKey(userKey);
 	var contextStr = JSON.stringify(context);

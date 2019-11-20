@@ -264,6 +264,17 @@ function ssmPerformSetup() {
 	return cbctx;
 }
 
+function ssmLimitSetup() {
+	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
+	var session = document.getElementById('session_id__Fld').value;
+	var limit = document.getElementById('session_limit__Fld').value;
+	var user = document.getElementById('access_id__Fld').value;
+	var userKey = document.getElementById('access_prv__Fld').value;
+	var hostCmd = ssmLimit(session, limit, user, userKey);
+	var cbctx = hostCmdSetup(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	return cbctx;
+}
+
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- View initialization
 
@@ -562,6 +573,7 @@ perform action
 </button>
 </div>
 
+<!-- Digest file / hash -->
 <div class="mdl-cell mdl-cell--2-col">
 <label class="file-input mdl-button mdl-js-button mdl-button--raised">
 digest file
@@ -569,8 +581,20 @@ digest file
 </label>
 </div>
 
-<div class="mdl-cell mdl-cell--4-col mdl-cell--hide-phone mdl-layout-spacer">
+<!-- Limit button / count field -->
+<div class="mdl-cell mdl-cell--3-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmLimitSetup()">
+limit
+</button>
 </div>
+
+<div class="mdl-cell mdl-cell--1-col">
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="session_limit__TxtFld">
+      <input class="mdl-textfield__input" pattern = "[0-9]+" type="text" id="session_limit__Fld">
+      <label class="mdl-textfield__label" for="session_limit__TxtFld">0</label>
+  </div>
+</div>
+
 
 <!-- Session field -->
 <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
