@@ -1,9 +1,0 @@
-pluginManagement {
-	repositories {
-		mavenCentral()
-	}
-}
-
-rootProject.name = 'ssm-sdk'
-
-include 'ssm-sdk-client', 'ssm-sdk-client-spring'

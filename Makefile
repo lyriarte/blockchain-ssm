@@ -2,13 +2,13 @@ NAME   	:= civisblockchain/ssm
 IMG    	:= ${NAME}:${VERSION}
 LATEST  := ${NAME}:latest
 
-clean: clean-ssm clean-ssm-java
+clean: clean-ssm
 
-build: build-ssm build-ssm-java
+build: build-ssm
 
 tag-latest: tag-latest-ssm
 
-push: push-ssm push-ssm-java
+push: push-ssm
 
 clean-ssm:
 	rm -fr build
@@ -30,12 +30,3 @@ inspect-ssm:
 
 login-ssm:
 	@docker log -u ${DOCKER_USER} -p ${DOCKER_PASS}
-
-clean-ssm-java:
-	./sdk/java/gradlew -p ./sdk/java  clean
-
-build-ssm-java:
-	./sdk/java/gradlew -p ./sdk/java build
-
-push-ssm-java:
-	./sdk/java/gradlew -p ./sdk/java publish -P version=${VERSION}

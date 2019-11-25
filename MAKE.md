@@ -72,21 +72,3 @@ Package will be created in build/ssm-0.6.0.pak
 docker cp build/ssm-0.6.0.pak cli-bclan:/opt/gopath/src/github.com/hyperledger/fabric/peer
 docker exec -it cli-bclan peer chaincode install ssm-0.6.0.pak
 ```
-
-## Build java sdk
- * Clean 
- ```
- make clean-ssm-java
- ```
-
- * Build
-
-```
-make build-ssm-java -e VERSION=0.6.0
-```
-
- * Push
-
-```
-make push-ssm-java -e VERSION=0.6.0
-```
