@@ -2,23 +2,23 @@
 
 usage() 
 {
-    echo "Usage: limit <session> <limit> <signer>"
+    echo "Usage: limit <session> <signer>"
     exit 1
 }
 
-[[ $# -ne 3 ]] && usage
+[[ $# -ne 2 ]] && usage
 
 SESSION="$1"
-LIMIT="$2"
-SIGNER="$3"
+SIGNER="$2"
+[[ -f ${SESSION}.json ]] || usage
 
 F_ARGS=$(mktemp)
-echo -n ${SESSION} > ${F_ARGS}
-echo -n ${LIMIT} >> ${F_ARGS}
+cat ${SESSION}.json | jq . -cM | tr -d "\n" > ${F_ARGS}
 rsa_sign ${SIGNER} ${F_ARGS}
 b64_encode ${F_ARGS}.dgst
 
+ARGS=$(mkarg ${F_ARGS})
 SIGN=$(cat ${F_ARGS}.dgst.b64 | tr -d "\n" | sed 's/"/\\"/g ; s/^/"/ ; s/$/"/')
 
 rm ${F_ARGS} ${F_ARGS}.dgst ${F_ARGS}.dgst.b64
-echo -n "{\"Args\": [\"limit\", \"${SESSION}\", \"${LIMIT}\", \"${SIGNER}\", ${SIGN}]}"
+echo -n "{\"Args\": [\"limit\", ${ARGS}, \"${SIGNER}\", ${SIGN}]}"

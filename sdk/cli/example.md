@@ -143,7 +143,12 @@ peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["list", "session
   * Limit session to 10 iterations
 
 ```
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(limit carsale20190301 10 adam)"
+echo '{
+  "session": "carsale20190301",
+  "iteration": 7,
+  "limit": 10
+}' > loop.json
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(limit loop adam)"
 ```
 
   * Log session history
