@@ -11,7 +11,6 @@ package main
 import (
 	"errors"
 	"strings"
-	"strconv"
 	"fmt"
 	"encoding/json"
 
@@ -115,9 +114,9 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return self.Start(stub, args)
 	}
 	
-	// "limit", state:string, limit:string, admin_name:string, signature:b64
+	// "limit", context:State, admin_name:string, signature:b64
 	if function == "limit" {
-		if len(args) != 4 {
+		if len(args) != 3 {
 			return shim.Error(errmsg)
 		}
 		err = self.Verify(stub, args, "ADMIN")
@@ -279,22 +278,26 @@ func (self *SSMChaincode) Start(stub shim.ChaincodeStubInterface, args []string)
 }
 
 
-// "limit", state:string, limit:string, admin_name:string, signature:b64
+// "limit", context:State, admin_name:string, signature:b64
 func (self *SSMChaincode) Limit(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error	
+	var update State
+	// Create state update from JSON string
+	err = update.Deserialize([]byte(args[0]))
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
 	// Get the session state referenced in the update
 	var session State
-	err = session.Get(stub, "STATE_" + args[0])
+	err = session.Get(stub, "STATE_" + update.Session)
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
-	// Update the session state with the new limit
-	var limit int
-	limit, err = strconv.Atoi(args[1])
+	// Let the current session update its state with the new limit
+	err = session.SetLimit(&update)
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
-	session.Limit = &limit
 	// Save the session state
 	err = session.Put(stub, "STATE_" + session.Session)
 	if (err != nil) {
