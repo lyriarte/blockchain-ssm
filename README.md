@@ -69,11 +69,11 @@ SSM chaincode agents are identified by a unique name. The agent's public key is 
 There are two kind of agents:
 
   * **Users** are the agents who can trigger a transition in a SSM. In effect they are the participants in the smart contract represented by the SSM.
-  * **Admins** have the rights to add new users and state machines. They are declared only once, when the chaincode is instanciated.
+  * **Admins** have the rights to add new users and state machines. They are declared only once, when the chaincode is instantiated.
 
 #### SSM state
 
-The SSM state represents a snapshot of a run session on a given state machine. It can be queried and updated from the SSM chaicode API. It holds the current state index, public and private data relevant to the SSM session. The iteration is incremented at every transition. The originating transition allows to track the SSM run session history in the ledger.
+The SSM state represents a snapshot of a run session on a given state machine. It can be queried and updated from the SSM chaincode API. It holds the current state index, public and private data relevant to the SSM session. The iteration is incremented at every transition. The originating transition allows to track the SSM run session history in the ledger.
 The limit is an optional maximum iterations count. Transitions can be performed while the current iteration count is strictly lower than the limit.
 
 ```
@@ -130,6 +130,26 @@ The SSM structure is just a list of transitions and a unique name.
 
 A new SSM session is intialized with a State structure. Semantics of initial / final states, and reset transitions returning to the initial state are left to the SSM users.
 
+#### Grant
+
+The Grant structure represents a set of admin APIs that are delegated to a given user.
+The iteration field is incremented every time an admin updates the user's grant credits.
+
+In the following example, user Bob can create 10 state machines, and start 100 sessions.
+
+```
+"Grant": {
+	user: "Bob",
+	iteration: 0,
+	credits: {
+		"create": {amount: 10},
+		"start": {amount: 100}
+	}
+}
+```
+
+The admin APIs that can be delegated to users are **register**, **create** and **start** i.e. creation APIs only. Other APIs such as "grant" and "limit" tamper with existing users and sessions and cannot be delegated.
+
 ### API
 
 #### Chaincode instanciation
@@ -143,7 +163,7 @@ Command
 
 Result
 ------
-  Chaincode is instanciated, DB stores a list of admins.
+  Chaincode is instantiated, DB stores a list of admins.
 ```
 
 
@@ -159,6 +179,18 @@ Command
 Result
 ------
   User is stored in the DB.
+```
+
+  * **grant:** A user is granted / revoked API rights by an admin, Grant structure is signed with the admin private key.
+
+```
+Command
+-------
+  "grant", rights:Grant, admin_name:string, signature:b64
+
+Result
+------
+  Grant is stored / updated in the DB.
 ```
 
 #### SSM management
