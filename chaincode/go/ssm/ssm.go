@@ -126,6 +126,18 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return self.Limit(stub, args)
 	}
 	
+	// "grant", rights:Grant, admin_name:string, signature:b64
+	if function == "grant" {
+		if len(args) != 3 {
+			return shim.Error(errmsg)
+		}
+		err = self.Verify(stub, args, "ADMIN")
+		if (err != nil) {
+			return shim.Error(err.Error())
+		}
+		return self.Grant(stub, args)
+	}
+	
 	// "perform", action:string, context:State, user_name:string, signature:b64
 	if function == "perform" {
 		if len(args) != 4 {
@@ -300,6 +312,42 @@ func (self *SSMChaincode) Limit(stub shim.ChaincodeStubInterface, args []string)
 	}
 	// Save the session state
 	err = session.Put(stub, "STATE_" + session.Session)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(nil)
+}
+
+
+// "grant", rights:Grant, admin_name:string, signature:b64
+func (self *SSMChaincode) Grant(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	var err error	
+	var update Grant
+	// Create grant update from JSON string
+	err = update.Deserialize([]byte(args[0]))
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	// Get the user referenced by the grant update
+	var user Agent
+	err =  user.Get(stub, "USER_" + update.User)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	// Get the user grant to update if any
+	var grant Grant
+	err = grant.Get(stub, "GRANT_" + update.User)
+	if (err != nil) {
+		// No preexisting grant, use the update for current grant
+		grant = update
+	}
+	// Let the current grant update its credits with the new grant
+	err = grant.SetCredits(&update)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	// Save the user grant
+	err = grant.Put(stub, "GRANT_" + grant.User)
 	if (err != nil) {
 		return shim.Error(err.Error())
 	}
