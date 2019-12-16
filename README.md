@@ -288,6 +288,18 @@ Result
   Returns corresponding Agent structure.
 ```
 
+  * **credits:** Get a user's API credits aka grants.
+
+```
+Query
+-------
+  "credits", <user name> 
+
+Result
+------
+  Returns corresponding Grant structure.
+```
+
   * **admin:** Get an administrator's public key.
 
 ```

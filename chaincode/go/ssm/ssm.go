@@ -169,6 +169,9 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	} else if function == "user" {
 	// "user", <user name>
 		dat, err = stub.GetState("USER_" + args[0])
+	} else if function == "credits" {
+	// "credits", <user name>
+		dat, err = stub.GetState("GRANT_" + args[0])
 	} else if function == "admin" {
 	// "admin", <admin name>
 		dat, err = stub.GetState("ADMIN_" + args[0])
