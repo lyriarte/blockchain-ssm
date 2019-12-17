@@ -157,6 +157,24 @@ peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --c
 peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["log", "carsale20190301"]}'
 ```
 
+  * Adam grants one session creation to Bob
+
+```
+echo '{
+	"user": "bob",
+	"credits": {
+		"start": {"amount": 1}
+	}
+}
+' > grant1.json
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(grant grant1 adam)"
+```
+
+```
+peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["credits", "bob"]}'
+```
+
+
   * Backup generated crypto keys and session data
 
 ```
