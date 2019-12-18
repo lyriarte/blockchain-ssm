@@ -126,6 +126,16 @@ func TestGrant(test *testing.T) {
 	if err == nil {
 		test.Fatal("Should fail due to iteration.")
 	}
+	strUpdate = "{\"user\": \"Bob\",\"iteration\": 1,\"credits\": {\"grant\": {\"amount\": 1}}}"
+	err = update.Deserialize([]byte(strUpdate))
+	if err != nil {
+		test.Fatal(err)
+	}
+	fmt.Println("---- ---- negative")
+	err = grant.SetCredits(&update)
+	if err == nil {
+		test.Fatal("Should fail due to forbidden api.")
+	}
 
 	fmt.Println("---- ---- ---- ---- ApiGrant")
 	fmt.Println("---- ---- negative")

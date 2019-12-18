@@ -59,6 +59,12 @@ func (self *Grant) SetCredits(update *Grant) error {
 	if self.User != update.User {
 		return errors.New("Invalid user for proposed update.")
 	}
+	// Check credits for authorized api
+	for api := range update.Credits {
+		if api != "register" && api != "create" && api != "start" {
+			return errors.New("Unallowed API grant request")
+		}
+	}
 	// Increment iteration
 	self.Iteration++
 	// Update the user credits
