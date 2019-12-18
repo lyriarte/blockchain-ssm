@@ -85,7 +85,10 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		}
 		err = self.Verify(stub, args, "ADMIN")
 		if (err != nil) {
-			return shim.Error(err.Error())
+			err = self.CheckGrants(stub, args, function)
+			if (err != nil) {
+				return shim.Error(err.Error())
+			}
 		}
 		return self.Register(stub, args)
 	}
@@ -97,7 +100,10 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		}
 		err = self.Verify(stub, args, "ADMIN")
 		if (err != nil) {
-			return shim.Error(err.Error())
+			err = self.CheckGrants(stub, args, function)
+			if (err != nil) {
+				return shim.Error(err.Error())
+			}
 		}
 		return self.Create(stub, args)
 	}
@@ -109,7 +115,10 @@ func (self *SSMChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		}
 		err = self.Verify(stub, args, "ADMIN")
 		if (err != nil) {
-			return shim.Error(err.Error())
+			err = self.CheckGrants(stub, args, function)
+			if (err != nil) {
+				return shim.Error(err.Error())
+			}
 		}
 		return self.Start(stub, args)
 	}
@@ -430,6 +439,37 @@ func (self *SSMChaincode) Verify(stub shim.ChaincodeStubInterface, args []string
 	}
 	return verifier.Verify(message, args[argCount - 1])
 }	
+
+// user grants verification
+func (self *SSMChaincode) CheckGrants(stub shim.ChaincodeStubInterface, args []string, api string) error {
+	// user signature verification
+	err := self.Verify(stub, args, "USER")
+	if (err != nil) {
+		return err
+	}
+	// Get user name from args
+	user := args[len(args) - 2]
+	// Get the user grant
+	var grant Grant
+	err = grant.Get(stub, "GRANT_" + user)
+	if (err != nil) {
+		return err
+	}
+	// Let grant verify and update credits
+	err = grant.ApiGrant(user, api)
+	if (err != nil) {
+		return err
+	}
+	// Save the updated grants
+	err = grant.Put(stub, "GRANT_" + user)
+	if (err != nil) {
+		return err
+	}	
+	// All done
+	return nil
+}
+
+
 
 // ensure a key is not already in use
 func (self *SSMChaincode) CheckUnique(stub shim.ChaincodeStubInterface, key string) error {
