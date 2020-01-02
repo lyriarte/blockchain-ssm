@@ -39,6 +39,19 @@ function ssmStart(session, admin, adminKey) {
 	return hostCmd;
 }
 
+function ssmGrant(rights, admin, adminKey) {
+	JSE.setPrivateKey(adminKey);
+	var rightsStr = JSON.stringify(rights);
+	var signStr = JSE.sign(rightsStr, CryptoJS.SHA256, "sha256");
+	var hostCmd = {
+		cmd: "invoke",
+		fcn: "grant",
+		args: [rightsStr, admin, signStr]
+	};
+
+	return hostCmd;
+}
+
 function ssmLimit(session, admin, adminKey) {
 	JSE.setPrivateKey(adminKey);
 	var sessionStr = JSON.stringify(session);

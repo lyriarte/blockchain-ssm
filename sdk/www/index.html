@@ -233,6 +233,16 @@ function ssmCreditsSetup() {
 	return cbctx;
 }
 
+function ssmGrantSetup() {
+	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
+	var rights = JSON.parse(document.getElementById('user_prv__Fld').value);
+	var admin = document.getElementById('access_id__Fld').value;
+	var adminKey = document.getElementById('access_prv__Fld').value;
+	var hostCmd = ssmGrant(rights, admin, adminKey);
+	var cbctx = hostCmdSetup(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logResult, logError);
+	return cbctx;
+}
+
 function ssmRegisterSetup() {
 	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
 	var user = {
@@ -467,8 +477,14 @@ register user
 </div>
 
 <!-- Private key / Credits / buttons -->
-<div class="mdl-cell mdl-cell--8-col mdl-cell--2-col-phone">
+<div class="mdl-cell mdl-cell--6-col mdl-cell--2-col-phone">
 Private key / Credits
+</div>
+
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmGrantSetup()">
+grant
+</button>
 </div>
 
 <div class="mdl-cell mdl-cell--2-col">
