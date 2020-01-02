@@ -167,6 +167,10 @@ function listSessionLog(result) {
 	document.getElementById('session_log__Tbl').value = JSON.stringify(JSON.parse(result),null,2);
 }
 
+function logCredits(result) {
+	document.getElementById('user_prv__Fld').value = JSON.stringify(JSON.parse(result),null,2);
+}
+
 function logUser(result) {
 	var usr = JSON.parse(result);
 	document.getElementById('user_id__Fld').value = usr.name;
@@ -217,6 +221,15 @@ function ssmLogSetup() {
 	var queryId = document.getElementById('session_id__Fld').value;
 	var hostCmd = ssmQuery(fcn, queryId);
 	var cbctx = hostCmdSetup(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, listSessionLog, logError);
+	return cbctx;
+}
+
+function ssmCreditsSetup() {
+	var uri = "http://" + document.getElementById('access_host__Fld').value + ":" + document.getElementById('access_port__Fld').value;
+	var fcn = "credits";
+	var queryId = document.getElementById('user_id__Fld').value;
+	var hostCmd = ssmQuery(fcn, queryId);
+	var cbctx = hostCmdSetup(uri, hostCmd.cmd, hostCmd.fcn, hostCmd.args, logCredits, logError);
 	return cbctx;
 }
 
@@ -453,9 +466,15 @@ register user
 </div>
 </div>
 
-<!-- Private key / generate button -->
-<div class="mdl-cell mdl-cell--10-col mdl-cell--2-col-phone">
-Private key
+<!-- Private key / Credits / buttons -->
+<div class="mdl-cell mdl-cell--8-col mdl-cell--2-col-phone">
+Private key / Credits
+</div>
+
+<div class="mdl-cell mdl-cell--2-col">
+<button type="button" class="mdl-button mdl-js-button mdl-button--raised" onclick="ssmCreditsSetup()">
+credits
+</button>
 </div>
 
 <div class="mdl-cell mdl-cell--2-col">
