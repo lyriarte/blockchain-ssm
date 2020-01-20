@@ -11,6 +11,6 @@ type StateModel struct {
 	Roles		map[string]string	`json:"roles"`
 	Current		int		`json:"current"`
 	Origin		*Transition	`json:"origin,omitempty"`
-	Public		string	`json:"public,omitempty"`
+	Public		interface{}	`json:"public,omitempty"`
 	Private		map[string]string	`json:"private,omitempty"`
 }
