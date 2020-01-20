@@ -211,6 +211,25 @@ func TestState(test *testing.T) {
 		test.Fatal(err)
 	}
 	
+	fmt.Println("---- ---- ---- ---- Deserialize ---- string payload")
+	strState = "{\"ssm\": \"Loop\", \"session\": \"looptest\", \"iteration\": 0, \"public\": \"Zero.\", \"roles\": {\"Luke\": \"Looper\"}}"
+	err = state.Deserialize([]byte(strState))
+	if err != nil {
+		test.Fatal(err)
+	}
+	fmt.Println("---- ---- ---- ---- Deserialize ---- float payload")
+	strState = "{\"ssm\": \"Loop\", \"session\": \"looptest\", \"iteration\": 0, \"public\": 3.14159, \"roles\": {\"Luke\": \"Looper\"}}"
+	err = state.Deserialize([]byte(strState))
+	if err != nil {
+		test.Fatal(err)
+	}
+	fmt.Println("---- ---- ---- ---- Deserialize ---- hash payload")
+	strState = "{\"ssm\": \"Loop\", \"session\": \"looptest\", \"iteration\": 0, \"public\": {\"astring\": \"Hello\", \"anint\":1234}, \"roles\": {\"Luke\": \"Looper\"}}"
+	err = state.Deserialize([]byte(strState))
+	if err != nil {
+		test.Fatal(err)
+	}
+
 	fmt.Println("---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ")
 }
 
