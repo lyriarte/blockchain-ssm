@@ -4,6 +4,7 @@
 package main
 
 type StateModel struct {
+	ObjectType	string	`json:"docType,omitempty"`
 	Ssm			string	`json:"ssm,omitempty"`
 	Session		string	`json:"session"`
 	Iteration	int		`json:"iteration"`

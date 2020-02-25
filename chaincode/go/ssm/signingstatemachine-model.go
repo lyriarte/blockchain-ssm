@@ -11,6 +11,7 @@ type Transition struct {
 }
 
 type SigningStateMachineModel struct {
+	ObjectType	string	`json:"docType,omitempty"`
 	Name		string	`json:"name"`
 	Transitions	[]Transition	`json:"transitions"`
 }

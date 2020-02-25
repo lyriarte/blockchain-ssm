@@ -5,6 +5,7 @@ package main
 
 import (
 	"errors"
+	"strings"
 
 	"crypto"
 	"crypto/x509"
@@ -26,6 +27,11 @@ type Agent struct {
 //
 
 func (self *Agent) Put(stub shim.ChaincodeStubInterface, key string) error {
+	if strings.HasPrefix(key, "ADMIN") {
+		self.AgentModel.ObjectType = "admin"
+	} else if strings.HasPrefix(key, "USER") {
+		self.AgentModel.ObjectType = "user"
+	}
 	data, err := self.Serialize()
 	if (err != nil) {
 		return err
@@ -38,7 +44,12 @@ func (self *Agent) Get(stub shim.ChaincodeStubInterface, key string) error {
 	if (err != nil) {
 		return err
 	}	
-	return self.Deserialize(data)
+	err = self.Deserialize(data)
+	if (err != nil) {
+		return err
+	}	
+	self.AgentModel.ObjectType = ""
+	return err
 }
 
 //

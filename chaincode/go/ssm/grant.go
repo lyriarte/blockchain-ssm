@@ -19,6 +19,7 @@ type Grant struct {
 //
 
 func (self *Grant) Put(stub shim.ChaincodeStubInterface, key string) error {
+	self.GrantModel.ObjectType = "grant"
 	data, err := self.Serialize()
 	if (err != nil) {
 		return err
@@ -31,7 +32,12 @@ func (self *Grant) Get(stub shim.ChaincodeStubInterface, key string) error {
 	if (err != nil) {
 		return err
 	}	
-	return self.Deserialize(data)
+	err = self.Deserialize(data)
+	if (err != nil) {
+		return err
+	}	
+	self.GrantModel.ObjectType = ""
+	return err
 }
 
 //

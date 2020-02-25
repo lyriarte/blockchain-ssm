@@ -19,6 +19,7 @@ type State struct {
 //
 
 func (self *State) Put(stub shim.ChaincodeStubInterface, key string) error {
+	self.StateModel.ObjectType = "state"
 	data, err := self.Serialize()
 	if (err != nil) {
 		return err
@@ -31,7 +32,12 @@ func (self *State) Get(stub shim.ChaincodeStubInterface, key string) error {
 	if (err != nil) {
 		return err
 	}	
-	return self.Deserialize(data)
+	err = self.Deserialize(data)
+	if (err != nil) {
+		return err
+	}	
+	self.StateModel.ObjectType = ""
+	return err
 }
 
 //

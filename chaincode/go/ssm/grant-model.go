@@ -8,6 +8,7 @@ type Credit struct {
 }
 
 type GrantModel struct {
+	ObjectType	string	`json:"docType,omitempty"`
 	User		string	`json:"user"`
 	Iteration	int		`json:"iteration"`
 	Credits		map[string]*Credit	`json:"credits"`

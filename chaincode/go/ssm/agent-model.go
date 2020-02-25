@@ -4,6 +4,7 @@
 package main
 
 type AgentModel struct {
+	ObjectType	string	`json:"docType,omitempty"`
 	Name		string	`json:"name"`
 	Pub			string	`json:"pub"`
 }

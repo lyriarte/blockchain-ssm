@@ -18,6 +18,7 @@ type SigningStateMachine struct {
 //
 
 func (self *SigningStateMachine) Put(stub shim.ChaincodeStubInterface, key string) error {
+	self.SigningStateMachineModel.ObjectType = "ssm"
 	data, err := self.Serialize()
 	if (err != nil) {
 		return err
@@ -30,7 +31,12 @@ func (self *SigningStateMachine) Get(stub shim.ChaincodeStubInterface, key strin
 	if (err != nil) {
 		return err
 	}	
-	return self.Deserialize(data)
+	err = self.Deserialize(data)
+	if (err != nil) {
+		return err
+	}	
+	self.SigningStateMachineModel.ObjectType = ""
+	return err
 }
 
 //
