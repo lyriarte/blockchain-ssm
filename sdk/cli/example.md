@@ -16,7 +16,7 @@ ORDERER_ADDR=orderer.bclan:7050
 ORDERER_CERT=/etc/hyperledger/orderer/tlsca.bclan-cert.pem
 CHANNEL=sandbox
 CHAINCODE=ssm
-VERSION=33bc87a
+VERSION=0.8.0
 ```
 
   * Install ssm chaincode
