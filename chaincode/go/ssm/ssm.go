@@ -60,6 +60,13 @@ func (self *SSMChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 			return shim.Error(err.Error())
 		}
 	}
+	
+	// Upgrade DB
+	err = self.UpgradeDB(stub)
+	if (err != nil) {
+		return shim.Error(err.Error())
+	}
+	
 	return shim.Success(nil)
 }
 
@@ -479,6 +486,47 @@ func (self *SSMChaincode) CheckUnique(stub shim.ChaincodeStubInterface, key stri
 	}	
 	if (data != nil) {
 		return errors.New("Identifier " + key + " already in use.")
+	}
+	return nil
+}
+
+
+// Object read/rewrite for DB upgrade
+func (self *SSMChaincode) ObjectRewrite(stub shim.ChaincodeStubInterface, obj Storable, key string) error {
+	err := obj.Get(stub, key)
+	if (err != nil) {
+		return err
+	}
+	err = obj.Put(stub, key)
+	return err
+}
+
+// Upgrade DB
+func (self *SSMChaincode) UpgradeDB(stub shim.ChaincodeStubInterface) error {
+	// Add docType to all models
+	itr, err := stub.GetStateByRange(" ", "~")
+	if (err != nil) {
+		return err
+	}
+	defer itr.Close()
+	for itr.HasNext() {
+		key, _ := itr.Next()
+		if strings.HasPrefix(key.Key, "USER") || strings.HasPrefix(key.Key, "ADMIN")  {
+			var obj Agent
+			err = self.ObjectRewrite(stub, &obj, key.Key)
+		} else if strings.HasPrefix(key.Key, "GRANT") {
+			var obj Grant
+			err = self.ObjectRewrite(stub, &obj, key.Key)
+		} else if strings.HasPrefix(key.Key, "STATE") {
+			var obj State
+			err = self.ObjectRewrite(stub, &obj, key.Key)
+		} else if strings.HasPrefix(key.Key, "SSM") {
+			var obj SigningStateMachine
+			err = self.ObjectRewrite(stub, &obj, key.Key)
+		}
+		if (err != nil) {
+			return err
+		}
 	}
 	return nil
 }
