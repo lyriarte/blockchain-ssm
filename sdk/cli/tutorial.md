@@ -1,4 +1,4 @@
-# Example session
+# Signing State Machines Command Line Interface Tutorial
 
   * Using the bclan network settings
 
@@ -25,37 +25,37 @@ VERSION=0.8.0
 peer chaincode install -n ${CHAINCODE} -v ${VERSION} -p blockchain-coop/go/ssm/
 ```
 
-  * Deploy ssm chaincode with admin "adam"
+  * Deploy ssm chaincode with admin "Adam"
 
 ```
-# Create keys for "adam"
-rsa_keygen adam
+# Create keys for "Adam"
+rsa_keygen Adam
 # Create init.arg string
 echo -n '{"Args":["init","[' > init.arg
-json_agent adam adam.pub | jq . -cM | sed 's/"/\\"/g' | tr -d "\n" >> init.arg
+json_agent Adam Adam.pub | jq . -cM | sed 's/"/\\"/g' | tr -d "\n" >> init.arg
 echo -n ']"]}' >> init.arg
 # Init chaincode
 peer chaincode instantiate -o ${ORDERER_ADDR} --tls --cafile ${ORDERER_CERT} -C ${CHANNEL} -n ${CHAINCODE} -v ${VERSION} -c $(cat init.arg) -P "OR ('BlockchainLANCoopMSP.member')"
 ```
 
 ```
-peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["admin", "adam"]}'
+peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["admin", "Adam"]}'
 ```
 
-  * Register users "bob" and "sam"
+  * Register users "Bob" and "Sam"
 
 ```
 # Create keys
-rsa_keygen bob
-rsa_keygen sam
-# Register users with "adam" for signer
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(register bob adam)"
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(register sam adam)"
+rsa_keygen Bob
+rsa_keygen Sam
+# Register users with "Adam" for signer
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(register Bob Adam)"
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(register Sam Adam)"
 ```
 
 ```
-peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["user", "bob"]}'
-peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["user", "sam"]}'
+peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["user", "Bob"]}'
+peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["user", "Sam"]}'
 ```
 
   * Create the "Negociation" ssm
@@ -73,7 +73,7 @@ echo '{
 		{"from": 4, "to": 3, "role": "Initiator", "action": "Reject"}
 	]
 }' > negociation.json
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(create negociation adam)"
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(create negociation Adam)"
 ```
 
 ```
@@ -88,11 +88,11 @@ echo '{
   "session": "carsale20190301",
   "public": "Used car for 100 dollars.",
   "roles": {
-    "bob": "Validator",
-    "sam": "Initiator"
+    "Bob": "Validator",
+    "Sam": "Initiator"
   }
 }' > carsale20190301.json
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(start carsale20190301 adam)"
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(start carsale20190301 Adam)"
 ```
 
 ```
@@ -107,7 +107,7 @@ echo '{
   "public": "100 dollars 1978 Camaro",
   "iteration": 0
 }' > state1.json
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(perform Propose state1 sam)"
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(perform Propose state1 Sam)"
 ```
 
 ```
@@ -119,12 +119,12 @@ echo '{
   "session": "carsale20190301",
   "iteration": 5
 }' > loop.json
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(perform Amend loop bob)"
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(perform Amend loop Bob)"
 echo '{
   "session": "carsale20190301",
   "iteration": 6
 }' > loop.json
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(perform Update loop sam)"
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(perform Update loop Sam)"
 ```
 
 ```
@@ -148,7 +148,7 @@ echo '{
   "iteration": 7,
   "limit": 10
 }' > loop.json
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(limit loop adam)"
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(limit loop Adam)"
 ```
 
   * Log session history
@@ -161,17 +161,17 @@ peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["log", "carsale2
 
 ```
 echo '{
-	"user": "bob",
+	"user": "Bob",
 	"credits": {
 		"start": {"amount": 1}
 	}
 }
 ' > grant1.json
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(grant grant1 adam)"
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(grant grant1 Adam)"
 ```
 
 ```
-peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["credits", "bob"]}'
+peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["credits", "Bob"]}'
 ```
 
 

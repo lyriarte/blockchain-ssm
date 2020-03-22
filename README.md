@@ -44,7 +44,7 @@ The SSM is initialized with:
 
 ## Signing State Machine Chaincode API
 
-  * Command Line Interface [SDK Documentation](sdk/cli/README.md) and [example](sdk/cli/example.md).
+  * Command Line Interface [SDK Documentation](sdk/cli/README.md) and [tutorial](sdk/cli/tutorial.md).
 
 ### Operation
 
