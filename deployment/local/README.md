@@ -81,7 +81,7 @@ echo ORDERER_CERT="/etc/hyperledger/orderer/tlsca.bclocal-cert.pem" >> session/c
 # current session chaincode
 echo CHANNEL="sandbox" >> session/cli_env
 echo CHAINCODE="ssm" >> session/cli_env
-echo VERSION="0.8.0" >> session/cli_env
+echo VERSION="0.8.1" >> session/cli_env
 ```
 
 ```
