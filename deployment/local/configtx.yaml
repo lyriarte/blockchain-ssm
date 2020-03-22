@@ -1,0 +1,47 @@
+# Copyright Luc Yriarte <luc.yriarte@thingagora.org> 2018 
+# License: Apache-2.0
+
+Organizations:
+  - &BlockchainLocalOrderer
+      Name: BlockchainLocalOrderer
+      ID: BlockchainLocalOrdererMSP
+      MSPDir: crypto-config/ordererOrganizations/bclocal/msp
+  - &BlockchainLocalOrg
+      Name: BlockchainLocalOrg
+      ID: BlockchainLocalOrgMSP
+      MSPDir: crypto-config/peerOrganizations/bc-org.bclocal/msp
+      AnchorPeers:
+        - Host: peer0.bc-org.bclocal
+          Port: 7051
+
+Application: &ApplicationDefaults
+    Organizations:
+
+Orderer: &OrdererDefaults
+    OrdererType: solo
+    Addresses:
+      - orderer.bclocal:7050
+    BatchTimeout: 2s
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+    MaxChannels: 0
+    Organizations:
+
+Profiles:
+    BlockchainLocalOrdererGenesis:
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *BlockchainLocalOrderer
+        Consortiums:
+            BlockchainLocalOrgConsortium:
+                Organizations:
+                    - *BlockchainLocalOrg
+    BlockchainLocalOrgChannels:
+        Consortium: BlockchainLocalOrgConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *BlockchainLocalOrg

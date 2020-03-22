@@ -1,28 +1,17 @@
 # Signing State Machines Command Line Interface Tutorial
 
-  * Using the bclan network settings
+  * Enter CLI environment
 
 ```
-# Use blockchain-ssm CLI SDK in blockchain-coop CLI environment
-cp sdk/cli/util/* ../blockchain-coop/util/
-# Enter CLI environment
-docker exec -it cli-bclan /bin/bash
-export PATH=/opt/blockchain-coop/:$PATH
-```
-
-```
-cli_ORGA=bc-coop.bclan
-ORDERER_ADDR=orderer.bclan:7050
-ORDERER_CERT=/etc/hyperledger/orderer/tlsca.bclan-cert.pem
-CHANNEL=sandbox
-CHAINCODE=ssm
-VERSION=0.8.0
+docker exec -it cli-bclocal /bin/bash
+source /opt/blockchain-org/session/cli_env
+export PATH=/opt/blockchain-org/util:$PATH
 ```
 
   * Install ssm chaincode
 
 ```
-peer chaincode install -n ${CHAINCODE} -v ${VERSION} -p blockchain-coop/go/ssm/
+peer chaincode install -n ${CHAINCODE} -v ${VERSION} -p blockchain-org/go/ssm/
 ```
 
   * Deploy ssm chaincode with admin "Adam"
@@ -35,7 +24,7 @@ echo -n '{"Args":["init","[' > init.arg
 json_agent Adam Adam.pub | jq . -cM | sed 's/"/\\"/g' | tr -d "\n" >> init.arg
 echo -n ']"]}' >> init.arg
 # Init chaincode
-peer chaincode instantiate -o ${ORDERER_ADDR} --tls --cafile ${ORDERER_CERT} -C ${CHANNEL} -n ${CHAINCODE} -v ${VERSION} -c $(cat init.arg) -P "OR ('BlockchainLANCoopMSP.member')"
+peer chaincode instantiate -o ${ORDERER_ADDR} --tls --cafile ${ORDERER_CERT} -C ${CHANNEL} -n ${CHAINCODE} -v ${VERSION} -c $(cat init.arg) -P "OR ('BlockchainLocalOrgMSP.member')"
 ```
 
 ```
@@ -114,23 +103,6 @@ peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --c
 peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["session", "carsale20190301"]}'
 ```
 
-```
-echo '{
-  "session": "carsale20190301",
-  "iteration": 5
-}' > loop.json
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(perform Amend loop Bob)"
-echo '{
-  "session": "carsale20190301",
-  "iteration": 6
-}' > loop.json
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(perform Update loop Sam)"
-```
-
-```
-peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["session", "carsale20190301"]}'
-```
-
   * List DB state contents
 
 ```
@@ -138,17 +110,6 @@ peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["list", "admin"]
 peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["list", "user"]}'
 peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["list", "ssm"]}'
 peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["list", "session"]}'
-```
-
-  * Limit session to 10 iterations
-
-```
-echo '{
-  "session": "carsale20190301",
-  "iteration": 7,
-  "limit": 10
-}' > loop.json
-peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(limit loop Adam)"
 ```
 
   * Log session history
@@ -178,7 +139,7 @@ peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["credits", "Bob"
   * Backup generated crypto keys and session data
 
 ```
-cp * /opt/blockchain-coop
+cp * /opt/blockchain-org/session
 exit
 ```
 

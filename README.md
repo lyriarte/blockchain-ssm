@@ -6,6 +6,20 @@ In a blockchain, smart-contracts are programs designed to implement a transactio
 
 A Signing State Machine (SSM) is a smart contract written with a more constrained paradigm than plain programming languages, based on a finite state automaton.
 
+
+## How to use
+
+Signing State Machines is implemented in go, as Hyperlerdger fabric chaincode. Java and JavaScript client web UIs and SDKs are available, however the command-line interface (CLI) SDK provided in this repository along with the chaincode is self sufficient.
+
+### Deploying Hyperledger Fabric locally
+
+See the [local deployment README](deployment/local/README.md) for instructions on how to bootstrap the a local blockchain. All client operations are run in a docker container.
+
+### Using the chaincode with the CLI SDK
+
+Once the local blockchain is deployed, check out the [Command Line Interface tutorial](sdk/cli/tutorial.md) to install and run the chaincode.
+
+
 ## Theory of operations
 
 ### Agents, roles and identities

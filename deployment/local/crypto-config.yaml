@@ -1,0 +1,18 @@
+# Copyright Luc Yriarte <luc.yriarte@thingagora.org> 2018 
+# License: Apache-2.0
+
+OrdererOrgs:
+  - Name: BlockchainLocalOrderer
+    Domain: bclocal
+    Specs:
+      - Hostname: orderer
+
+PeerOrgs:
+  - Name: BlockchainLocalOrg
+    Domain: bc-org.bclocal
+    CA:
+       Hostname: ca
+    Template:
+      Count: 1
+    Users:
+      Count: 0
