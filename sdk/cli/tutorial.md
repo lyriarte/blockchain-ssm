@@ -8,10 +8,11 @@ source /opt/blockchain-org/session/cli_env
 export PATH=/opt/blockchain-org/util:$PATH
 ```
 
-  * Install ssm chaincode
+  * Package and install ssm chaincode
 
 ```
-peer chaincode install -n ${CHAINCODE} -v ${VERSION} -p blockchain-org/go/ssm/
+peer chaincode package -n ${CHAINCODE} -p blockchain-org/go/${CHAINCODE} -v ${VERSION} ${CHAINCODE}-${VERSION}.pak
+peer chaincode install ${CHAINCODE}-${VERSION}.pak
 ```
 
   * Deploy ssm chaincode with admin "Adam"
@@ -75,7 +76,6 @@ peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["ssm", "Negociat
 echo '{
   "ssm": "Negociation",
   "session": "carsale20190301",
-  "public": "Used car for 100 dollars.",
   "roles": {
     "Bob": "Validator",
     "Sam": "Initiator"
@@ -93,10 +93,23 @@ peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["session", "cars
 ```
 echo '{
   "session": "carsale20190301",
-  "public": "100 dollars 1978 Camaro",
+  "public": "1000 dollars 1978 Camaro",
   "iteration": 0
 }' > state1.json
 peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(perform Propose state1 Sam)"
+```
+
+```
+peer chaincode query -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["session", "carsale20190301"]}'
+```
+
+```
+echo '{
+  "session": "carsale20190301",
+  "public": "800 dollars 1978 Camaro",
+  "iteration": 1
+}' > state1.json
+peer chaincode invoke -o ${ORDERER_ADDR} -C ${CHANNEL} -n ${CHAINCODE} --tls --cafile ${ORDERER_CERT} -c "$(perform Amend state1 Bob)"
 ```
 
 ```
