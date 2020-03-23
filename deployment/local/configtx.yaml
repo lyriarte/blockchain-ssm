@@ -6,17 +6,48 @@ Organizations:
       Name: BlockchainLocalOrderer
       ID: BlockchainLocalOrdererMSP
       MSPDir: crypto-config/ordererOrganizations/bclocal/msp
+      Policies:
+        Readers:
+          Type: Signature
+          Rule: "OR('BlockchainLocalOrdererMSP.member')"
+        Writers:
+          Type: Signature
+          Rule: "OR('BlockchainLocalOrdererMSP.member')"
+        Admins:
+          Type: Signature
+          Rule: "OR('BlockchainLocalOrdererMSP.admin')"   
   - &BlockchainLocalOrg
       Name: BlockchainLocalOrg
       ID: BlockchainLocalOrgMSP
       MSPDir: crypto-config/peerOrganizations/bc-org.bclocal/msp
+      Policies:
+        Readers:
+          Type: Signature
+          Rule: "OR('BlockchainLocalOrgMSP.member')"
+        Writers:
+          Type: Signature
+          Rule: "OR('BlockchainLocalOrgMSP.member')"
+        Admins:
+          Type: Signature
+          Rule: "OR('BlockchainLocalOrgMSP.admin')"   
       AnchorPeers:
         - Host: peer0.bc-org.bclocal
           Port: 7051
 
-Application: &ApplicationDefaults
-    Organizations:
-
+Capabilities:
+    Channel: &ChannelCapabilities
+        V1_4_3: true
+        V1_3: false
+        V1_1: false
+    Orderer: &OrdererCapabilities
+        V1_4_2: true
+        V1_1: false
+    Application: &ApplicationCapabilities
+        V1_4_2: true
+        V1_3: false
+        V1_2: false
+        V1_1: false
+        
 Orderer: &OrdererDefaults
     OrdererType: solo
     Addresses:
@@ -28,19 +59,65 @@ Orderer: &OrdererDefaults
         PreferredMaxBytes: 512 KB
     MaxChannels: 0
     Organizations:
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+            
+Application: &ApplicationDefaults
+    Organizations:
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+    Capabilities:
+        <<: *ApplicationCapabilities
+        
+Channel: &ChannelDefaults
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+    Capabilities:
+        <<: *ApplicationCapabilities
 
 Profiles:
     BlockchainLocalOrdererGenesis:
+        <<: *ChannelDefaults
         Orderer:
             <<: *OrdererDefaults
             Organizations:
                 - *BlockchainLocalOrderer
+            Capabilities:
+                <<: *OrdererCapabilities
         Consortiums:
             BlockchainLocalOrgConsortium:
                 Organizations:
                     - *BlockchainLocalOrg
     BlockchainLocalOrgChannels:
         Consortium: BlockchainLocalOrgConsortium
+        <<: *ChannelDefaults
         Application:
             <<: *ApplicationDefaults
             Organizations:

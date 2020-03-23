@@ -21,7 +21,7 @@ export FABRIC_CFG_PATH=$PWD
   * Orderer genesis block
 
 ```
-configtxgen -profile BlockchainLocalOrdererGenesis -outputBlock ./config/genesis.block
+configtxgen -profile BlockchainLocalOrdererGenesis -channelID testchainid -outputBlock ./config/genesis.block
 ```
 
 #### Channels
