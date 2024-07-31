@@ -1,0 +1,43 @@
+# Improved SSM Project
+
+## About this fork
+
+This repository is a fork of the original Signing State Machine (SSM) project, aimed at introducing enhancements and additional features. Our goal is to expand the capabilities of the SSM while maintaining its fundamental robustness and security.
+
+## Proposed Improvements
+
+We are currently working on several key improvements:
+
+1. **AI Integration**: Utilizing language models for contextual adaptation and intelligent validation of transitions.
+
+2. **Enhanced Scalability**: Implementing sharding techniques and performance optimizations.
+
+3. **Increased Interoperability**: Developing standardized interfaces for better integration with other blockchain systems.
+
+4. **Strengthened Security**: Integrating zero-knowledge proofs and improving key management.
+
+5. **User-Friendly Interface**: Creating a graphical interface to facilitate SSM management.
+
+## How to Contribute
+
+We welcome contributions from the community! Here's how you can participate:
+
+1. **Fork the project**: Create your own fork of this repository.
+2. **Create a branch**: `git checkout -b name-of-your-feature`
+3. **Commit your changes**: `git commit -am 'Add a new feature'`
+4. **Push to the branch**: `git push origin name-of-your-feature`
+5. **Submit a Pull Request**
+
+## Roadmap
+
+- [x] Creation of initial fork
+- [ ] Implementation of AI integration (in progress)
+- [ ] Scalability improvement
+- [ ] Development of graphical user interface
+- [ ] Testing and performance optimization
+
+## Contact
+
+For any questions or suggestions, please don't hesitate to open an issue or contact me directly at [your-email@example.com].
+
+Thank you for contributing to the improvement of the SSM project!
